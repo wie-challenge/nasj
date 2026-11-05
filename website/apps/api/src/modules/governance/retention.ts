@@ -1,0 +1,123 @@
+export const RETENTION_VERSION = 'batch12-purpose-v1';
+const entry = (
+  dataClass: string,
+  purpose: string,
+  accessRoles: string[],
+  trigger: string,
+  preservation: string,
+  deletion: string,
+  technicalExpiry: string | null = null,
+) => ({
+  dataClass,
+  purpose,
+  controller: 'Pilot operating organization — named controller pending owner review',
+  operationalOwner:
+    dataClass === 'AUDIT_SECURITY' ? 'Security operations' : 'Privacy officer with domain owner',
+  accessRoles,
+  retentionTrigger: trigger,
+  retentionDuration: null,
+  technicalExpiry,
+  reviewStatus: 'PENDING_QUALIFIED_POLICY_REVIEW',
+  preservationExceptions: preservation,
+  deletionCorrectionProcess: deletion,
+  auditRequirements:
+    'Record actor, purpose, scope, evidence, retained references and outcome; never log private payloads',
+  breachResponseOwner:
+    'Security incident lead and privacy officer — named persons pending pilot review',
+});
+export const RETENTION_INVENTORY = [
+  entry(
+    'AUTH_MEMBERSHIP',
+    'Authentication, representation and access revocation',
+    ['Subject', 'Scoped organization manager', 'Authentication provider'],
+    'Account/relationship ends',
+    'Preserve evidence of authority and disputes',
+    'Revoke access immediately; reviewed dependency-aware erasure; never export credentials',
+    'Sessions expire after seven days; reset and verification use provider expiry',
+  ),
+  entry(
+    'BUYER_ARTISAN_PROFILES',
+    'Voluntary craft participation and approved buyer representation',
+    ['Subject', 'Explicit scoped delegate'],
+    'Consent withdrawn or relationship ends',
+    'Preserve accepted obligations and permission evidence',
+    'Owner corrections and privacy request; withdraw consent and revoke delegations',
+  ),
+  entry(
+    'COMMERCIAL_CONTACTS',
+    'Documented sales follow-up only',
+    ['Active scoped business development'],
+    'Contact basis review expires or do-not-contact recorded',
+    'Preserve minimal negotiation evidence subject to reviewed claims policy',
+    'Hide contact from sales workspace on expiry/opt-out; correction via organization authority; history erasure requires retention review',
+  ),
+  entry(
+    'ORDERS_AGREEMENTS',
+    'Execute accepted specifications and contractual work',
+    ['Scoped buyer', 'Assigned operator', 'Assigned artisan for own work'],
+    'Contract and dispute lifecycle ends',
+    'Do not destroy obligations, accepted terms or sample consent',
+    'Append corrections/amendments; privacy reviewer inventories dependencies',
+  ),
+  entry(
+    'FINANCIAL_RECORDS',
+    'Evidence obligations, reconciliation and source-based reporting',
+    ['Assigned scoped finance', 'Subject for own statement'],
+    'Settlement/dispute lifecycle ends',
+    'Qualified review must define statutory financial preservation; no period approved here',
+    'No bulk deletion or debt waiver; correct through existing reviewed events',
+  ),
+  entry(
+    'SUPPORT_ATTACHMENTS',
+    'Resolve assistance, safety escalation and rights requests',
+    ['Subject', 'Authorized scoped support'],
+    'Case closes',
+    'Retain minimum evidence for active dispute or legal preservation',
+    'Reviewed correction, attachment minimization and explicit retained-data reasons',
+  ),
+  entry(
+    'PRODUCTION_OBSERVATIONS',
+    'Voluntary time evidence, execution and quality accountability',
+    ['Subject', 'Authorized scoped operator/finance'],
+    'Work/consent ends',
+    'Preserve terms and dispute evidence; individual observations never public',
+    'Append corrections; consent withdrawal ends new collection; no health-derived ranking',
+  ),
+  entry(
+    'AUDIT_SECURITY',
+    'Investigate access and critical changes',
+    ['Scoped audit reviewer', 'Security operations'],
+    'Incident or accountability period ends',
+    'Append-only evidence; any retention migration requires qualified preservation review',
+    'No truncate endpoint; restrict access; record purpose; reviewed schema-owner maintenance',
+  ),
+  entry(
+    'BUYER_ORDER_FEEDBACK',
+    'Private delivered-order satisfaction assessment and scoped follow-up',
+    [
+      'Subject (the buyer author)',
+      'Authorized scoped support with support.case.manage and a current buyer assignment',
+    ],
+    'Order and dispute lifecycle ends',
+    'Preserve the original statement and every accepted correction as evidence of what the buyer reported and what support did; internal follow-up notes are never exported to the buyer',
+    'Buyer corrections append a new version instead of rewriting history; no deletion endpoint exists; any erasure requires the qualified privacy review below',
+  ),
+  entry(
+    'DEMO_VISITOR_FEEDBACK',
+    'Voluntary structured feedback about a synthetic demonstration, used only to improve the demonstration',
+    ['Visitor for their own submissions', 'Qualified team reviewer with administrator identity'],
+    'Feedback triage closes or the whole exhibition is retired',
+    'Preserve the submitted words unchanged plus every attributable moderation decision so a review can be reconstructed; a showroom reset archives a scenario and must not destroy this evidence',
+    'The visitor may only read their own submissions; a reviewer may not alter submitted text; no deletion endpoint exists and any erasure requires the qualified review below',
+  ),
+  entry(
+    'DEMO_SYNTHETIC',
+    'Isolated demonstration and executable tests',
+    ['Visitor within generation', 'Test harness'],
+    'Visitor reset or expiry',
+    'Preserve minimum synthetic regression/audit history without real-person substitution',
+    'Generation reset revokes old sessions; isolated test containers destroyed; no persistent reset authorized here',
+  ),
+];
+export const RETENTION_BOUNDARY =
+  'Wearable raw readings and summaries remain local-only, outside commercial storage, retention, ranking and exports.';

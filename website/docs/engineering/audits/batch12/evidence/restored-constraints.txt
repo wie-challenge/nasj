@@ -1,0 +1,566 @@
+"Account":Account_pkey:PRIMARY KEY (id)
+"Account":Account_userId_fkey:FOREIGN KEY ("userId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE CASCADE
+"AllocationOverride":AllocationOverride_actingUserId_fkey:FOREIGN KEY ("actingUserId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"AllocationOverride":AllocationOverride_pkey:PRIMARY KEY (id)
+"AllocationOverride":AllocationOverride_planId_fkey:FOREIGN KEY ("planId") REFERENCES "AllocationPlan"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"AllocationPlan":AllocationPlan_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"AllocationPlan":AllocationPlan_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"AllocationPlan":AllocationPlan_pkey:PRIMARY KEY (id)
+"AllocationPlan":AllocationPlan_recommendationId_fkey:FOREIGN KEY ("recommendationId") REFERENCES "RecommendationSnapshot"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"AllocationPlan":AllocationPlan_reviewedById_fkey:FOREIGN KEY ("reviewedById") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"AllocationPlanItem":AllocationPlanItem_artisanProfileId_fkey:FOREIGN KEY ("artisanProfileId") REFERENCES "ArtisanProfile"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"AllocationPlanItem":AllocationPlanItem_offerId_fkey:FOREIGN KEY ("offerId") REFERENCES "CommercialOffer"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"AllocationPlanItem":AllocationPlanItem_pkey:PRIMARY KEY (id)
+"AllocationPlanItem":AllocationPlanItem_planId_fkey:FOREIGN KEY ("planId") REFERENCES "AllocationPlan"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"AllocationPlanItem":AllocationPlanItem_replacementForId_fkey:FOREIGN KEY ("replacementForId") REFERENCES "AllocationPlanItem"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ApprovedProductVersion":ApprovedProductVersion_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ApprovedProductVersion":ApprovedProductVersion_pkey:PRIMARY KEY (id)
+"ApprovedProductVersion":ApprovedProductVersion_sampleId_fkey:FOREIGN KEY ("sampleId") REFERENCES "ProcurementSample"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ApprovedProductVersion":ApprovedProductVersion_sourceOrderId_fkey:FOREIGN KEY ("sourceOrderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ApprovedProductVersion":ApprovedProductVersion_sourceRfqId_fkey:FOREIGN KEY ("sourceRfqId") REFERENCES "CommercialRfq"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ApprovedProductVersion":product_status_valid:CHECK ((status = ANY (ARRAY['ACTIVE'::text, 'SUPERSEDED'::text, 'DISCONTINUED'::text])))
+"ArtisanAssignment":ArtisanAssignment_artisanProfileId_fkey:FOREIGN KEY ("artisanProfileId") REFERENCES "ArtisanProfile"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ArtisanAssignment":ArtisanAssignment_assignedById_fk:FOREIGN KEY ("assignedById") REFERENCES "User"(id) ON DELETE RESTRICT
+"ArtisanAssignment":ArtisanAssignment_coordinatorId_fk:FOREIGN KEY ("coordinatorId") REFERENCES "User"(id) ON DELETE RESTRICT
+"ArtisanAssignment":ArtisanAssignment_organizationId_fk:FOREIGN KEY ("organizationId") REFERENCES "Organization"(id) ON DELETE RESTRICT
+"ArtisanAssignment":ArtisanAssignment_pkey:PRIMARY KEY (id)
+"ArtisanManagement":ArtisanManagement_artisanProfileId_fkey:FOREIGN KEY ("artisanProfileId") REFERENCES "ArtisanProfile"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ArtisanManagement":ArtisanManagement_organizationId_fk:FOREIGN KEY ("organizationId") REFERENCES "Organization"(id) ON DELETE RESTRICT
+"ArtisanManagement":ArtisanManagement_pkey:PRIMARY KEY (id)
+"ArtisanManagement":ArtisanManagement_recordedById_fk:FOREIGN KEY ("recordedById") REFERENCES "User"(id) ON DELETE RESTRICT
+"ArtisanPayable":ArtisanPayable_artisanProfileId_fkey:FOREIGN KEY ("artisanProfileId") REFERENCES "ArtisanProfile"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ArtisanPayable":ArtisanPayable_batchId_fkey:FOREIGN KEY ("batchId") REFERENCES "CommercialBatch"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ArtisanPayable":ArtisanPayable_currency_check:CHECK ((currency = 'TND'::text))
+"ArtisanPayable":ArtisanPayable_milestone_check:CHECK ((milestone = ANY (ARRAY['BUYER_ACCEPTED_PIECE'::text, 'SAMPLE_COMPLETION'::text, 'SAMPLE_ACCEPTED_TERMS'::text])))
+"ArtisanPayable":ArtisanPayable_offerId_fkey:FOREIGN KEY ("offerId") REFERENCES "CommercialOffer"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ArtisanPayable":ArtisanPayable_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ArtisanPayable":ArtisanPayable_pkey:PRIMARY KEY (id)
+"ArtisanPayable":ArtisanPayable_provenance_check:CHECK ((provenance = ANY (ARRAY['SYNTHETIC'::text, 'DECLARED'::text])))
+"ArtisanPayable":ArtisanPayable_quantity_check:CHECK (((quantity > 0) AND ("amountMillimes" > 0) AND ("unitPayMillimes" > 0)))
+"ArtisanPayable":ArtisanPayable_sampleRequestId_fkey:FOREIGN KEY ("sampleRequestId") REFERENCES "ProductSampleRequest"(id) ON DELETE RESTRICT
+"ArtisanPayable":ArtisanPayable_status_check:CHECK ((status = 'RECOGNIZED'::text))
+"ArtisanPayable":payable_source_integrity:CHECK (((("sampleRequestId" IS NOT NULL) AND ("offerId" IS NULL) AND ("orderId" IS NULL) AND ("batchId" IS NULL)) OR (("sampleRequestId" IS NULL) AND ("offerId" IS NOT NULL) AND ("orderId" IS NOT NULL) AND ("batchId" IS NOT NULL))))
+"ArtisanProfile":ArtisanProfile_createdById_fk:FOREIGN KEY ("createdById") REFERENCES "User"(id) ON DELETE RESTRICT
+"ArtisanProfile":ArtisanProfile_pkey:PRIMARY KEY (id)
+"ArtisanProfile":ArtisanProfile_userId_fkey:FOREIGN KEY ("userId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ArtisanProfile":contact_visibility:CHECK (("contactVisibility" = ANY (ARRAY['PRIVATE'::text, 'ASSOCIATION'::text, 'PUBLIC'::text])))
+"ArtisanSkill":ArtisanSkill_artisanProfileId_fkey:FOREIGN KEY ("artisanProfileId") REFERENCES "ArtisanProfile"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ArtisanSkill":ArtisanSkill_craftSkillId_fkey:FOREIGN KEY ("craftSkillId") REFERENCES "CraftSkill"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ArtisanSkill":ArtisanSkill_pkey:PRIMARY KEY (id)
+"AssistedOfferDecision":AssistedOfferDecision_offerId_fkey:FOREIGN KEY ("offerId") REFERENCES "CommercialOffer"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"AssistedOfferDecision":AssistedOfferDecision_pkey:PRIMARY KEY (id)
+"AssistedOfferDecision":AssistedOfferDecision_recordedById_fkey:FOREIGN KEY ("recordedById") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"AssistedOfferDecision":AssistedOfferDecision_reported:CHECK ((("reportedDecision" = ANY (ARRAY['ACCEPT'::text, 'DECLINE'::text])) AND (method = 'IN_PERSON_REPORTED'::text) AND ("verificationStatus" = 'PENDING_UNAPPROVED_METHOD'::text)))
+"AssociationMembership":AssociationMembership_artisanProfileId_fkey:FOREIGN KEY ("artisanProfileId") REFERENCES "ArtisanProfile"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"AssociationMembership":AssociationMembership_consentRecordId_fkey:FOREIGN KEY ("consentRecordId") REFERENCES "ConsentRecord"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"AssociationMembership":AssociationMembership_organizationId_fkey:FOREIGN KEY ("organizationId") REFERENCES "Organization"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"AssociationMembership":AssociationMembership_pkey:PRIMARY KEY (id)
+"AuditEvent":AuditEvent_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"AuditEvent":AuditEvent_organizationId_fkey:FOREIGN KEY ("organizationId") REFERENCES "Organization"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"AuditEvent":AuditEvent_pkey:PRIMARY KEY (id)
+"AuthorizationPolicy":AuthorizationPolicy_pkey:PRIMARY KEY (id)
+"AuthorizationPolicy":AuthorizationPolicy_reviewedById_fk:FOREIGN KEY ("reviewedById") REFERENCES "User"(id) ON DELETE RESTRICT
+"AvailabilityPause":AvailabilityPause_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"AvailabilityPause":AvailabilityPause_artisanProfileId_fkey:FOREIGN KEY ("artisanProfileId") REFERENCES "ArtisanProfile"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"AvailabilityPause":AvailabilityPause_pkey:PRIMARY KEY (id)
+"AvailabilityPause":AvailabilityPause_resumedById_fkey:FOREIGN KEY ("resumedById") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"BatchAlert":BatchAlert_acknowledgedById_fkey:FOREIGN KEY ("acknowledgedById") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"BatchAlert":BatchAlert_batchId_fkey:FOREIGN KEY ("batchId") REFERENCES "CommercialBatch"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"BatchAlert":BatchAlert_pkey:PRIMARY KEY (id)
+"BatchMaterialRequirement":BatchMaterialRequirement_batchId_fkey:FOREIGN KEY ("batchId") REFERENCES "CommercialBatch"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"BatchMaterialRequirement":BatchMaterialRequirement_pkey:PRIMARY KEY (id)
+"BatchMaterialRequirement":BatchMaterialRequirement_releaseId_fkey:FOREIGN KEY ("releaseId") REFERENCES "BatchRelease"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"BatchMaterialRequirement":requirement_readiness:CHECK (((readiness = ANY (ARRAY['AVAILABILITY_UNKNOWN'::text, 'SYNTHETIC_ATTESTED_NOT_PHYSICAL_RECEIPT'::text])) AND ("requiredMilli" >= 0) AND ("batchQuantity" > 0)))
+"BatchRelease":BatchRelease_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"BatchRelease":BatchRelease_batchId_fkey:FOREIGN KEY ("batchId") REFERENCES "CommercialBatch"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"BatchRelease":BatchRelease_pkey:PRIMARY KEY (id)
+"BatchRelease":BatchRelease_revisionId_fkey:FOREIGN KEY ("revisionId") REFERENCES "ProcurementRevision"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"BatchRelease":BatchRelease_sampleId_fkey:FOREIGN KEY ("sampleId") REFERENCES "ProcurementSample"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"BatchRelease":release_attestation:CHECK ((("fundingAttestation" = 'SYNTHETIC_DEMO_NOT_A_PAYMENT'::text) AND ("materialAttestation" = 'SYNTHETIC_ATTESTED_NOT_PHYSICAL_RECEIPT'::text)))
+"BuyerDeliveryConfirmation":BuyerDeliveryConfirmation_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"BuyerDeliveryConfirmation":BuyerDeliveryConfirmation_pkey:PRIMARY KEY (id)
+"BuyerDeliveryConfirmation":BuyerDeliveryConfirmation_quantity_check:CHECK (((received >= 0) AND (accepted >= 0) AND (missing >= 0) AND (damaged >= 0) AND ((accepted + damaged) <= received)))
+"BuyerDeliveryConfirmation":BuyerDeliveryConfirmation_shipmentId_fkey:FOREIGN KEY ("shipmentId") REFERENCES "Shipment"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"BuyerDepositRecord":BuyerDepositRecord_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"BuyerDepositRecord":BuyerDepositRecord_buyerOrganizationId_fkey:FOREIGN KEY ("buyerOrganizationId") REFERENCES "Organization"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"BuyerDepositRecord":BuyerDepositRecord_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"BuyerDepositRecord":BuyerDepositRecord_pkey:PRIMARY KEY (id)
+"BuyerDepositRecord":BuyerDepositRecord_reviewerId_fkey:FOREIGN KEY ("reviewerId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"BuyerDepositRecord":deposit_money:CHECK ((("amountMillimes" > 0) AND ("expectedMillimes" >= 0)))
+"BuyerDepositRecord":deposit_unverified:CHECK (((status = ANY (ARRAY['PENDING_VERIFICATION'::text, 'REJECTED'::text, 'DISPUTED'::text])) AND (provenance = ANY (ARRAY['SYNTHETIC'::text, 'PENDING_VERIFICATION'::text]))))
+"BuyerSampleApproval":BuyerSampleApproval_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"BuyerSampleApproval":BuyerSampleApproval_amendmentOfId_fkey:FOREIGN KEY ("amendmentOfId") REFERENCES "BuyerSampleApproval"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"BuyerSampleApproval":BuyerSampleApproval_buyerOrganizationId_fkey:FOREIGN KEY ("buyerOrganizationId") REFERENCES "Organization"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"BuyerSampleApproval":BuyerSampleApproval_pkey:PRIMARY KEY (id)
+"BuyerSampleApproval":BuyerSampleApproval_sampleRequestId_fkey:FOREIGN KEY ("sampleRequestId") REFERENCES "ProductSampleRequest"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"BuyerSampleApproval":BuyerSampleApproval_specificationRevisionId_fkey:FOREIGN KEY ("specificationRevisionId") REFERENCES "ProductSpecificationRevision"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CapacityDeclaration":CapacityDeclaration_artisanProfileId_fkey:FOREIGN KEY ("artisanProfileId") REFERENCES "ArtisanProfile"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CapacityDeclaration":CapacityDeclaration_authorizationId_fk:FOREIGN KEY ("authorizationId") REFERENCES "OnboardingAuthorization"(id) ON DELETE RESTRICT
+"CapacityDeclaration":CapacityDeclaration_craftSkillId_fkey:FOREIGN KEY ("craftSkillId") REFERENCES "CraftSkill"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CapacityDeclaration":CapacityDeclaration_declaredByUserId_fkey:FOREIGN KEY ("declaredByUserId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CapacityDeclaration":CapacityDeclaration_pkey:PRIMARY KEY (id)
+"CapacityDeclaration":CapacityDeclaration_previousDeclarationId_fkey:FOREIGN KEY ("previousDeclarationId") REFERENCES "CapacityDeclaration"(id) ON DELETE RESTRICT
+"CapacityDeclaration":CapacityDeclaration_version_positive:CHECK ((version > 0))
+"CapacityDeclaration":capacity_effective_period:CHECK (("effectiveTo" > "effectiveFrom"))
+"CapacityDeclaration":capacity_nonnegative:CHECK ((quantity >= (0)::numeric))
+"CommandOutcome":CommandOutcome_pkey:PRIMARY KEY (id)
+"CommerceNotice":CommerceNotice_audience_check:CHECK ((audience = ANY (ARRAY['BUYER'::text, 'OPERATOR'::text, 'ARTISAN'::text])))
+"CommerceNotice":CommerceNotice_code_check:CHECK ((code ~~ 'commerce.%'::text))
+"CommerceNotice":CommerceNotice_eventId_audience_scopeId_key:UNIQUE ("eventId", audience, "scopeId")
+"CommerceNotice":CommerceNotice_eventId_fkey:FOREIGN KEY ("eventId") REFERENCES "OutboxEvent"(id) ON DELETE RESTRICT
+"CommerceNotice":CommerceNotice_pkey:PRIMARY KEY (id)
+"CommerceProjection":CommerceProjection_definitionVersion_check:CHECK (("definitionVersion" = 1))
+"CommerceProjection":CommerceProjection_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON DELETE RESTRICT
+"CommerceProjection":CommerceProjection_pkey:PRIMARY KEY ("orderId")
+"CommercialBatch":CommercialBatch_artisanProfileId_fkey:FOREIGN KEY ("artisanProfileId") REFERENCES "ArtisanProfile"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CommercialBatch":CommercialBatch_offerId_fkey:FOREIGN KEY ("offerId") REFERENCES "CommercialOffer"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CommercialBatch":CommercialBatch_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CommercialBatch":CommercialBatch_pkey:PRIMARY KEY (id)
+"CommercialBatch":CommercialBatch_revisionId_fkey:FOREIGN KEY ("revisionId") REFERENCES "ProcurementRevision"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CommercialBatch":batch_reconciliation:CHECK (((produced >= 0) AND (submitted >= 0) AND (submitted <= produced) AND (approved >= 0) AND (rejected >= 0) AND (pending >= 0) AND (((approved + rejected) + pending) = submitted) AND (version > 0)))
+"CommercialBatch":batch_state:CHECK ((status = ANY (ARRAY['ACCEPTED'::text, 'MATERIAL_READY'::text, 'IN_PROGRESS'::text, 'SUBMITTED'::text, 'INSPECTION'::text, 'APPROVED'::text, 'REWORK_REQUESTED'::text, 'DISPUTED'::text, 'COMPLETED'::text])))
+"CommercialBatch":batch_synthetic:CHECK ((provenance = 'SYNTHETIC'::text))
+"CommercialInspection":CommercialInspection_batchId_fkey:FOREIGN KEY ("batchId") REFERENCES "CommercialBatch"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CommercialInspection":CommercialInspection_pkey:PRIMARY KEY (id)
+"CommercialInspection":inspection_reconciliation:CHECK (((approved >= 0) AND (rejected >= 0) AND (pending >= 0) AND (((approved + rejected) + pending) = submitted) AND ("batchVersion" > 0)))
+"CommercialOffer":CommercialOffer_artisanProfileId_fkey:FOREIGN KEY ("artisanProfileId") REFERENCES "ArtisanProfile"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CommercialOffer":CommercialOffer_associationOrganizationId_fkey:FOREIGN KEY ("associationOrganizationId") REFERENCES "Organization"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CommercialOffer":CommercialOffer_capacityDeclarationId_fkey:FOREIGN KEY ("capacityDeclarationId") REFERENCES "CapacityDeclaration"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CommercialOffer":CommercialOffer_eligibilityAssessmentId_fkey:FOREIGN KEY ("eligibilityAssessmentId") REFERENCES "EligibilityAssessment"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CommercialOffer":CommercialOffer_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CommercialOffer":CommercialOffer_pkey:PRIMARY KEY (id)
+"CommercialOffer":CommercialOffer_quoteId_fkey:FOREIGN KEY ("quoteId") REFERENCES "ProcurementQuote"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CommercialOffer":offer_bounds:CHECK (((quantity >= 1) AND (quantity <= 1000000) AND ("unitPayMillimes" > 0) AND (version > 0)))
+"CommercialOffer":offer_state:CHECK ((status = ANY (ARRAY['PLANNED'::text, 'PREPARED'::text, 'OFFERED'::text, 'ACCEPTED'::text, 'DECLINED'::text, 'EXPIRED'::text, 'REPLACED'::text])))
+"CommercialOffer":offer_synthetic:CHECK ((provenance = 'SYNTHETIC'::text))
+"CommercialOrder":CommercialOrder_catalogueProcurementRevisionId_fkey:FOREIGN KEY ("catalogueProcurementRevisionId") REFERENCES "ProcurementRevision"(id) ON DELETE RESTRICT
+"CommercialOrder":CommercialOrder_pkey:PRIMARY KEY (id)
+"CommercialOrder":CommercialOrder_productSpecificationRevisionId_fkey:FOREIGN KEY ("productSpecificationRevisionId") REFERENCES "ProductSpecificationRevision"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CommercialOrder":CommercialOrder_rfqId_fkey:FOREIGN KEY ("rfqId") REFERENCES "CommercialRfq"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CommercialOrder":order_counts:CHECK (((delivered >= 0) AND (version > 0)))
+"CommercialOrder":order_state:CHECK ((status = ANY (ARRAY['APPROVED'::text, 'FUNDING_CONFIRMED'::text, 'PLANNING'::text, 'IN_PRODUCTION'::text, 'QUALITY_REVIEW'::text, 'READY_TO_SHIP'::text, 'IN_TRANSIT'::text, 'DELIVERED'::text, 'BUYER_ACCEPTED'::text, 'SETTLED'::text, 'CLOSED'::text, 'DISPUTED'::text, 'CANCELLED'::text, 'AMENDED'::text])))
+"CommercialOrder":order_synthetic:CHECK ((provenance = 'SYNTHETIC'::text))
+"CommercialProspect":CommercialProspect_buyerOrganizationId_fkey:FOREIGN KEY ("buyerOrganizationId") REFERENCES "Organization"(id) ON DELETE RESTRICT
+"CommercialProspect":CommercialProspect_operatorOrganizationId_fkey:FOREIGN KEY ("operatorOrganizationId") REFERENCES "Organization"(id) ON DELETE RESTRICT
+"CommercialProspect":CommercialProspect_pkey:PRIMARY KEY (id)
+"CommercialProspect":CommercialProspect_version_check:CHECK ((version > 0))
+"CommercialRfq":CommercialRfq_buyerOrganizationId_fkey:FOREIGN KEY ("buyerOrganizationId") REFERENCES "Organization"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CommercialRfq":CommercialRfq_craftSkillId_fkey:FOREIGN KEY ("craftSkillId") REFERENCES "CraftSkill"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CommercialRfq":CommercialRfq_operatorOrganizationId_fkey:FOREIGN KEY ("operatorOrganizationId") REFERENCES "Organization"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CommercialRfq":CommercialRfq_pkey:PRIMARY KEY (id)
+"CommercialRfq":CommercialRfq_sourceProductId_fkey:FOREIGN KEY ("sourceProductId") REFERENCES "ApprovedProductVersion"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CommercialRfq":rfq_money:CHECK ((("quoteMillimes" IS NULL) OR ("quoteMillimes" > 0)))
+"CommercialRfq":rfq_quantity:CHECK (((quantity >= 1) AND (quantity <= 1000000)))
+"CommercialRfq":rfq_state:CHECK ((status = ANY (ARRAY['DRAFT'::text, 'SUBMITTED'::text, 'UNDER_REVIEW'::text, 'QUOTED'::text, 'ACCEPTED'::text, 'DECLINED'::text, 'EXPIRED'::text])))
+"CommercialRfq":rfq_synthetic:CHECK ((provenance = 'SYNTHETIC'::text))
+"CommercialRfq":rfq_version:CHECK ((version > 0))
+"ConsentRecord":ConsentRecord_pkey:PRIMARY KEY (id)
+"ConsentRecord":ConsentRecord_userId_fkey:FOREIGN KEY ("userId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CostEstimate":CostEstimate_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CostEstimate":CostEstimate_feasibilityAssessmentId_fkey:FOREIGN KEY ("feasibilityAssessmentId") REFERENCES "FeasibilityAssessment"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CostEstimate":CostEstimate_pkey:PRIMARY KEY (id)
+"CostEstimate":CostEstimate_rfqId_fkey:FOREIGN KEY ("rfqId") REFERENCES "CommercialRfq"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"Counteroffer":Counteroffer_acceptedById_fkey:FOREIGN KEY ("acceptedById") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"Counteroffer":Counteroffer_authorUserId_fkey:FOREIGN KEY ("authorUserId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"Counteroffer":Counteroffer_offerId_fkey:FOREIGN KEY ("offerId") REFERENCES "CommercialOffer"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"Counteroffer":Counteroffer_pkey:PRIMARY KEY (id)
+"Counteroffer":Counteroffer_reviewedById_fkey:FOREIGN KEY ("reviewedById") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"Counteroffer":Counteroffer_revisedOfferId_fkey:FOREIGN KEY ("revisedOfferId") REFERENCES "CommercialOffer"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CraftSkill":CraftSkill_pkey:PRIMARY KEY (id)
+"CustodyHandover":CustodyHandover_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CustodyHandover":CustodyHandover_pkey:PRIMARY KEY (id)
+"CustodyHandover":CustodyHandover_priorHandoverId_fkey:FOREIGN KEY ("priorHandoverId") REFERENCES "CustodyHandover"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CustodyHandover":CustodyHandover_provenance_check:CHECK ((provenance = 'SYNTHETIC'::text))
+"CustodyHandover":CustodyHandover_quantity_check:CHECK ((quantity > 0))
+"CustodyHandover":CustodyHandover_shipmentId_fkey:FOREIGN KEY ("shipmentId") REFERENCES "Shipment"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"CustodyHandover":CustodyHandover_status_check:CHECK (("confirmationStatus" = ANY (ARRAY['PENDING'::text, 'CONFIRMED'::text])))
+"CustodyHandover":CustodyHandover_type_check:CHECK (("eventType" = ANY (ARRAY['COLLECTED_FROM_ASSOCIATION'::text, 'RECEIVED_AT_HUB'::text, 'HANDED_TO_TRANSPORT'::text])))
+"DelegationGrant":DelegationGrant_artisanProfileId_fkey:FOREIGN KEY ("artisanProfileId") REFERENCES "ArtisanProfile"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"DelegationGrant":DelegationGrant_delegateUserId_fkey:FOREIGN KEY ("delegateUserId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"DelegationGrant":DelegationGrant_organizationId_fkey:FOREIGN KEY ("organizationId") REFERENCES "Organization"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"DelegationGrant":DelegationGrant_pkey:PRIMARY KEY (id)
+"DeliveryDiscrepancy":DeliveryDiscrepancy_confirmationId_fkey:FOREIGN KEY ("confirmationId") REFERENCES "BuyerDeliveryConfirmation"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"DeliveryDiscrepancy":DeliveryDiscrepancy_pkey:PRIMARY KEY (id)
+"DeliveryDiscrepancy":DeliveryDiscrepancy_quantity_check:CHECK ((quantity > 0))
+"DeliveryDiscrepancy":DeliveryDiscrepancy_status_check:CHECK ((status = 'OPEN'::text))
+"DeliveryReport":DeliveryReport_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"DeliveryReport":DeliveryReport_pkey:PRIMARY KEY (id)
+"DeliveryReport":DeliveryReport_provenance_check:CHECK ((provenance = 'SYNTHETIC'::text))
+"DeliveryReport":DeliveryReport_quantity_check:CHECK ((quantity > 0))
+"DeliveryReport":DeliveryReport_shipmentId_fkey:FOREIGN KEY ("shipmentId") REFERENCES "Shipment"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"DemoCommand":DemoCommand_operation_check:CHECK ((operation = ANY (ARRAY['start'::text, 'switch'::text, 'reset'::text])))
+"DemoCommand":DemoCommand_pkey:PRIMARY KEY (id)
+"DemoCommand":DemoCommand_scenarioId_fkey:FOREIGN KEY ("scenarioId") REFERENCES "DemoScenario"(id) ON DELETE RESTRICT
+"DemoCommand":DemoCommand_visitorId_fkey:FOREIGN KEY ("visitorId") REFERENCES "DemoVisitor"(id) ON DELETE RESTRICT
+"DemoIdentity":DemoIdentity_persona_check:CHECK ((persona = ANY (ARRAY['buyer'::text, 'artisan'::text, 'coordinator'::text, 'production'::text, 'qa'::text, 'finance'::text])))
+"DemoIdentity":DemoIdentity_pkey:PRIMARY KEY (id)
+"DemoIdentity":DemoIdentity_scenarioId_fkey:FOREIGN KEY ("scenarioId") REFERENCES "DemoScenario"(id) ON DELETE RESTRICT
+"DemoIdentity":DemoIdentity_userId_fkey:FOREIGN KEY ("userId") REFERENCES "User"(id) ON DELETE RESTRICT
+"DemoScenario":DemoScenario_check:CHECK (((generation > 0) AND (version > 0) AND (status = ANY (ARRAY['ACTIVE'::text, 'ARCHIVED'::text])) AND (((status = 'ACTIVE'::text) AND ("archivedAt" IS NULL)) OR ((status = 'ARCHIVED'::text) AND ("archivedAt" IS NOT NULL)))))
+"DemoScenario":DemoScenario_pkey:PRIMARY KEY (id)
+"DemoScenario":DemoScenario_rfqId_fkey:FOREIGN KEY ("rfqId") REFERENCES "CommercialRfq"(id) ON DELETE RESTRICT
+"DemoScenario":DemoScenario_visitorId_fkey:FOREIGN KEY ("visitorId") REFERENCES "DemoVisitor"(id) ON DELETE RESTRICT
+"DemoVisitor":DemoVisitor_activeScenarioId_fkey:FOREIGN KEY ("activeScenarioId") REFERENCES "DemoScenario"(id) ON DELETE RESTRICT
+"DemoVisitor":DemoVisitor_pkey:PRIMARY KEY (id)
+"DemoVisitor":DemoVisitor_sessionEpoch_check:CHECK (("sessionEpoch" >= 0))
+"DiscussionMessage":DiscussionMessage_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"DiscussionMessage":DiscussionMessage_discussionId_fkey:FOREIGN KEY ("discussionId") REFERENCES "OrderDiscussion"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"DiscussionMessage":DiscussionMessage_pkey:PRIMARY KEY (id)
+"EffortAssumption":EffortAssumption_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"EffortAssumption":EffortAssumption_craftSkillId_fkey:FOREIGN KEY ("craftSkillId") REFERENCES "CraftSkill"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"EffortAssumption":EffortAssumption_pkey:PRIMARY KEY (id)
+"EffortAssumption":EffortAssumption_version_positive:CHECK (((version > 0) AND ("minPerUnit" >= (0)::numeric) AND ("maxPerUnit" >= "minPerUnit")))
+"EligibilityAssessment":EligibilityAssessment_artisanProfileId_fkey:FOREIGN KEY ("artisanProfileId") REFERENCES "ArtisanProfile"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"EligibilityAssessment":EligibilityAssessment_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"EligibilityAssessment":EligibilityAssessment_decision_known:CHECK ((decision = ANY (ARRAY['ELIGIBLE'::text, 'INELIGIBLE'::text, 'NEEDS_REVIEW'::text])))
+"EligibilityAssessment":EligibilityAssessment_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"EligibilityAssessment":EligibilityAssessment_pkey:PRIMARY KEY (id)
+"EventReceipt":EventReceipt_eventId_fkey:FOREIGN KEY ("eventId") REFERENCES "OutboxEvent"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"EventReceipt":EventReceipt_pkey:PRIMARY KEY ("eventId")
+"FeasibilityAssessment":FeasibilityAssessment_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"FeasibilityAssessment":FeasibilityAssessment_effortAssumptionId_fkey:FOREIGN KEY ("effortAssumptionId") REFERENCES "EffortAssumption"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"FeasibilityAssessment":FeasibilityAssessment_pkey:PRIMARY KEY (id)
+"FeasibilityAssessment":FeasibilityAssessment_result_known:CHECK ((result = ANY (ARRAY['FEASIBLE'::text, 'NOT_FEASIBLE'::text, 'NEEDS_REVIEW'::text])))
+"FeasibilityAssessment":FeasibilityAssessment_rfqId_fkey:FOREIGN KEY ("rfqId") REFERENCES "CommercialRfq"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"FinanceRecordEvent":FinanceRecordEvent_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"FinanceRecordEvent":FinanceRecordEvent_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON DELETE RESTRICT
+"FinanceRecordEvent":FinanceRecordEvent_pkey:PRIMARY KEY (id)
+"FinancialAdjustment":FinancialAdjustment_checkerId_fkey:FOREIGN KEY ("checkerId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"FinancialAdjustment":FinancialAdjustment_makerId_fkey:FOREIGN KEY ("makerId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"FinancialAdjustment":FinancialAdjustment_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"FinancialAdjustment":FinancialAdjustment_pkey:PRIMARY KEY (id)
+"FinancialAdjustment":adjustment_amount:CHECK (("amountMillimes" > 0))
+"FinancialAdjustment":adjustment_approval_metadata:CHECK (((status = ANY (ARRAY['PENDING_REVIEW'::text, 'APPROVED_PENDING_POLICY'::text])) AND ((status = 'PENDING_REVIEW'::text) OR ("checkerId" IS NOT NULL))))
+"FinancialAdjustment":adjustment_checker:CHECK ((("checkerId" IS NULL) OR ("checkerId" <> "makerId")))
+"FinancialAdjustment":adjustment_direction:CHECK ((direction = ANY (ARRAY['INCREASE'::text, 'DECREASE'::text, 'REVIEW_ONLY'::text])))
+"ForecastComparison":ForecastComparison_forecastId_fkey:FOREIGN KEY ("forecastId") REFERENCES "ForecastSnapshot"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ForecastComparison":ForecastComparison_pkey:PRIMARY KEY (id)
+"ForecastSnapshot":ForecastSnapshot_batchId_fkey:FOREIGN KEY ("batchId") REFERENCES "CommercialBatch"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ForecastSnapshot":ForecastSnapshot_createdById_fkey:FOREIGN KEY ("createdById") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ForecastSnapshot":ForecastSnapshot_pkey:PRIMARY KEY (id)
+"InspectionCriterion":InspectionCriterion_pkey:PRIMARY KEY (id)
+"InspectionCriterion":InspectionCriterion_revisionId_fkey:FOREIGN KEY ("revisionId") REFERENCES "ProcurementRevision"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"InspectionCriterionResult":InspectionCriterionResult_attemptId_fkey:FOREIGN KEY ("attemptId") REFERENCES "QualityInspectionAttempt"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"InspectionCriterionResult":InspectionCriterionResult_criterionId_fkey:FOREIGN KEY ("criterionId") REFERENCES "InspectionCriterion"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"InspectionCriterionResult":InspectionCriterionResult_pkey:PRIMARY KEY (id)
+"InspectionCriterionResult":criterion_outcome:CHECK ((outcome = ANY (ARRAY['PASS'::text, 'FAIL'::text, 'NOT_APPLICABLE'::text])))
+"InventoryMovement":InventoryMovement_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON DELETE RESTRICT
+"InventoryMovement":InventoryMovement_lotId_fkey:FOREIGN KEY ("lotId") REFERENCES "MaterialLot"(id) ON DELETE RESTRICT
+"InventoryMovement":InventoryMovement_pkey:PRIMARY KEY (id)
+"InventoryMovement":InventoryMovement_quantityMilli_check:CHECK (("quantityMilli" >= 0))
+"Invitation":Invitation_createdByUserId_fkey:FOREIGN KEY ("createdByUserId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"Invitation":Invitation_organizationId_fkey:FOREIGN KEY ("organizationId") REFERENCES "Organization"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"Invitation":Invitation_pkey:PRIMARY KEY (id)
+"MaterialHandover":MaterialHandover_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON DELETE RESTRICT
+"MaterialHandover":MaterialHandover_artisanProfileId_fkey:FOREIGN KEY ("artisanProfileId") REFERENCES "ArtisanProfile"(id) ON DELETE RESTRICT
+"MaterialHandover":MaterialHandover_batchId_fkey:FOREIGN KEY ("batchId") REFERENCES "CommercialBatch"(id) ON DELETE RESTRICT
+"MaterialHandover":MaterialHandover_check:CHECK ((("quantityMilli" > 0) AND ("consumedMilli" >= 0) AND ("returnedMilli" >= 0) AND (("consumedMilli" + "returnedMilli") <= "quantityMilli")))
+"MaterialHandover":MaterialHandover_lotId_fkey:FOREIGN KEY ("lotId") REFERENCES "MaterialLot"(id) ON DELETE RESTRICT
+"MaterialHandover":MaterialHandover_pkey:PRIMARY KEY (id)
+"MaterialHandover":MaterialHandover_receiverOrganizationId_fkey:FOREIGN KEY ("receiverOrganizationId") REFERENCES "Organization"(id) ON DELETE RESTRICT
+"MaterialHandover":MaterialHandover_reservationId_fkey:FOREIGN KEY ("reservationId") REFERENCES "MaterialReservation"(id) ON DELETE RESTRICT
+"MaterialHandover":MaterialHandover_status_check:CHECK ((status = ANY (ARRAY['PENDING_RECEIVER_CONFIRMATION'::text, 'PENDING_INDEPENDENT_VERIFICATION'::text, 'RECEIVED_CONFIRMED'::text, 'DISCREPANCY_REPORTED'::text, 'DISCREPANCY_RECONCILED'::text])))
+"MaterialLot":MaterialLot_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON DELETE RESTRICT
+"MaterialLot":MaterialLot_organizationId_fkey:FOREIGN KEY ("organizationId") REFERENCES "Organization"(id) ON DELETE RESTRICT
+"MaterialLot":MaterialLot_pkey:PRIMARY KEY (id)
+"MaterialLot":MaterialLot_provenance_check:CHECK ((provenance = ANY (ARRAY['SYNTHETIC'::text, 'PENDING_VERIFICATION'::text])))
+"MaterialLot":MaterialLot_quantity_check:CHECK ((("receivedMilli" > 0) AND ("availableMilli" >= 0) AND ("reservedMilli" >= 0) AND ("issuedMilli" >= 0) AND ("consumedMilli" >= 0) AND ("damagedMilli" >= 0) AND ("returnedMilli" >= 0) AND ("quarantineMilli" >= 0) AND ("receivedMilli" = ((((("availableMilli" + "reservedMilli") + "issuedMilli") + "consumedMilli") + "damagedMilli") + "quarantineMilli"))))
+"MaterialLot":MaterialLot_unit_check:CHECK ((unit = ANY (ARRAY['METERS'::text, 'PIECES'::text, 'UNITS'::text])))
+"MaterialReadiness":MaterialReadiness_batchId_fkey:FOREIGN KEY ("batchId") REFERENCES "CommercialBatch"(id) ON DELETE RESTRICT
+"MaterialReadiness":MaterialReadiness_pkey:PRIMARY KEY (id)
+"MaterialReadiness":MaterialReadiness_readiness_check:CHECK ((readiness = ANY (ARRAY['DISCREPANCY_BLOCKED'::text, 'RECEIPT_ACKNOWLEDGED_PENDING_STOCK_VERIFICATION'::text, 'SYNTHETIC_RECEIPT_ACKNOWLEDGED'::text, 'RECEIPT_INCOMPLETE'::text])))
+"MaterialReadiness":MaterialReadiness_requirementId_fkey:FOREIGN KEY ("requirementId") REFERENCES "BatchMaterialRequirement"(id) ON DELETE RESTRICT
+"MaterialReceipt":MaterialReceipt_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON DELETE RESTRICT
+"MaterialReceipt":MaterialReceipt_artisanProfileId_fkey:FOREIGN KEY ("artisanProfileId") REFERENCES "ArtisanProfile"(id) ON DELETE RESTRICT
+"MaterialReceipt":MaterialReceipt_check1:CHECK ((((source = 'ARTISAN_DIRECT'::text) AND ("verificationStatus" = 'AUTHENTICATED_ACKNOWLEDGEMENT'::text) AND (method = 'DIRECT'::text)) OR ((source = 'COORDINATOR_REPORTED'::text) AND ("verificationStatus" = 'PENDING_INDEPENDENT_VERIFICATION'::text) AND (method = ANY (ARRAY['PHONE'::text, 'IN_PERSON'::text])))))
+"MaterialReceipt":MaterialReceipt_check:CHECK ((("receivedMilli" >= 0) AND ("damagedMilli" >= 0) AND ("shortageMilli" >= 0) AND ("damagedMilli" <= "receivedMilli")))
+"MaterialReceipt":MaterialReceipt_handoverId_fkey:FOREIGN KEY ("handoverId") REFERENCES "MaterialHandover"(id) ON DELETE RESTRICT
+"MaterialReceipt":MaterialReceipt_pkey:PRIMARY KEY (id)
+"MaterialReconciliation":MaterialReconciliation_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON DELETE RESTRICT
+"MaterialReconciliation":MaterialReconciliation_handoverId_fkey:FOREIGN KEY ("handoverId") REFERENCES "MaterialHandover"(id) ON DELETE RESTRICT
+"MaterialReconciliation":MaterialReconciliation_pkey:PRIMARY KEY (id)
+"MaterialReservation":MaterialReservation_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON DELETE RESTRICT
+"MaterialReservation":MaterialReservation_batchId_fkey:FOREIGN KEY ("batchId") REFERENCES "CommercialBatch"(id) ON DELETE RESTRICT
+"MaterialReservation":MaterialReservation_check:CHECK ((("quantityMilli" >= 0) AND ("remainingMilli" >= 0) AND ("remainingMilli" <= "quantityMilli")))
+"MaterialReservation":MaterialReservation_lotId_fkey:FOREIGN KEY ("lotId") REFERENCES "MaterialLot"(id) ON DELETE RESTRICT
+"MaterialReservation":MaterialReservation_pkey:PRIMARY KEY (id)
+"MaterialReservation":MaterialReservation_requirementId_fkey:FOREIGN KEY ("requirementId") REFERENCES "BatchMaterialRequirement"(id) ON DELETE RESTRICT
+"MaterialReservation":MaterialReservation_status_check:CHECK ((status = ANY (ARRAY['RESERVED'::text, 'ISSUED'::text, 'PARTIALLY_ISSUED'::text, 'RELEASED'::text, 'PARTIALLY_ISSUED_RELEASED'::text])))
+"MaterialReturn":MaterialReturn_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON DELETE RESTRICT
+"MaterialReturn":MaterialReturn_check:CHECK ((("quantityMilli" > 0) AND (condition = ANY (ARRAY['DAMAGED'::text, 'UNUSED'::text, 'DEFECTIVE'::text])) AND (disposition = ANY (ARRAY['AWAITING_INSPECTION'::text, 'RESTOCK'::text, 'DAMAGED'::text])) AND ((disposition <> 'RESTOCK'::text) OR (condition = 'UNUSED'::text))))
+"MaterialReturn":MaterialReturn_dispositionActorId_fkey:FOREIGN KEY ("dispositionActorId") REFERENCES "User"(id) ON DELETE RESTRICT
+"MaterialReturn":MaterialReturn_handoverId_fkey:FOREIGN KEY ("handoverId") REFERENCES "MaterialHandover"(id) ON DELETE RESTRICT
+"MaterialReturn":MaterialReturn_lotId_fkey:FOREIGN KEY ("lotId") REFERENCES "MaterialLot"(id) ON DELETE RESTRICT
+"MaterialReturn":MaterialReturn_pkey:PRIMARY KEY (id)
+"MembershipPermission":MembershipPermission_grantedById_fk:FOREIGN KEY ("grantedById") REFERENCES "User"(id) ON DELETE RESTRICT
+"MembershipPermission":MembershipPermission_membershipId_fkey:FOREIGN KEY ("membershipId") REFERENCES "OrganizationMember"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"MembershipPermission":MembershipPermission_pkey:PRIMARY KEY (id)
+"MembershipRole":MembershipRole_assignedByUserId_fkey:FOREIGN KEY ("assignedByUserId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"MembershipRole":MembershipRole_membershipId_fkey:FOREIGN KEY ("membershipId") REFERENCES "OrganizationMember"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"MembershipRole":MembershipRole_pkey:PRIMARY KEY (id)
+"NotificationDelivery":NotificationDelivery_pkey:PRIMARY KEY (id)
+"NotificationDelivery":NotificationDelivery_userId_fkey:FOREIGN KEY ("userId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"NotificationPreference":NotificationPreference_pkey:PRIMARY KEY (id)
+"NotificationPreference":NotificationPreference_userId_fkey:FOREIGN KEY ("userId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"OnboardingAuthorization":OnboardingAuthorization_artisanProfileId_fkey:FOREIGN KEY ("artisanProfileId") REFERENCES "ArtisanProfile"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"OnboardingAuthorization":OnboardingAuthorization_pkey:PRIMARY KEY (id)
+"OnboardingAuthorization":OnboardingAuthorization_policyId_fkey:FOREIGN KEY ("policyId") REFERENCES "AuthorizationPolicy"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"OnboardingAuthorization":OnboardingAuthorization_recordedById_fk:FOREIGN KEY ("recordedById") REFERENCES "User"(id) ON DELETE RESTRICT
+"OperatorAssignment":OperatorAssignment_assignedById_fk:FOREIGN KEY ("assignedById") REFERENCES "User"(id) ON DELETE RESTRICT
+"OperatorAssignment":OperatorAssignment_operatorId_fk:FOREIGN KEY ("operatorId") REFERENCES "User"(id) ON DELETE RESTRICT
+"OperatorAssignment":OperatorAssignment_organizationId_fk:FOREIGN KEY ("organizationId") REFERENCES "Organization"(id) ON DELETE RESTRICT
+"OperatorAssignment":OperatorAssignment_pkey:PRIMARY KEY (id)
+"OrderClosureAssessment":OrderClosureAssessment_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"OrderClosureAssessment":OrderClosureAssessment_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"OrderClosureAssessment":OrderClosureAssessment_pkey:PRIMARY KEY (id)
+"OrderClosureAssessment":closure_blocked:CHECK ((status = ANY (ARRAY['BLOCKED'::text, 'NEEDS_REVIEW'::text])))
+"OrderDiscussion":OrderDiscussion_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"OrderDiscussion":OrderDiscussion_authorOrganizationId_fkey:FOREIGN KEY ("authorOrganizationId") REFERENCES "Organization"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"OrderDiscussion":OrderDiscussion_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"OrderDiscussion":OrderDiscussion_pkey:PRIMARY KEY (id)
+"Organization":Organization_approvedByUserId_fkey:FOREIGN KEY ("approvedByUserId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"Organization":Organization_createdByUserId_fkey:FOREIGN KEY ("createdByUserId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"Organization":Organization_pkey:PRIMARY KEY (id)
+"OrganizationMember":OrganizationMember_organizationId_fkey:FOREIGN KEY ("organizationId") REFERENCES "Organization"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"OrganizationMember":OrganizationMember_pkey:PRIMARY KEY (id)
+"OrganizationMember":OrganizationMember_userId_fkey:FOREIGN KEY ("userId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"OutboxEvent":OutboxEvent_pkey:PRIMARY KEY (id)
+"OutboxEvent":outbox_attempts_valid:CHECK ((attempts >= 0))
+"OutboxEvent":outbox_version_valid:CHECK ((version = 1))
+"ParticipantConcern":ParticipantConcern_pkey:PRIMARY KEY (id)
+"ParticipantConcern":ParticipantConcern_reviewedById_fkey:FOREIGN KEY ("reviewedById") REFERENCES "User"(id) ON DELETE RESTRICT
+"PaymentDispute":PaymentDispute_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"PaymentDispute":PaymentDispute_artisanProfileId_fkey:FOREIGN KEY ("artisanProfileId") REFERENCES "ArtisanProfile"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"PaymentDispute":PaymentDispute_batchId_fkey:FOREIGN KEY ("batchId") REFERENCES "CommercialBatch"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"PaymentDispute":PaymentDispute_handlerId_fkey:FOREIGN KEY ("handlerId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"PaymentDispute":PaymentDispute_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"PaymentDispute":PaymentDispute_payableId_fkey:FOREIGN KEY ("payableId") REFERENCES "ArtisanPayable"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"PaymentDispute":PaymentDispute_pkey:PRIMARY KEY (id)
+"PaymentDispute":dispute_amount:CHECK (("amountMillimes" > 0))
+"PayoutExecutionRecord":PayoutExecutionRecord_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"PayoutExecutionRecord":PayoutExecutionRecord_payoutId_fkey:FOREIGN KEY ("payoutId") REFERENCES "PayoutRequest"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"PayoutExecutionRecord":PayoutExecutionRecord_pkey:PRIMARY KEY (id)
+"PayoutExecutionRecord":PayoutExecutionRecord_reference_key:UNIQUE (reference)
+"PayoutExecutionRecord":execution_unverified:CHECK (((NOT "bankVerified") AND (status = ANY (ARRAY['VERIFICATION_PENDING'::text, 'FAILED'::text])) AND ("amountMillimes" > 0)))
+"PayoutRequest":PayoutRequest_approverId_fkey:FOREIGN KEY ("approverId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"PayoutRequest":PayoutRequest_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"PayoutRequest":PayoutRequest_payableId_fkey:FOREIGN KEY ("payableId") REFERENCES "ArtisanPayable"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"PayoutRequest":PayoutRequest_pkey:PRIMARY KEY (id)
+"PayoutRequest":PayoutRequest_requesterId_fkey:FOREIGN KEY ("requesterId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"PayoutRequest":payout_approval_metadata:CHECK ((("policyVersion" = 1) AND ((status = 'REQUESTED'::text) OR (("approverId" IS NOT NULL) AND ("approvedAt" IS NOT NULL) AND ("approverId" <> "requesterId")))))
+"PayoutRequest":payout_checker:CHECK ((("approverId" IS NULL) OR ("approverId" <> "requesterId")))
+"PayoutRequest":payout_money:CHECK ((("amountMillimes" > 0) AND ("amountMillimes" <= "payableSnapshotMillimes")))
+"PayoutRequest":payout_status:CHECK ((status = ANY (ARRAY['REQUESTED'::text, 'APPROVED'::text, 'EXECUTION_PENDING'::text, 'VERIFICATION_PENDING'::text, 'FAILED'::text])))
+"PickupSchedule":PickupSchedule_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"PickupSchedule":PickupSchedule_associationOrganizationId_fkey:FOREIGN KEY ("associationOrganizationId") REFERENCES "Organization"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"PickupSchedule":PickupSchedule_coordinatorId_fkey:FOREIGN KEY ("coordinatorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"PickupSchedule":PickupSchedule_operatorId_fkey:FOREIGN KEY ("operatorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"PickupSchedule":PickupSchedule_pkey:PRIMARY KEY (id)
+"PickupSchedule":PickupSchedule_quantity_check:CHECK ((quantity > 0))
+"PickupSchedule":PickupSchedule_shipmentId_fkey:FOREIGN KEY ("shipmentId") REFERENCES "Shipment"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"PickupSchedule":PickupSchedule_unit_check:CHECK ((unit = 'PIECES'::text))
+"PickupSchedule":PickupSchedule_window_check:CHECK (("windowEnd" > "windowStart"))
+"PilotProposalRevision":PilotProposalRevision_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON DELETE RESTRICT
+"PilotProposalRevision":PilotProposalRevision_pkey:PRIMARY KEY (id)
+"PilotProposalRevision":PilotProposalRevision_prospectId_fkey:FOREIGN KEY ("prospectId") REFERENCES "CommercialProspect"(id) ON DELETE RESTRICT
+"PilotProposalRevision":PilotProposalRevision_rfqId_fkey:FOREIGN KEY ("rfqId") REFERENCES "CommercialRfq"(id) ON DELETE RESTRICT
+"PilotProposalRevision":PilotProposalRevision_specificationRevisionId_fkey:FOREIGN KEY ("specificationRevisionId") REFERENCES "ProductSpecificationRevision"(id) ON DELETE RESTRICT
+"PilotProposalRevision":PilotProposalRevision_version_check:CHECK ((version > 0))
+"PrivacyRequest":PrivacyRequest_assignedReviewerId_fkey:FOREIGN KEY ("assignedReviewerId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"PrivacyRequest":PrivacyRequest_pkey:PRIMARY KEY (id)
+"PrivacyRequest":PrivacyRequest_userId_fkey:FOREIGN KEY ("userId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementAcceptance":ProcurementAcceptance_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementAcceptance":ProcurementAcceptance_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementAcceptance":ProcurementAcceptance_pkey:PRIMARY KEY (id)
+"ProcurementAcceptance":ProcurementAcceptance_quoteId_fkey:FOREIGN KEY ("quoteId") REFERENCES "ProcurementQuote"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementActivity":ProcurementActivity_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementActivity":ProcurementActivity_pkey:PRIMARY KEY (id)
+"ProcurementActivity":ProcurementActivity_rfqId_fkey:FOREIGN KEY ("rfqId") REFERENCES "CommercialRfq"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementAttachment":ProcurementAttachment_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementAttachment":ProcurementAttachment_pkey:PRIMARY KEY (id)
+"ProcurementAttachment":ProcurementAttachment_rfqId_fkey:FOREIGN KEY ("rfqId") REFERENCES "CommercialRfq"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementAttachment":attachment_safe_image:CHECK (((mime = 'image/webp'::text) AND (octet_length(bytes) <= 262144)))
+"ProcurementDocument":ProcurementDocument_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementDocument":ProcurementDocument_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementDocument":ProcurementDocument_pkey:PRIMARY KEY (id)
+"ProcurementDocument":ProcurementDocument_rfqId_fkey:FOREIGN KEY ("rfqId") REFERENCES "CommercialRfq"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementDocument":document_kind_valid:CHECK ((kind = ANY (ARRAY['QUOTE'::text, 'CONTRACT'::text, 'INVOICE'::text, 'DELIVERY'::text])))
+"ProcurementDocument":document_status_valid:CHECK ((status = ANY (ARRAY['DRAFT'::text, 'FINAL'::text, 'VOID'::text])))
+"ProcurementMessage":ProcurementMessage_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementMessage":ProcurementMessage_pkey:PRIMARY KEY (id)
+"ProcurementMessage":ProcurementMessage_rfqId_fkey:FOREIGN KEY ("rfqId") REFERENCES "CommercialRfq"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementQuestion":ProcurementQuestion_answeredById_fkey:FOREIGN KEY ("answeredById") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementQuestion":ProcurementQuestion_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementQuestion":ProcurementQuestion_pkey:PRIMARY KEY (id)
+"ProcurementQuestion":ProcurementQuestion_rfqId_fkey:FOREIGN KEY ("rfqId") REFERENCES "CommercialRfq"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementQuote":ProcurementQuote_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementQuote":ProcurementQuote_costEstimateId_fkey:FOREIGN KEY ("costEstimateId") REFERENCES "CostEstimate"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementQuote":ProcurementQuote_feasibilityAssessmentId_fkey:FOREIGN KEY ("feasibilityAssessmentId") REFERENCES "FeasibilityAssessment"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementQuote":ProcurementQuote_pkey:PRIMARY KEY (id)
+"ProcurementQuote":ProcurementQuote_revisionId_fkey:FOREIGN KEY ("revisionId") REFERENCES "ProcurementRevision"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementQuote":ProcurementQuote_rfqId_fkey:FOREIGN KEY ("rfqId") REFERENCES "CommercialRfq"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementQuote":ProcurementQuote_status_known:CHECK ((status = ANY (ARRAY['ISSUED'::text, 'ACCEPTED'::text, 'REJECTED'::text, 'SUPERSEDED'::text])))
+"ProcurementQuoteRejection":ProcurementQuoteRejection_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementQuoteRejection":ProcurementQuoteRejection_pkey:PRIMARY KEY (id)
+"ProcurementQuoteRejection":ProcurementQuoteRejection_quoteId_fkey:FOREIGN KEY ("quoteId") REFERENCES "ProcurementQuote"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementQuoteRejection":ProcurementQuoteRejection_reason_bounds:CHECK (((char_length(reason) >= 2) AND (char_length(reason) <= 500)))
+"ProcurementRevision":ProcurementRevision_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementRevision":ProcurementRevision_pkey:PRIMARY KEY (id)
+"ProcurementRevision":ProcurementRevision_predecessorId_fkey:FOREIGN KEY ("predecessorId") REFERENCES "ProcurementRevision"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementRevision":ProcurementRevision_rfqId_fkey:FOREIGN KEY ("rfqId") REFERENCES "CommercialRfq"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementSample":ProcurementSample_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementSample":ProcurementSample_catalogueApprovalId_fkey:FOREIGN KEY ("catalogueApprovalId") REFERENCES "BuyerSampleApproval"(id) ON DELETE RESTRICT
+"ProcurementSample":ProcurementSample_pkey:PRIMARY KEY (id)
+"ProcurementSample":ProcurementSample_revisionId_fkey:FOREIGN KEY ("revisionId") REFERENCES "ProcurementRevision"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementSample":ProcurementSample_rfqId_fkey:FOREIGN KEY ("rfqId") REFERENCES "CommercialRfq"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementSampleDecision":ProcurementSampleDecision_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementSampleDecision":ProcurementSampleDecision_pkey:PRIMARY KEY (id)
+"ProcurementSampleDecision":ProcurementSampleDecision_sampleId_fkey:FOREIGN KEY ("sampleId") REFERENCES "ProcurementSample"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProcurementSampleDecision":sample_decision_valid:CHECK ((decision = ANY (ARRAY['APPROVED'::text, 'CHANGES_REQUESTED'::text, 'REJECTED'::text])))
+"ProducerSharePolicy":ProducerSharePolicy_pkey:PRIMARY KEY (version)
+"ProducerShareSnapshot":ProducerShareSnapshot_availability_check:CHECK ((availability = ANY (ARRAY['AVAILABLE'::text, 'UNAVAILABLE_SMALL_GROUP'::text, 'UNAVAILABLE_DENOMINATOR'::text])))
+"ProducerShareSnapshot":ProducerShareSnapshot_basis_check:CHECK ((basis = 'AGREED_NOT_PAID'::text))
+"ProducerShareSnapshot":ProducerShareSnapshot_pkey:PRIMARY KEY (id)
+"ProducerShareSnapshot":ProducerShareSnapshot_provenance_check:CHECK ((provenance = 'SYNTHETIC'::text))
+"ProducerShareSnapshot":ProducerShareSnapshot_revisionId_fkey:FOREIGN KEY ("revisionId") REFERENCES "TraceabilityRevision"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductSampleRequest":ProductSampleRequest_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductSampleRequest":ProductSampleRequest_buyerOrganizationId_fkey:FOREIGN KEY ("buyerOrganizationId") REFERENCES "Organization"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductSampleRequest":ProductSampleRequest_operatorOrganizationId_fkey:FOREIGN KEY ("operatorOrganizationId") REFERENCES "Organization"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductSampleRequest":ProductSampleRequest_pkey:PRIMARY KEY (id)
+"ProductSampleRequest":ProductSampleRequest_responsibleArtisanProfileId_fkey:FOREIGN KEY ("responsibleArtisanProfileId") REFERENCES "ArtisanProfile"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductSampleRequest":ProductSampleRequest_specificationRevisionId_fkey:FOREIGN KEY ("specificationRevisionId") REFERENCES "ProductSpecificationRevision"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductSampleRequest":sample_acceptor_user_fk:FOREIGN KEY ("acceptedById") REFERENCES "User"(id) ON DELETE RESTRICT
+"ProductSpecification":ProductSpecification_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductSpecification":ProductSpecification_craftSkillId_fkey:FOREIGN KEY ("craftSkillId") REFERENCES "CraftSkill"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductSpecification":ProductSpecification_ownerOrganizationId_fkey:FOREIGN KEY ("ownerOrganizationId") REFERENCES "Organization"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductSpecification":ProductSpecification_pkey:PRIMARY KEY (id)
+"ProductSpecificationRevision":ProductSpecificationRevision_approvedById_fkey:FOREIGN KEY ("approvedById") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductSpecificationRevision":ProductSpecificationRevision_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductSpecificationRevision":ProductSpecificationRevision_pkey:PRIMARY KEY (id)
+"ProductSpecificationRevision":ProductSpecificationRevision_specificationId_fkey:FOREIGN KEY ("specificationId") REFERENCES "ProductSpecification"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductSpecificationRevision":ProductSpecificationRevision_submittedById_fkey:FOREIGN KEY ("submittedById") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductSpecificationRevision":ProductSpecificationRevision_supersededById_fkey:FOREIGN KEY ("supersededById") REFERENCES "ProductSpecificationRevision"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductionException":ProductionException_assignedCoordinatorId_fkey:FOREIGN KEY ("assignedCoordinatorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductionException":ProductionException_batchId_fkey:FOREIGN KEY ("batchId") REFERENCES "CommercialBatch"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductionException":ProductionException_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductionException":ProductionException_pkey:PRIMARY KEY (id)
+"ProductionException":ProductionException_reporterId_fkey:FOREIGN KEY ("reporterId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductionLedgerEvent":ProductionLedgerEvent_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductionLedgerEvent":ProductionLedgerEvent_batchId_fkey:FOREIGN KEY ("batchId") REFERENCES "CommercialBatch"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductionLedgerEvent":ProductionLedgerEvent_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductionLedgerEvent":ProductionLedgerEvent_pkey:PRIMARY KEY (id)
+"ProductionProgressEvent":ProductionProgressEvent_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductionProgressEvent":ProductionProgressEvent_artisanProfileId_fkey:FOREIGN KEY ("artisanProfileId") REFERENCES "ArtisanProfile"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductionProgressEvent":ProductionProgressEvent_associationOrganizationId_fkey:FOREIGN KEY ("associationOrganizationId") REFERENCES "Organization"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductionProgressEvent":ProductionProgressEvent_batchId_fkey:FOREIGN KEY ("batchId") REFERENCES "CommercialBatch"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductionProgressEvent":ProductionProgressEvent_pkey:PRIMARY KEY (id)
+"ProductionProgressEvent":ProductionProgressEvent_priorEventId_fkey:FOREIGN KEY ("priorEventId") REFERENCES "ProductionProgressEvent"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductionProgressEvent":progress_event_shape:CHECK (((kind = ANY (ARRAY['REPORT'::text, 'CORRECTION'::text, 'FLAG'::text])) AND (mode = 'CUMULATIVE'::text) AND (source = ANY (ARRAY['ARTISAN'::text, 'COORDINATOR'::text, 'OPERATOR'::text])) AND (cumulative >= 0) AND ("previousCumulative" >= 0)))
+"ProductionTimeRecord":ProductionTimeRecord_artisanProfileId_fkey:FOREIGN KEY ("artisanProfileId") REFERENCES "ArtisanProfile"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductionTimeRecord":ProductionTimeRecord_batchId_fkey:FOREIGN KEY ("batchId") REFERENCES "CommercialBatch"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductionTimeRecord":ProductionTimeRecord_correctionOfId_fkey:FOREIGN KEY ("correctionOfId") REFERENCES "ProductionTimeRecord"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProductionTimeRecord":ProductionTimeRecord_duration_check:CHECK ((("periodTo" > "periodFrom") AND (("observedMinutes" IS NULL) OR (("observedMinutes" > 0) AND (("observedMinutes")::numeric <= (EXTRACT(epoch FROM ("periodTo" - "periodFrom")) / (60)::numeric))))))
+"ProductionTimeRecord":ProductionTimeRecord_observedUnits_check:CHECK (("observedUnits" >= 0))
+"ProductionTimeRecord":ProductionTimeRecord_pkey:PRIMARY KEY (id)
+"ProductionTimeRecord":ProductionTimeRecord_reportedById_fkey:FOREIGN KEY ("reportedById") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ProspectRevision":ProspectRevision_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON DELETE RESTRICT
+"ProspectRevision":ProspectRevision_pkey:PRIMARY KEY (id)
+"ProspectRevision":ProspectRevision_prospectId_fkey:FOREIGN KEY ("prospectId") REFERENCES "CommercialProspect"(id) ON DELETE RESTRICT
+"ProspectRevision":ProspectRevision_version_check:CHECK ((version > 0))
+"QualityInspectionAttempt":QualityInspectionAttempt_batchId_fkey:FOREIGN KEY ("batchId") REFERENCES "CommercialBatch"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"QualityInspectionAttempt":QualityInspectionAttempt_inspectorId_fkey:FOREIGN KEY ("inspectorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"QualityInspectionAttempt":QualityInspectionAttempt_pkey:PRIMARY KEY (id)
+"QualityInspectionAttempt":QualityInspectionAttempt_priorAttemptId_fkey:FOREIGN KEY ("priorAttemptId") REFERENCES "QualityInspectionAttempt"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"QualityInspectionAttempt":inspection_attempt_reconcile:CHECK (((kind = ANY (ARRAY['INITIAL'::text, 'REINSPECTION'::text])) AND (approved >= 0) AND (rejected >= 0) AND (pending >= 0) AND (((approved + rejected) + pending) = "scopeQuantity") AND (attempt > 0)))
+"RateBucket":RateBucket_pkey:PRIMARY KEY (key)
+"RecommendationPolicy":RecommendationPolicy_pkey:PRIMARY KEY (id)
+"RecommendationSnapshot":RecommendationSnapshot_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"RecommendationSnapshot":RecommendationSnapshot_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"RecommendationSnapshot":RecommendationSnapshot_pkey:PRIMARY KEY (id)
+"RecommendationSnapshot":RecommendationSnapshot_policyId_fkey:FOREIGN KEY ("policyId") REFERENCES "RecommendationPolicy"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ReportingPolicy":ReportingPolicy_pkey:PRIMARY KEY (id)
+"ReportingPolicy":ReportingPolicy_reviewedById_fkey:FOREIGN KEY ("reviewedById") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"SampleEvaluation":SampleEvaluation_inspectorId_fkey:FOREIGN KEY ("inspectorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"SampleEvaluation":SampleEvaluation_pkey:PRIMARY KEY (id)
+"SampleEvaluation":SampleEvaluation_sampleRequestId_fkey:FOREIGN KEY ("sampleRequestId") REFERENCES "ProductSampleRequest"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"SamplePayable":SamplePayable_artisanProfileId_fkey:FOREIGN KEY ("artisanProfileId") REFERENCES "ArtisanProfile"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"SamplePayable":SamplePayable_offerId_fkey:FOREIGN KEY ("offerId") REFERENCES "CommercialOffer"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"SamplePayable":SamplePayable_pkey:PRIMARY KEY (id)
+"SamplePayable":SamplePayable_sampleRequestId_fkey:FOREIGN KEY ("sampleRequestId") REFERENCES "ProductSampleRequest"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ScheduleRevision":ScheduleRevision_approvedById_fkey:FOREIGN KEY ("approvedById") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ScheduleRevision":ScheduleRevision_artisanApprovedById_fkey:FOREIGN KEY ("artisanApprovedById") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ScheduleRevision":ScheduleRevision_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ScheduleRevision":ScheduleRevision_batchId_fkey:FOREIGN KEY ("batchId") REFERENCES "CommercialBatch"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ScheduleRevision":ScheduleRevision_buyerApprovedById_fkey:FOREIGN KEY ("buyerApprovedById") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ScheduleRevision":ScheduleRevision_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ScheduleRevision":ScheduleRevision_pkey:PRIMARY KEY (id)
+"ScheduleScenario":ScheduleScenario_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ScheduleScenario":ScheduleScenario_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ScheduleScenario":ScheduleScenario_pkey:PRIMARY KEY (id)
+"Session":Session_pkey:PRIMARY KEY (id)
+"Session":Session_userId_fkey:FOREIGN KEY ("userId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE CASCADE
+"Shipment":Shipment_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"Shipment":Shipment_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"Shipment":Shipment_pkey:PRIMARY KEY (id)
+"Shipment":Shipment_provenance_check:CHECK ((provenance = 'SYNTHETIC'::text))
+"Shipment":Shipment_status_check:CHECK ((status = ANY (ARRAY['PICKUP_SCHEDULED'::text, 'COLLECTED'::text, 'IN_TRANSIT'::text, 'DELIVERY_REPORTED'::text, 'BUYER_CONFIRMED'::text, 'DISCREPANCY'::text, 'CANCELLED'::text])))
+"ShipmentItem":ShipmentItem_pkey:PRIMARY KEY (id)
+"ShipmentItem":ShipmentItem_preparationItemId_fkey:FOREIGN KEY ("preparationItemId") REFERENCES "ShipmentPreparationItem"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ShipmentItem":ShipmentItem_quantity_check:CHECK ((quantity > 0))
+"ShipmentItem":ShipmentItem_shipmentId_fkey:FOREIGN KEY ("shipmentId") REFERENCES "Shipment"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ShipmentPreparation":ShipmentPreparation_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ShipmentPreparation":ShipmentPreparation_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ShipmentPreparation":ShipmentPreparation_pkey:PRIMARY KEY (id)
+"ShipmentPreparation":preparation_status:CHECK ((status = 'PREPARED'::text))
+"ShipmentPreparationItem":ShipmentPreparationItem_batchId_fkey:FOREIGN KEY ("batchId") REFERENCES "CommercialBatch"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ShipmentPreparationItem":ShipmentPreparationItem_pkey:PRIMARY KEY (id)
+"ShipmentPreparationItem":ShipmentPreparationItem_preparationId_fkey:FOREIGN KEY ("preparationId") REFERENCES "ShipmentPreparation"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"ShipmentPreparationItem":preparation_quantity:CHECK ((quantity > 0))
+"SimulatedSettlement":SimulatedSettlement_amount_check:CHECK (("amountMillimes" > 0))
+"SimulatedSettlement":SimulatedSettlement_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"SimulatedSettlement":SimulatedSettlement_payableId_fkey:FOREIGN KEY ("payableId") REFERENCES "ArtisanPayable"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"SimulatedSettlement":SimulatedSettlement_pkey:PRIMARY KEY (id)
+"SimulatedSettlement":SimulatedSettlement_provenance_check:CHECK (((provenance = 'SYNTHETIC'::text) AND ("bankVerified" = false)))
+"SimulatedSettlement":SimulatedSettlement_side_check:CHECK ((side = ANY (ARRAY['BUYER'::text, 'ARTISAN'::text])))
+"SimulatedSettlement":SimulatedSettlement_status_check:CHECK ((status = ANY (ARRAY['SCHEDULED'::text, 'SIMULATED_INITIATED'::text, 'SIMULATED_SETTLED'::text, 'SIMULATED_FAILED'::text])))
+"SimulatedSettlementEvent":SimulatedSettlementEvent_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"SimulatedSettlementEvent":SimulatedSettlementEvent_pkey:PRIMARY KEY (id)
+"SimulatedSettlementEvent":SimulatedSettlementEvent_settlementId_fkey:FOREIGN KEY ("settlementId") REFERENCES "SimulatedSettlement"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"SimulatedSettlementEvent":SimulatedSettlementEvent_status_check:CHECK ((status = ANY (ARRAY['SCHEDULED'::text, 'SIMULATED_INITIATED'::text, 'SIMULATED_SETTLED'::text, 'SIMULATED_FAILED'::text])))
+"SpecificationMaterialLine":SpecificationMaterialLine_pkey:PRIMARY KEY (id)
+"SpecificationMaterialLine":SpecificationMaterialLine_revisionId_fkey:FOREIGN KEY ("revisionId") REFERENCES "ProcurementRevision"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"SpecificationMaterialLine":material_line_exact:CHECK (((unit = ANY (ARRAY['METERS'::text, 'PIECES'::text, 'UNITS'::text])) AND ("perItemMilli" > 0) AND ("wastageBps" >= 0) AND ("wastageBps" <= 1000)))
+"SupportCase":SupportCase_assignedToUserId_fkey:FOREIGN KEY ("assignedToUserId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"SupportCase":SupportCase_organizationId_fkey:FOREIGN KEY ("organizationId") REFERENCES "Organization"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"SupportCase":SupportCase_pkey:PRIMARY KEY (id)
+"SupportCase":SupportCase_userId_fkey:FOREIGN KEY ("userId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"SupportTicket":SupportTicket_organizationId_fkey:FOREIGN KEY ("organizationId") REFERENCES "Organization"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"SupportTicket":SupportTicket_ownerId_fkey:FOREIGN KEY ("ownerId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"SupportTicket":SupportTicket_pkey:PRIMARY KEY (id)
+"SupportTicket":SupportTicket_reporterId_fkey:FOREIGN KEY ("reporterId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"SupportTicketAttachment":SupportTicketAttachment_authorId_fkey:FOREIGN KEY ("authorId") REFERENCES "User"(id) ON DELETE RESTRICT
+"SupportTicketAttachment":SupportTicketAttachment_pkey:PRIMARY KEY (id)
+"SupportTicketAttachment":SupportTicketAttachment_ticketId_fkey:FOREIGN KEY ("ticketId") REFERENCES "SupportTicket"(id) ON DELETE RESTRICT
+"SupportTicketEvent":SupportTicketEvent_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"SupportTicketEvent":SupportTicketEvent_pkey:PRIMARY KEY (id)
+"SupportTicketEvent":SupportTicketEvent_ticketId_fkey:FOREIGN KEY ("ticketId") REFERENCES "SupportTicket"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"SyntheticPayment":SyntheticPayment_batchId_fkey:FOREIGN KEY ("batchId") REFERENCES "CommercialBatch"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"SyntheticPayment":SyntheticPayment_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"SyntheticPayment":SyntheticPayment_pkey:PRIMARY KEY (id)
+"SyntheticPayment":payment_bounds:CHECK ((("amountMillimes" > 0) AND (version > 0)))
+"SyntheticPayment":payment_kind:CHECK ((((kind = 'BUYER_RECEIPT'::text) AND ("batchId" IS NULL)) OR ((kind = 'ARTISAN_PAYOUT'::text) AND ("batchId" IS NOT NULL))))
+"SyntheticPayment":payment_simulated_evidence:CHECK ((((status = 'SETTLED'::text) AND ("evidenceType" IS NOT NULL) AND ("evidenceType" = 'SIMULATED_SETTLEMENT'::text)) OR ((status <> 'SETTLED'::text) AND ("evidenceType" IS NULL))))
+"SyntheticPayment":payment_state:CHECK ((status = ANY (ARRAY['SCHEDULED'::text, 'APPROVED'::text, 'INITIATED'::text, 'SETTLED'::text, 'FAILED'::text, 'CANCELLED'::text, 'DISPUTED'::text])))
+"SyntheticPayment":payment_synthetic:CHECK ((provenance = 'SYNTHETIC'::text))
+"TraceabilityPublication":TraceabilityPublication_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"TraceabilityPublication":TraceabilityPublication_orderId_fkey:FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"TraceabilityPublication":TraceabilityPublication_pkey:PRIMARY KEY (id)
+"TraceabilityPublication":TraceabilityPublication_status_check:CHECK ((status = ANY (ARRAY['DRAFT'::text, 'PENDING_REVIEW'::text, 'PUBLISHED'::text, 'REVOKED'::text])))
+"TraceabilityRevision":TraceabilityRevision_actorId_fkey:FOREIGN KEY ("actorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"TraceabilityRevision":TraceabilityRevision_pkey:PRIMARY KEY (id)
+"TraceabilityRevision":TraceabilityRevision_publicationId_fkey:FOREIGN KEY ("publicationId") REFERENCES "TraceabilityPublication"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"TwoFactor":TwoFactor_pkey:PRIMARY KEY (id)
+"TwoFactor":TwoFactor_userId_fkey:FOREIGN KEY ("userId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE RESTRICT
+"User":User_pkey:PRIMARY KEY (id)
+"Verification":Verification_pkey:PRIMARY KEY (id)
+_prisma_migrations:_prisma_migrations_pkey:PRIMARY KEY (id)

@@ -1,0 +1,17 @@
+rules:
+  - id: nasj-prisma-raw-unsafe
+    languages: [typescript]
+    severity: ERROR
+    message: >-
+      $queryRawUnsafe/$executeRawUnsafe with a non-constant SQL string allows SQL injection.
+      Use the tagged-template form ($queryRaw`...`), which sends values as parameters.
+    metadata:
+      category: security
+      cwe: 'CWE-89: SQL Injection'
+    patterns:
+      - pattern-either:
+          - pattern: $DB.$queryRawUnsafe($SQL, ...)
+          - pattern: $DB.$executeRawUnsafe($SQL, ...)
+      # A constant SQL string (no variables inside) cannot carry user input.
+      - pattern-not: $DB.$queryRawUnsafe("...", ...)
+      - pattern-not: $DB.$executeRawUnsafe("...", ...)

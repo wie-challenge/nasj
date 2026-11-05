@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 280" width="480" height="280">
+  <title>Synthetic storage basket illustration</title>
+  <rect width="480" height="280" fill="#eee8dc"/>
+  <path d="M134 108q106-46 212 0l-24 106q-82 30-164 0z" fill="#c8a56d" stroke="#675944" stroke-width="4"/>
+  <path d="M176 96q6-104 64-66 58-38 64 66" fill="none" stroke="#82643e" stroke-width="8"/>
+  <ellipse cx="240" cy="108" rx="106" ry="26" fill="#82643e" stroke="#675944" stroke-width="4"/>
+  <path d="M147 144q93 34 186 0m-178 27q85 34 170 0m-165 27q80 28 160 0M174 132l17 91m18-83 9 87m22-85v88m22-90-9 87m53-95-17 91" fill="none" stroke="#f0d5a5" stroke-width="4"/>
+</svg>

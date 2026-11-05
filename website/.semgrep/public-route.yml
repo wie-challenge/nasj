@@ -1,0 +1,18 @@
+rules:
+  - id: nasj-public-route
+    languages: [typescript]
+    severity: ERROR
+    message: >-
+      @Public() turns off the global authentication guard for this route. Make sure it is really
+      meant for anonymous users, then document why with:
+      // nosemgrep: nasj-public-route -- <reason>
+    metadata:
+      category: security
+      cwe: 'CWE-306: Missing Authentication for Critical Function'
+    pattern-either:
+      - pattern: |
+          @Public()
+          class $CLASS { ... }
+      - pattern: |
+          @Public()
+          $METHOD(...) { ... }

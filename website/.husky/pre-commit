@@ -1,0 +1,24 @@
+# Runs on every `git commit`, on the staged files only. CI repeats these checks.
+# Stop at the first failing check, so the commit is refused.
+set -e
+
+# 1. Lint + format of the staged files.
+pnpm exec biome check --staged --no-errors-on-unmatched
+
+# 2. No large files (database dumps, backups, screenshots): 500 KB per added or modified file.
+large=$(git diff --cached --name-only --diff-filter=AM | while IFS= read -r file; do
+  size=$(git cat-file -s ":$file")
+  if [ "$size" -gt 512000 ]; then echo "  $file ($((size / 1024)) KB)"; fi
+done)
+if [ -n "$large" ]; then
+  echo "Files larger than 500 KB are not allowed in Git:"
+  echo "$large"
+  exit 1
+fi
+
+# 3. Secrets in the staged changes. Warns instead of blocking when Gitleaks is not installed.
+if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks git --pre-commit --staged --redact --no-banner --verbose
+else
+  echo "WARNING: gitleaks is not installed, secret scan skipped. See README > Security checks."
+fi

@@ -1,0 +1,98 @@
+ M apps/api/prisma/schema.prisma
+ M apps/api/src/app.module.ts
+ M apps/api/src/modules/artisans/artisan.projection.ts
+ M apps/api/src/modules/artisans/artisans.controller.ts
+ M apps/api/src/modules/artisans/artisans.service.ts
+ M apps/api/src/modules/commerce/commerce.module.ts
+ M apps/api/src/modules/commerce/commerce.service.ts
+ M apps/api/src/modules/procurement/procurement.controller.ts
+ M apps/api/src/modules/procurement/procurement.service.ts
+ M apps/api/src/modules/registry/registry.controller.ts
+ M apps/api/src/modules/registry/registry.service.ts
+ M apps/api/test/commerce.fixture.ts
+ M apps/api/test/integration.ts
+ M apps/web/next-env.d.ts
+ M apps/web/package.json
+ M apps/web/src/app/globals.css
+ M apps/web/src/components/artisan-workspace.tsx
+ M apps/web/src/components/commerce-workspace.tsx
+ M apps/web/src/components/foundation-workspace.tsx
+ M apps/web/src/components/procurement.tsx
+ M apps/web/src/lib/app-navigation.ts
+ M apps/web/src/lib/navigation.ts
+ M apps/web/test/workspace-navigation.test.ts
+ M docs/api/README.md
+ M docs/foundation/ROLE_STORY_ACCESS_MATRIX.md
+ M packages/contracts/src/artisans.ts
+ M packages/contracts/src/commerce/contracts.ts
+ M packages/contracts/src/commerce/domain.ts
+ M packages/contracts/src/foundation.ts
+ M packages/contracts/src/index.ts
+ M packages/contracts/src/permissions.ts
+ M packages/contracts/src/procurement.ts
+ M pnpm-lock.yaml
+ M tests/e2e/setup.ts
+?? apps/api/prisma/migrations/20261027010000_capacity_revisions/
+?? apps/api/prisma/migrations/20261027020000_commercial_decisions/
+?? apps/api/prisma/migrations/20261027030000_production_offers/
+?? apps/api/prisma/migrations/20261027040000_production_execution/
+?? apps/api/prisma/migrations/20261027050000_logistics_traceability/
+?? apps/api/prisma/migrations/20261027060000_shipment_cancel_damage/
+?? apps/api/src/modules/artisans/capacity.ts
+?? apps/api/src/modules/directory/
+?? apps/api/src/modules/procurement/commercial-decision.ts
+?? apps/api/src/modules/procurement/execution.ts
+?? apps/api/src/modules/procurement/logistics.controller.ts
+?? apps/api/src/modules/procurement/logistics.ts
+?? apps/api/src/modules/procurement/production-offers.ts
+?? apps/api/test/capacity-upgrade.scenarios.ts
+?? apps/api/test/capacity.scenarios.ts
+?? apps/api/test/commercial.fixture.ts
+?? apps/api/test/commercial.scenarios.ts
+?? apps/api/test/directory.fixture.ts
+?? apps/api/test/directory.scenarios.ts
+?? apps/api/test/execution.scenarios.ts
+?? apps/api/test/production.fixture.ts
+?? apps/api/test/unit/capacity.test.ts
+?? apps/api/test/unit/commercial.test.ts
+?? apps/api/test/unit/directory.test.ts
+?? apps/api/test/unit/eligibility.test.ts
+?? apps/api/test/unit/execution.test.ts
+?? apps/api/test/unit/logistics.test.ts
+?? apps/web/src/app/(protected)/artisan/compensation/
+?? apps/web/src/app/(protected)/association/offers/
+?? apps/web/src/app/(protected)/association/pickups/
+?? apps/web/src/app/(protected)/association/production/
+?? apps/web/src/app/(protected)/directory/
+?? apps/web/src/app/trace/
+?? apps/web/src/components/capacity-workspace.tsx
+?? apps/web/src/components/directory-workspace.tsx
+?? apps/web/src/components/execution-workspace.tsx
+?? apps/web/src/components/logistics-workspace.tsx
+?? apps/web/src/components/production-offers.tsx
+?? apps/web/src/components/trace-qr.tsx
+?? apps/web/src/lib/trace-qr.ts
+?? apps/web/test/trace-qr.test.ts
+?? docs/engineering/BACKLOG_NEXT_STEPS_2026-10-27.md
+?? docs/engineering/CAPACITY_IMPLEMENTATION_2026-10-27.md
+?? docs/engineering/COMMERCIAL_DECISION_2026-10-27.md
+?? docs/engineering/DIRECTORY_IMPLEMENTATION_2026-10-27.md
+?? docs/engineering/GITHUB_COMPLETION_AUDIT_2026-10-27.md
+?? docs/engineering/LOGISTICS_TRACEABILITY_2026-10-27.md
+?? docs/engineering/PRODUCTION_EXECUTION_2026-10-27.md
+?? docs/engineering/PRODUCTION_OFFERS_2026-10-27.md
+?? docs/engineering/evidence/backlog-20261027/
+?? docs/engineering/evidence/batch5-20261027/
+?? docs/engineering/evidence/capacity-20261027/
+?? docs/engineering/evidence/directory-20261027/
+?? packages/contracts/src/capacity.ts
+?? packages/contracts/src/commercial.ts
+?? packages/contracts/src/directory.ts
+?? packages/contracts/src/eligibility.ts
+?? packages/contracts/src/execution.ts
+?? packages/contracts/src/logistics.ts
+?? tests/e2e/capacity.spec.ts
+?? tests/e2e/commercial.spec.ts
+?? tests/e2e/directory.spec.ts
+?? tests/e2e/execution.spec.ts
+?? tests/e2e/production.spec.ts

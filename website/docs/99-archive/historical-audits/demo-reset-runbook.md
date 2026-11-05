@@ -1,0 +1,15 @@
+# Visitor-scoped showroom reset
+
+Reset is available only in the isolated local demo environment. The visitor control cookie is a random HttpOnly secret; only its hash is stored. POST `/api/v1/demo/reset` requires matching origin, visitor-bound X-Demo-CSRF, Idempotency-Key and the current scenario ID/generation with confirm=true. The confirmation explains scope and retained history.
+
+The transaction acquires the same IAM advisory locks as business/lifecycle commands. It rechecks active visitor ownership, archives the old generation, revokes only its owned sessions, disables only its synthetic users, revokes its published public QR records with history, and creates a complete new generation of accounts/organizations/commercial seed. The expected seed specification is compared with database-derived totals before commit. Any failure rolls back the archive and recreation together. A provider sign-in racing reset rechecks generation/epoch and discards stale issued sessions.
+
+Repeated requests with the same operation key replay the same active generation. A different payload with the same key conflicts. An old command cannot reactivate an archived generation. Repeating a reset with a new key but stale generation is rejected, requiring a fresh status fetch. Resetting the newly active generation is allowed and produces another clean instance. Concurrent identical resets produce one new generation, not two.
+
+Initial values: one RFQ, one quotation; zero orders/offers/commitments/capacity reservations/production/QA/prepared/shipment/delivery/payables/payment simulations/inventory/public QR; verified paid zero. The seeded sample, requirements and costing remain explicitly synthetic. Existing archived obligations, accepted versions, inventory movements, financial attempts and audit records remain unchanged. Archived scenario IDs and disabled accounts cannot be used to access active workflows. Other visitors, real/unrelated accounts and their sessions are outside the reset's ownership set.
+
+To recover from an error, refresh the showroom's current status; do not delete rows or disable immutable triggers. Retry a timed-out request with its same idempotency key. A successful reset response is shown only after all reconciliation checks and transaction commit. The page clears its transient action feedback as it loads the new generation.
+
+Local wearable/safety simulator history is not hosted by this website and is not reset here. Where running separately, the IoT simulator exposes its own local `deleteLocalData()` API or a new process instance; use its README. Never upload private monitoring history to make a commerce reset appear comprehensive. Automatic cross-app safety reset remains outside #190's implemented browser scope.
+
+Retained archived demo generations consume storage. No automatic cleanup policy for immutable history is implemented. Keep the showroom local and short-lived; a hosted multi-user service needs owner-approved retention, quotas, operational monitoring and deployment review before enabling public provisioning.

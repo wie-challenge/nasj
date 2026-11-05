@@ -1,0 +1,13 @@
+# Local secrets and configuration
+.env
+.env.*
+!.env.example
+.local/
+*.pem
+*.key
+
+# Dependencies and generated output
+node_modules/
+.venv/
+__pycache__/
+.DS_Store

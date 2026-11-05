@@ -1,0 +1,17 @@
+# E02 and foundation integration into NASJ
+
+The integration target is `feat/nasj-rebrand`, not `main`. Before this work, local E02 commit `2d4ceda` was not an ancestor of either target. NASJ commit `582127a` started from the original application baseline, so integrating only the E02-specific files would omit its required E16 reliability and revised-role foundation. The merge retains both complete histories.
+
+The NASJ landing page, logos, photography, typography, metadata and public page content are preserved. The NASJ sidebar/account-menu design now uses the existing identity-context permissions, approved affiliations and role landing paths. Buyer procurement, assigned coordinator registry/discussions, operator accounts and administrator governance remain available to their permitted actors. Shared shadcn components use the NASJ palette; the mobile sidebar and account menu use Radix focus, Escape and keyboard handling. The account menu includes sign-out and working profile/security/notification/privacy destinations.
+
+Workspace packages and executable imports consistently use `@nasj/*`, including the newer E02/E16 modules, tests and operations scripts. The root lockfile is regenerated and frozen installation is verified.
+
+Existing PostgreSQL database/user/container project names, fixture email addresses and Better Auth session cookie prefixes remain stable. A visual rebrand must not create another database, duplicate demo users or invalidate existing sessions. NASJ remains the application name, email branding and new MFA issuer. The preexisting `202610200001_nasj_rename` migration preserves the audit trigger function by renaming its OID; previous migrations, accounts, sessions and domain enum values are retained. New E02 migrations remain additive, and real payouts remain disabled.
+
+The integration is verified through lint/types, unit tests, real disposable PostgreSQL scenarios (including upgrade and encrypted restore), browser journeys on mobile/tablet/desktop, accessibility scans, dependency audit and production build. Added NASJ cases verify the public landing page, branding, account-menu keyboard navigation, Escape focus return, privacy navigation and sign-out. Raw evidence stays ignored under `.local/integration`; screenshots and Playwright reports are included in the existing CI artifact.
+
+The E02 delivery retains its local synthetic-demo boundary. Physical device issue #197 remains pending hardware; live accounting, legal review, paid sample execution and hosted operations are separate release gates. This merge does not automatically close those epics or deploy a live pilot.
+
+Local API verification passed 49 unit tests and all 93 PostgreSQL integration scenarios, including a restore of all 51 tables. Frozen install, lint/types, dependency audit and production build passed. Browser review also corrected the desktop mobile-menu visibility, slightly darkened small terracotta text for contrast, and made the account dropdown non-modal to avoid hiding focusable page controls from assistive technology. Hosted CI is required before merging this integration into the NASJ branch.
+
+The two added NASJ landing/account-menu cases pass on mobile and desktop with zero reported axe violations. The retained business/browser regressions and focused sidebar/drawer checks also pass after resolving the integration findings. Account menu list wrappers use presentation semantics so assistive technology sees the actual menu items. The PR checks run the complete 27-case browser suite against the final merge candidate.

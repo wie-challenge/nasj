@@ -1,0 +1,10 @@
+BEGIN;
+ALTER TABLE "AllocationPlan" ADD COLUMN "materialAssumptions" JSONB NOT NULL DEFAULT '{}';
+ALTER TABLE "ProductionTimeRecord" ADD COLUMN "provenance" TEXT NOT NULL DEFAULT '';
+ALTER TABLE "ProductionTimeRecord" ADD COLUMN "observedUnits" INTEGER NOT NULL DEFAULT 0 CHECK ("observedUnits" >= 0);
+ALTER TABLE "ProductionTimeRecord" ADD CONSTRAINT "ProductionTimeRecord_duration_check" CHECK ("periodTo" > "periodFrom" AND ("observedMinutes" IS NULL OR ("observedMinutes" > 0 AND "observedMinutes" <= EXTRACT(EPOCH FROM ("periodTo" - "periodFrom")) / 60)));
+CREATE FUNCTION nasj_intelligence_immutable() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'Intelligence evidence is append-only; record a correction or a new version'; END $$;
+CREATE TRIGGER "ForecastSnapshot_immutable" BEFORE UPDATE OR DELETE ON "ForecastSnapshot" FOR EACH ROW EXECUTE FUNCTION nasj_intelligence_immutable();
+CREATE TRIGGER "ForecastComparison_immutable" BEFORE UPDATE OR DELETE ON "ForecastComparison" FOR EACH ROW EXECUTE FUNCTION nasj_intelligence_immutable();
+CREATE TRIGGER "ProductionTimeRecord_immutable" BEFORE UPDATE OR DELETE ON "ProductionTimeRecord" FOR EACH ROW EXECUTE FUNCTION nasj_intelligence_immutable();
+COMMIT;

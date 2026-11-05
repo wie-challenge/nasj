@@ -1,0 +1,31 @@
+# Local secrets and configuration
+.env
+.env.*
+!.env.example
+.local/
+*.pem
+*.key
+
+# Operating system and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Generated files
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+coverage/
+
+node_modules/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.coverage
+htmlcov/
+data/raw/
+models/artifacts/

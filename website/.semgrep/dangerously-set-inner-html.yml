@@ -1,0 +1,11 @@
+rules:
+  - id: nasj-dangerously-set-inner-html
+    languages: [typescript]
+    severity: ERROR
+    message: >-
+      dangerouslySetInnerHTML inserts raw HTML and allows XSS. Render text normally, or sanitize with
+      a reviewed sanitizer and document it with a nosemgrep comment.
+    metadata:
+      category: security
+      cwe: "CWE-79: Cross-site Scripting"
+    pattern: <$EL dangerouslySetInnerHTML={...} />

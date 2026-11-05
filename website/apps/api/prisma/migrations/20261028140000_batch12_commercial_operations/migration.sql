@@ -1,0 +1,15 @@
+ALTER TABLE "FinanceRecordEvent" ADD COLUMN "orderId" TEXT, ADD COLUMN "sourceKey" TEXT, ADD COLUMN "data" JSONB;
+CREATE UNIQUE INDEX "FinanceRecordEvent_sourceKey_key" ON "FinanceRecordEvent"("sourceKey");
+ALTER TABLE "FinanceRecordEvent" ADD CONSTRAINT "FinanceRecordEvent_orderId_fkey" FOREIGN KEY ("orderId") REFERENCES "CommercialOrder"("id") ON DELETE RESTRICT;
+CREATE TABLE "CommercialProspect" ("id" TEXT PRIMARY KEY, "operatorOrganizationId" TEXT NOT NULL REFERENCES "Organization"("id") ON DELETE RESTRICT, "buyerOrganizationId" TEXT NOT NULL REFERENCES "Organization"("id") ON DELETE RESTRICT, "version" INTEGER NOT NULL DEFAULT 1 CHECK("version">0), "snapshot" JSONB NOT NULL, "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE UNIQUE INDEX "CommercialProspect_operatorOrganizationId_buyerOrganizationId_key" ON "CommercialProspect"("operatorOrganizationId","buyerOrganizationId");
+CREATE INDEX "CommercialProspect_operatorOrganizationId_createdAt_idx" ON "CommercialProspect"("operatorOrganizationId","createdAt");
+CREATE TABLE "ProspectRevision" ("id" TEXT PRIMARY KEY,"prospectId" TEXT NOT NULL REFERENCES "CommercialProspect"("id") ON DELETE RESTRICT,"version" INTEGER NOT NULL CHECK("version">0),"snapshot" JSONB NOT NULL,"actorId" TEXT NOT NULL REFERENCES "User"("id") ON DELETE RESTRICT,"createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE UNIQUE INDEX "ProspectRevision_prospectId_version_key" ON "ProspectRevision"("prospectId","version");
+CREATE TABLE "PilotProposalRevision" ("id" TEXT PRIMARY KEY,"prospectId" TEXT NOT NULL REFERENCES "CommercialProspect"("id") ON DELETE RESTRICT,"groupId" TEXT NOT NULL,"version" INTEGER NOT NULL CHECK("version">0),"specificationRevisionId" TEXT NOT NULL REFERENCES "ProductSpecificationRevision"("id") ON DELETE RESTRICT,"rfqId" TEXT REFERENCES "CommercialRfq"("id") ON DELETE RESTRICT,"snapshot" JSONB NOT NULL,"actorId" TEXT NOT NULL REFERENCES "User"("id") ON DELETE RESTRICT,"createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE UNIQUE INDEX "PilotProposalRevision_groupId_version_key" ON "PilotProposalRevision"("groupId","version");
+CREATE INDEX "PilotProposalRevision_prospectId_createdAt_idx" ON "PilotProposalRevision"("prospectId","createdAt");
+CREATE FUNCTION batch12_immutable() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'Append-only commercial evidence'; END; $$;
+CREATE TRIGGER prospect_revision_immutable BEFORE UPDATE OR DELETE ON "ProspectRevision" FOR EACH ROW EXECUTE FUNCTION batch12_immutable();
+CREATE TRIGGER pilot_proposal_immutable BEFORE UPDATE OR DELETE ON "PilotProposalRevision" FOR EACH ROW EXECUTE FUNCTION batch12_immutable();
+CREATE TRIGGER finance_record_event_immutable BEFORE UPDATE OR DELETE ON "FinanceRecordEvent" FOR EACH ROW EXECUTE FUNCTION batch12_immutable();

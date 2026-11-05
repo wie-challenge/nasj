@@ -1,0 +1,29 @@
+# Local secrets and configuration
+.env
+.env.*
+!.env.example
+.local/
+*.pem
+*.key
+
+# Operating system and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Generated files
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+coverage/
+
+.pio/
+.platformio/
+build/
+
+# Simulator toolchain and generated output
+node_modules/
+dist/
+*.tsbuildinfo

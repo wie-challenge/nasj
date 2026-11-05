@@ -1,0 +1,9 @@
+# Foundation role restructuring audit — 2026-10-21
+
+The existing application uses Better Auth with persistent User, Account, Session and Verification records, USER/ADMIN platform status, scoped OrganizationMember/MembershipRole records, token-hashed invitations, serialised IAM transactions, consent/delegation and immutable audit events. These remain authoritative.
+
+Findings: ArtisanProfile.userId is mandatory; coordinator memberships can span associations; buyer and internal financial roles use legacy role checks; association managers can assign coordinator access; navigation derives from the commercial demo rather than a central identity context. Historical consent records belong to authenticated users, so assisted participation evidence needs a participant-specific record. Existing association relationships and delegations must remain valid history.
+
+Implementation boundaries: four operational personas layered on existing accounts; legacy enum values retained, with restricted organization-specific compatibility mappings. Explicit grants control buyer quotation approval and sensitive financial authority. The existing membership table represents coordinator affiliations; a database-maintained marker and partial unique index enforce one active coordinator affiliation per user, including concurrent writes. Separate managing affiliations and coordinator assignments preserve artisan management history without deleting existing consent-linked relationships.
+
+Migration is additive. Conflicting coordinator memberships or managing artisan relationships must stop migration with a conflict report, never be silently reassigned. Existing authentication records and commercial references remain untouched. Real payout functionality remains disabled; only the existing labelled simulation remains. Assisted authorization policies require an administrator-recorded review reference; software does not assert legal approval on its own.

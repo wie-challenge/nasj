@@ -1,0 +1,9 @@
+Initial normal browser suite, 27 October 2026: 40 passed, four presentation tests failed.
+See e2e.log and retained initial error contexts for original failure evidence.
+
+Diagnosed failures:
+- Two viewport tests used article:not([hidden]), which also selected nested simulator result cards. Fix: explicit data-presentation-slide audience-scene selector and data-scene-active marker.
+- Print inspection found one visible scene because global hidden styling defeated print overrides. Fix: scoped CSS scene visibility via data-scene-active instead of HTML hidden; print exposes every audience scene and hides notes.
+- Headless Chromium delivered Escape to the document without a native fullscreen exit. Fix: invoke actual document.exitFullscreen for Escape while this presentation owns fullscreen, without preventing browser Escape behavior.
+
+The initial failures are not counted as passing evidence. presentation-targeted.log and the final full-suite log establish subsequent outcomes after execution.

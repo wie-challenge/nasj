@@ -1,0 +1,123 @@
+node_modules/
+.env
+.env.*
+!.env.example
+.next/
+# Alternate Next.js output directories used by local browser test harnesses.
+.next-*/
+/docs/engineering/**/browser-build/
+dist/
+*.tsbuildinfo
+coverage/
+test-results/
+playwright-report/
+.local/
+__pycache__/
+
+.next-e2e/
+
+.next-demo/
+
+# Editor and local secret artifacts
+.vscode/
+.idea/
+.DS_Store
+*.pem
+*.key
+
+# Protected backup artifacts
+*.hcab
+*.dump
+
+.next-showroom-e2e/
+
+# Generated narrated media exceeds the repository 500 KB commit limit.
+/output/
+
+# Generated Next.js declarations and CI scanner output.
+/apps/web/next-env.d.ts
+# Cleanup and maintenance reports are documentation and must be recoverable.
+# Only machine-generated build output belongs below.
+/reports/*.log
+/reports/tmp/
+
+# Package-manager crash/debug output; retained engineering evidence stays tracked.
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Machine-local Python tooling caches.
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Accidental nested workspace used during local migration experiments.
+/apps/api/apps/
+
+# Retention: documentation is version-controlled; raw execution output is not. Bulk-ignoring an
+# evidence tree previously allowed ~257 MB of audit evidence to be deleted with no recoverable
+# copy, so the authored record stays tracked. What remains ignored is machine output: logs, JSON
+# snapshots and hash dumps are regenerable, and they are large — tracking them once swept 2 MB and
+# 90 files into a documentation commit, and their SHA-256 dumps trip the secret scanner.
+# Authored .md reports inside evidence/ stay tracked by the negation below.
+/docs/engineering/**/evidence/**/*.zip
+/docs/engineering/**/evidence/**/*.png
+/docs/engineering/**/evidence/**/trace.zip
+/docs/engineering/**/evidence/**/*.log
+/docs/engineering/**/evidence/**/*.json
+/docs/engineering/**/evidence/**/*.csv
+/docs/engineering/**/evidence/**/*.ts
+/docs/engineering/**/evidence/**/*.mts
+/docs/engineering/**/evidence/**/*.mjs
+/docs/engineering/**/evidence/**/*.py
+!/docs/engineering/**/evidence/**/*.md
+# 567 KB census export; regenerated from the sources that sit beside it.
+/docs/engineering/full-backlog-remediation/evidence/backlog-code-alignment-review/FULL_BACKLOG_STATUS_CENSUS.json
+/docs/engineering/full-backlog-remediation/evidence/backlog-code-alignment-review/FULL_BACKLOG_STATUS_CENSUS.csv
+
+# Oversized audit registries and reports exceed the 500 KiB pre-commit limit.
+/docs/engineering/backlog-closeout/github-closure-proposal.json
+/docs/engineering/full-backlog-audit/COMPLETE_ISSUE_ACCEPTANCE_MATRIX.md
+/docs/engineering/full-backlog-audit/audit-inventory.json
+/docs/engineering/full-backlog-remediation/UPDATED_ACCEPTANCE_MATRIX.md
+/docs/engineering/full-backlog-remediation/acceptance-registry.json
+.superpowers/
+
+# One verification bundle holds 40 MB of regenerable machine output: GitHub issue snapshots that
+# `gh issue list` reproduces, and a Playwright trace. Its 29 Markdown verdict reports stay
+# tracked — only the raw dumps and binaries below are excluded, each named explicitly.
+/docs/engineering/backlog-code-verification-2026-10-31/inputs/
+/docs/engineering/backlog-code-verification-2026-10-31/browser-artifacts-original/
+/docs/engineering/backlog-code-verification-2026-10-31/captures/
+/docs/engineering/backlog-code-verification-2026-10-31/logs/
+/docs/engineering/backlog-code-verification-2026-10-31/*.json
+/docs/engineering/backlog-code-verification-2026-10-31/*.csv
+
+# Preservation backup: intentionally not part of documentation navigation. The same content is
+# restored to its original path; this copy exists only as recovery evidence for the incident
+# recorded in docs/documentation-maintenance/EVIDENCE_RECOVERY_STATUS.md.
+/docs/documentation-maintenance/preservation-backup/
+
+# Disposable copies of audit probes; maintained tests live in apps/api/test and tests/e2e.
+/docs/engineering/backlog-code-verification-2026-10-31/probes/
+# Rebuildable documentation-maintenance inventories; authored recovery reports remain tracked.
+/docs/documentation-maintenance/INVENTORY.csv
+/docs/documentation-maintenance/INVENTORY.json
+/docs/documentation-maintenance/HASH_VERIFICATION.json
+/docs/documentation-maintenance/LINK_VALIDATION.json
+/docs/documentation-maintenance/MIGRATION_MANIFEST.json
+/docs/documentation-maintenance/PRESERVATION_REPORT.json
+# Local package-manager stores, compiler caches and scanner output.
+.pnpm-store/
+.pnpm-debug.log*
+.turbo/
+.eslintcache
+/reports/gitleaks*.json
+/reports/semgrep*.json
+/reports/semgrep*.sarif
+/reports/zizmor*.sarif
+# Local agent write-coordination metadata and per-machine settings.
+.cc-writes/
+**/.claude/settings.local.json
+/apps/api/prisma/migrations/.claude/

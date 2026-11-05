@@ -1,0 +1,41 @@
+{
+  "snapshot": {
+    "snapshot_id": "00000000-0000-4000-8000-000000000001",
+    "as_of": "2026-10-18T10:00:00Z",
+    "evidence_kind": "synthetic"
+  },
+  "craft_id": "embroidery",
+  "requested_units": 30,
+  "candidates": [
+    {
+      "candidate_id": "artisan-a",
+      "craft_ids": [
+        "embroidery"
+      ],
+      "availability": "available",
+      "weekly_capacity_units": 40,
+      "committed_units_per_week": 10,
+      "skill_level": 5
+    },
+    {
+      "candidate_id": "artisan-b",
+      "craft_ids": [
+        "embroidery"
+      ],
+      "availability": "available",
+      "weekly_capacity_units": 20,
+      "committed_units_per_week": 0,
+      "skill_level": 3
+    },
+    {
+      "candidate_id": "artisan-c",
+      "craft_ids": [
+        "embroidery"
+      ],
+      "availability": "paused",
+      "weekly_capacity_units": 10,
+      "committed_units_per_week": 0,
+      "skill_level": null
+    }
+  ]
+}

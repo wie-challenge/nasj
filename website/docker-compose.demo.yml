@@ -1,0 +1,24 @@
+# Separate project/volume; never pass this file to the live compose project.
+services:
+  postgres:
+    image: postgres:17.7-alpine
+    environment:
+      POSTGRES_USER: nasj_demo
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run pnpm demo:setup}
+      POSTGRES_DB: nasj_demo
+    ports:
+      - '127.0.0.1:5542:5432'
+    volumes:
+      - demo-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U nasj_demo -d nasj_demo']
+      interval: 2s
+      timeout: 5s
+      retries: 30
+  mailpit:
+    image: axllent/mailpit:v1.31.4
+    ports:
+      - '127.0.0.1:1126:1025'
+      - '127.0.0.1:8126:8025'
+volumes:
+  demo-postgres:

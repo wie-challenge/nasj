@@ -1,0 +1,177 @@
+                  Women And Rural Agriculture Innovation Challenge
+                                          TSYP14 TECHNICAL CHALLENGE
+
+SCOPE & TOPIC                                                 Challenge goal
+This challenge invites engineering and                        Teams are expected to develop practical and
+entrepreneurship students to design technology-driven         deployable solutions that:
+
+and business-driven solutions that strengthen the                Reduce Physical Drudgery
+
+position of women in Tunisia's rural and peri-urban              Use technology to reduce manual effort and
+agricultural and artisanal economy.
+                             physical strain.
+
+The challenge focuses on:
+                                       Improve Occupational Safety
+
+   Technological automation to reduce manual labor               Address health risks through protective, monitoring
+   and drudgery
+                                                 or ergonomic solutions.
+
+   Digitalization & supply-chain structuring
+                    Digitalize Supply Chains
+
+   Occupational health & safety
+                                 Improve traceability and connections between
+   Direct market access for women-led ventures
+                  producers, processors, distributors and buyers.
+
+Solutions should consider the real working conditions,           Improve Market Access
+
+safety and economic empowerment of women.                        Enable women-led micro-enterprises to reach
+                                                                 buyers directly through digital platforms, traceability
+Challenge problem                                                or alternative distribution models.
+
+Women agricultural workers, artisanal producers and              Promote Gender-Inclusive Engineering
+
+micro-entrepreneurs play a major role in local                   Design around the actual needs and working
+production, including:
+                                          conditions of women.
+
+Olive oil harvesting • Essential oil distillation • Textile      Build Deployable Solutions
+
+weaving • Agro-food processing
+                                  Develop prototypes and business concepts with
+However, they face interconnected challenges:
+                   realistic potential for deployment in rural Tunisian
+    Low technological automation
+                                communities.
+    Fragmented and informal supply chains
+
+    Occupational health risks
+                                Thematic Tracks
+    Limited direct access to markets
+                         TRACK 1: LOW TECHNOLOGICAL AUTOMATION
+
+    Reduced traceability and bargaining power
+                Develop technologies that reduce manual labor,
+    Dependence on intermediaries
+                             physical effort and repetitive work.
+
+Addressing only one dimension has limited impact.             TRACK 2: SUPPLY CHAIN FRAGMENTATION &
+Solutions should consider the interconnected nature of
+                                                              LIMITED DIRECT MARKET ACCESS
+
+these challenges.
+                                                              Improve traceability, coordination, distribution and
+                                                              direct access to markets.
+
+                                                              TRACK 3: OCCUPATIONAL HEALTH RISKS
+
+                                                              Develop protective, monitoring, ergonomic or
+                                                              preventive solutions for safer working conditions.
+
+                                                              Each team selects one primary track.
+Challenge Instructions                                   PHASE 2
+
+                                                         Finalists must provide:
+
+WHO CAN PARTICIPATE?
+                                           4 minute Presentation PDF including proposed
+  Teams of 3–4 members
+                                         solution, technologies used, project architecture
+  All student members must be IEEE WIE members
+                 and Impact
+
+  All student members must be Entrepreneurship                  2-minute Prototype Demo Video
+
+  Community members
+                                            Deployed Technical Prototype
+
+  At least 1 TEMS member
+                                       GitHub Repository
+  At least 1 SSIT member
+                                                         Pitching
+Phase 1: Preliminary Solution                                   English       4min Presentation    2min Q&A
+Deadline: 05 November 2026
+
+Teams must submit:
+
+   3-Minute Video: Show the progress of the challenge
+                                                         Scoring
+   and present the technical solution.
+                                   TOTAL SCORE: 100 POINTS
+      Minimum editing preferred
+                         FINAL SCORING SYSTEM — 100 POINTS
+
+      Must remain anonymous
+                             PHASE 1 — PRELIMINARY SOLUTION: 40 POINTS
+
+   Technical Report — Maximum 6 pages
+                      Problem Understanding & Social Relevance — 7 pts
+
+      Required structure:
+                                  Innovation & Technical Solution — 10 pts
+
+         Title
+                                             Feasibility, Business Model & Impact Potential — 8
+         Abstract — 150–250 words
+                          pts
+
+         Keywords — 3–6 keywords
+                           Technical Report — 10 pts
+
+         Introduction
+                                      Solution Pitch — 3-min Video — 5 pts
+
+         Related Work — if applicable
+                   PHASE 2 — SOLUTION DEPLOYMENT: 60 POINTS
+
+         Methodology / Materials and Methods
+               Technical Solution & Demo — 20 pts
+
+         Results and Discussion
+                            Technologies & Engineering Quality — 10 pts
+
+         Conclusion and Future Work
+                        Impact & Relevance — 10 pts
+
+         Acknowledgments — optional
+                        Creativity, Consistency & Effectiveness — 10 pts
+
+         References
+                                        Pitching, Presentation & Q&A — 10 pts
+Plagiarism checks will be applied, including internet
+sources and AI-generated content.
+                                                         Important Dates
+                                                           Challenge Infosession: 1 6/09/2026
+
+Phase 2: Solution Deployment                               Phase 1 Submission Deadline: 05/11/2026
+
+                                                           Final Submission Deadline: 10/12/2026
+Deadline: 10 December 2026
+
+Pre-selected teams must:
+                                Winners
+   Develop and deploy the technical solution                              3 WINNING TEAMS
+   prototype
+
+                                                         Prizes: To be defined
+   Submit a 4-minute presentation — PDF format
+
+   Submit a 2-minute final demonstration video
+          Submission
+Teams may also submit additional materials
+                                                         Submit your project and show us what you’ve built.
+demonstrating the impact and creativity of their work,
+such as papers or posters.                               Contact
+Deliverables
+PHASE 1
+                                                   Please contact us through the following email
+      3-minute Pitching Video
+
+                                                              address wie@ieee.tn or tems@ieee.tn or
+      Technical Report max. 6 pages
+                                                           entrepreneurship@ieee.tn for any inquires or
+                                                                           clarifications.
+

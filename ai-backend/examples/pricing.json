@@ -1,0 +1,21 @@
+{
+  "snapshot": {
+    "snapshot_id": "00000000-0000-4000-8000-000000000001",
+    "as_of": "2026-10-18T10:00:00Z",
+    "evidence_kind": "synthetic"
+  },
+  "quantity": 10,
+  "labor_minutes_per_unit_min": "30",
+  "labor_minutes_per_unit_max": "60",
+  "labor_rate_tnd_per_hour": "6.000",
+  "materials_tnd_per_unit": "2.000",
+  "qa_tnd": "2.000",
+  "transport_tnd": "3.000",
+  "overhead_tnd": "4.000",
+  "contingency_tnd": "1.000",
+  "markup_percent": "10",
+  "assumptions": {
+    "kind": "illustrative",
+    "reference": "Synthetic example only; not a validated local pay rate"
+  }
+}

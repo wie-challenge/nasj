@@ -1,0 +1,191 @@
+# Fast checks on every push (~3-5 min): lint, types, unit tests, dependency audit.
+# The slow tests (integration, e2e, build) run in pr.yml, once a PR is ready for review.
+name: Checks
+on:
+  push:
+# No token permissions by default; each job asks only for what it needs.
+permissions: {}
+# A newer push to the same branch cancels the older, now outdated run.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  quality:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: 11.3.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm setup:local
+      - run: pnpm db:generate
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - name: Unit, domain, backup and logging tests
+        shell: bash
+        run: |
+          mkdir -p .local
+          pnpm test | tee .local/e16-unit.log
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: unit-evidence
+          include-hidden-files: true
+          path: .local/e16-unit.log
+          retention-days: 3
+
+  # Reads pnpm-lock.yaml only: no install needed, so it finishes in about a minute.
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: 11.3.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+      - run: pnpm audit --audit-level=high
+
+  # Secrets in the commits of this push. Enforced from day one: a new secret is never acceptable.
+  secrets-new:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    env:
+      ENFORCE: 'true'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - run: bash scripts/ci/install-gitleaks.sh
+      - name: Scan the pushed commits
+        id: scan
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          set +e
+          # New branch (or force-push): "before" is unknown, so scan everything not yet on main.
+          if git cat-file -e "${BEFORE}^{commit}" 2>/dev/null; then range="${BEFORE}..HEAD"; else range="origin/main..HEAD"; fi
+          echo "Scanning commits: $range"
+          mkdir -p reports
+          gitleaks git . --log-opts="$range" --redact --no-banner --verbose --exit-code 99 \
+            --report-format json --report-path reports/gitleaks.json
+          echo "code=$?" >>"$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: gitleaks-new-report
+          path: reports/
+          retention-days: 7
+      - name: Gate
+        if: always()
+        env:
+          CODE: ${{ steps.scan.outputs.code }}
+        run: bash scripts/ci/gate.sh gitleaks "$CODE" 99 "$ENFORCE"
+
+  # Dangerous code patterns: registry rulesets + NASJ rules in .semgrep/ (each with a test file).
+  # Blocking on ERROR-level findings (first CI run, 2026-10-26: 0 findings).
+  sast:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    env:
+      ENFORCE: 'true'
+      SEMGREP_VERSION: 1.182.1
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: pipx install "semgrep==${SEMGREP_VERSION}"
+      - name: Test the NASJ rules
+        run: |
+          for rule in .semgrep/*.yml; do
+            semgrep --test --metrics=off --config "$rule" "${rule%.yml}".ts*
+          done
+      - name: Scan
+        id: scan
+        run: |
+          set +e
+          bash scripts/ci/semgrep-scan.sh
+          echo "code=$?" >>"$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: semgrep-report
+          path: reports/
+          retention-days: 7
+      - name: Gate
+        if: always()
+        env:
+          CODE: ${{ steps.scan.outputs.code }}
+        run: bash scripts/ci/gate.sh semgrep "$CODE" 99 "$ENFORCE"
+
+  # Security of the workflow files themselves: syntax + ShellCheck on run: scripts (actionlint),
+  # and GitHub Actions risks such as template injection or excessive permissions (zizmor).
+  # Report-only for the first CI run (ShellCheck results are only visible in CI); then blocking.
+  workflow-lint:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    env:
+      ENFORCE: 'false'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: bash scripts/ci/install-workflow-linters.sh
+      - name: actionlint
+        id: actionlint
+        run: |
+          set +e
+          actionlint .github/workflows/*.yml
+          echo "code=$?" >>"$GITHUB_OUTPUT"
+      - name: zizmor
+        id: zizmor
+        env:
+          GH_TOKEN: ${{ github.token }} # lets zizmor check pinned SHAs against the actions' repositories
+        run: |
+          set +e
+          mkdir -p reports
+          zizmor --no-progress --format=sarif .github/workflows/ >reports/zizmor.sarif
+          # Gate on high-severity findings; medium and low stay in the report.
+          zizmor --no-progress --min-severity=high .github/workflows/
+          echo "code=$?" >>"$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: zizmor-report
+          path: reports/
+          retention-days: 7
+      - name: Gate (actionlint)
+        if: always()
+        env:
+          CODE: ${{ steps.actionlint.outputs.code }}
+        run: bash scripts/ci/gate.sh actionlint "$CODE" 1 "$ENFORCE"
+      - name: Gate (zizmor)
+        if: always()
+        env:
+          CODE: ${{ steps.zizmor.outputs.code }}
+        run: bash scripts/ci/gate.sh zizmor "$CODE" 14 "$ENFORCE"

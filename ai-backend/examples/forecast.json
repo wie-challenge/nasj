@@ -1,0 +1,39 @@
+{
+  "snapshot": {
+    "snapshot_id": "00000000-0000-4000-8000-000000000001",
+    "as_of": "2026-10-18T10:00:00Z",
+    "evidence_kind": "synthetic"
+  },
+  "scenarios": [
+    {
+      "scenario_id": "baseline",
+      "quantity": 7,
+      "start_date": "2026-10-20",
+      "materials_ready_date": "2026-10-20",
+      "deadline": "2026-10-26",
+      "weekly_capacity_units": 7,
+      "committed_units_per_week": 0,
+      "buffer_days": 0
+    },
+    {
+      "scenario_id": "late-materials",
+      "quantity": 7,
+      "start_date": "2026-10-20",
+      "materials_ready_date": "2026-10-25",
+      "deadline": "2026-10-26",
+      "weekly_capacity_units": 7,
+      "committed_units_per_week": 0,
+      "buffer_days": 2
+    },
+    {
+      "scenario_id": "fully-committed",
+      "quantity": 7,
+      "start_date": "2026-10-20",
+      "materials_ready_date": "2026-10-20",
+      "deadline": "2026-10-26",
+      "weekly_capacity_units": 7,
+      "committed_units_per_week": 7,
+      "buffer_days": 0
+    }
+  ]
+}

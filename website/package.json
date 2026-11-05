@@ -1,0 +1,52 @@
+{
+  "name": "nasj",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.3.0",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "prepare": "husky",
+    "dev": "tsx scripts/dev.ts",
+    "build": "pnpm --filter @nasj/contracts build && pnpm --filter @nasj/api build && pnpm --filter @nasj/web build",
+    "lint": "biome lint apps packages tests scripts/*.ts playwright.config.ts playwright.demo.config.ts",
+    "format": "biome format --write apps packages tests scripts/*.ts playwright.config.ts playwright.demo.config.ts",
+    "typecheck": "pnpm --filter @nasj/contracts build && pnpm --filter @nasj/api typecheck && pnpm --filter @nasj/api typecheck:test && pnpm --filter @nasj/web typecheck",
+    "test": "pnpm --filter @nasj/contracts build && pnpm --filter @nasj/api test && pnpm --filter @nasj/web test",
+    "test:integration": "pnpm db:generate && pnpm --filter @nasj/contracts build && pnpm --filter @nasj/api test:integration",
+    "test:e2e": "pnpm db:generate && pnpm --filter @nasj/contracts build && playwright test && playwright test --config playwright.demo.config.ts",
+    "test:e2e:demo": "pnpm db:generate && pnpm --filter @nasj/contracts build && playwright test --config playwright.demo.config.ts",
+    "db:generate": "pnpm --filter @nasj/api db:generate",
+    "db:migrate": "pnpm --filter @nasj/api db:migrate",
+    "db:bootstrap-admin": "pnpm --filter @nasj/api bootstrap-admin",
+    "setup:local": "tsx scripts/setup-local.ts",
+    "services:up": "docker --context default compose -p nasj up -d --wait",
+    "services:stop": "docker --context default compose -p nasj stop",
+    "demo:setup": "tsx scripts/setup-demo.ts",
+    "demo:seed": "tsx --tsconfig apps/api/tsconfig.json --env-file=.local/demo.env scripts/seed-demo.ts",
+    "demo:api": "tsx --tsconfig apps/api/tsconfig.json --env-file=.local/demo.env apps/api/src/main.ts",
+    "demo:web": "tsx scripts/dev-demo-web.ts",
+    "db:recover-organization-manager": "tsx --tsconfig apps/api/tsconfig.json --env-file=.env scripts/recover-organization-manager.ts",
+    "db:seed": "tsx --tsconfig apps/api/tsconfig.json --env-file=.env scripts/seed-local.ts",
+    "db:seed:market": "tsx --tsconfig apps/api/tsconfig.json --env-file=.env scripts/seed-market.ts",
+    "db:reset:market": "tsx --tsconfig apps/api/tsconfig.json --env-file=.env scripts/seed-market.ts --reset",
+    "worker": "tsx --tsconfig apps/api/tsconfig.json --env-file-if-exists=.env apps/api/src/jobs/main.ts",
+    "ops:check": "tsx --tsconfig apps/api/tsconfig.json --env-file-if-exists=.env scripts/check-operations.ts",
+    "ops:backup": "tsx scripts/backup-database.ts",
+    "ops:setup": "tsx scripts/setup-local-operations.ts",
+    "ops:run": "tsx --tsconfig apps/api/tsconfig.json --env-file-if-exists=.env --env-file=.local/operations/schedule.env scripts/run-local-operation.ts",
+    "db:status:local": "tsx scripts/inspect-migration-status.ts",
+    "competition:validate": "tsx scripts/validate-competition.ts",
+    "verify:clean": "tsx scripts/verify-clean.ts"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@biomejs/biome": "2.6.3",
+    "@playwright/test": "1.64.1",
+    "@types/node": "24.19.2",
+    "husky": "9.1.7",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  }
+}

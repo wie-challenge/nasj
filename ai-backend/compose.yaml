@@ -1,0 +1,18 @@
+name: nasj-ai
+services:
+  api:
+    build: .
+    environment:
+      NASJ_AI_ENVIRONMENT: production
+      NASJ_AI_SERVICE_API_KEY: ${NASJ_AI_SERVICE_API_KEY:?Run python scripts/setup_local.py}
+      NASJ_AI_MAX_REQUEST_BYTES: ${NASJ_AI_MAX_REQUEST_BYTES:-65536}
+    ports:
+      - "127.0.0.1:8001:8001"
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped

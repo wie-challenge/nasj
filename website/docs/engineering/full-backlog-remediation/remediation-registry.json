@@ -1,0 +1,3559 @@
+[
+ {
+  "findingId": "FPA-01",
+  "issues": [
+   156
+  ],
+  "severity": "P1",
+  "title": "Dedicated AI service cannot import its configured package",
+  "originalCriteria": [
+   {
+    "issue": 156,
+    "storyId": "E11-08",
+    "criteria": [
+     {
+      "id": "E11-08.C1",
+      "text": "Consent, representative labels, baseline benchmark and monitoring required."
+     },
+     {
+      "id": "E11-08.C2",
+      "text": "Define representative consented training labels and exclude wearable/health inputs."
+     },
+     {
+      "id": "E11-08.C3",
+      "text": "Use time-aware evaluation or equivalent leakage controls and compare with deterministic baseline."
+     },
+     {
+      "id": "E11-08.C4",
+      "text": "Report errors, coverage and limitations by craft/context with sufficient samples."
+     },
+     {
+      "id": "E11-08.C5",
+      "text": "Monitor drift and provide deterministic fallback when evidence/confidence is insufficient."
+     }
+    ]
+   }
+  ],
+  "affectedFiles": [
+   "../ai-backend/pyproject.toml:27",
+   "../ai-backend/Dockerfile:18",
+   "../ai-backend/src/hirfacare_ai/main.py:3"
+  ],
+  "implementationTask": "Choose one package namespace and update source layout/imports/build/ASGI/tests consistently.",
+  "testRequirements": "Clean package build/install; collect and run tests; start container and exercise service-authenticated health/inference previews.",
+  "state": "VERIFIED_SOFTWARE",
+  "evidenceLocation": "AI_SERVICE_VERIFICATION.md; evidence/ai-service/verification-summary.json",
+  "externalGate": "Owner acceptance PENDING; original qualified legal/privacy/settlement/model-data approvals remain separately required",
+  "verificationScope": "Bounded local defect correction; not whole-story acceptance, production deployment or external approval",
+  "remainingVerification": "AI Docker image build/start unverified after prior pull timeout; trained/validated ML scope remains unmet; owner acceptance pending."
+ },
+ {
+  "findingId": "FPA-02",
+  "issues": [
+   38,
+   78,
+   87
+  ],
+  "severity": "P2",
+  "title": "Production accepts non-enforcing Arcjet default",
+  "originalCriteria": [
+   {
+    "issue": 38,
+    "storyId": "E01-10",
+    "criteria": [
+     {
+      "id": "E01-10.C1",
+      "text": "Protected session, revocation and brute-force protections tested; invalid credentials rejected without account enumeration."
+     },
+     {
+      "id": "E01-10.C2",
+      "text": "Authenticate approved accounts with protected credentials and generic failures."
+     },
+     {
+      "id": "E01-10.C3",
+      "text": "Document session expiry and enforce secure cookie/token validation."
+     },
+     {
+      "id": "E01-10.C4",
+      "text": "Rate-limit repeated failures and invalidate the relevant session on logout."
+     },
+     {
+      "id": "E01-10.C5",
+      "text": "Keep demo identities separate and reject expired/revoked sessions."
+     }
+    ]
+   },
+   {
+    "issue": 78,
+    "storyId": "E16-05",
+    "criteria": [
+     {
+      "id": "E16-05.C1",
+      "text": "Zod validation, rate limits, resource-level RBAC and error contracts."
+     },
+     {
+      "id": "E16-05.C2",
+      "text": "Validate payload/query schemas and return consistent safe errors."
+     },
+     {
+      "id": "E16-05.C3",
+      "text": "Enforce session, resource authorization and rate limits on authoritative NestJS endpoints."
+     },
+     {
+      "id": "E16-05.C4",
+      "text": "Secure any Next.js proxy/server boundary against unauthorized forwarding and CSRF where applicable."
+     },
+     {
+      "id": "E16-05.C5",
+      "text": "Reject unknown monitoring fields, invalid IDs and unbounded list/upload requests."
+     }
+    ]
+   },
+   {
+    "issue": 87,
+    "storyId": "E01-07",
+    "criteria": [
+     {
+      "id": "E01-07.C1",
+      "text": "Reset tokens expire, sessions revoked after reset as appropriate."
+     },
+     {
+      "id": "E01-07.C2",
+      "text": "Use neutral recovery responses regardless of account existence."
+     },
+     {
+      "id": "E01-07.C3",
+      "text": "Issue expiring single-use tokens and rate-limit requests/verification."
+     },
+     {
+      "id": "E01-07.C4",
+      "text": "Require appropriate identity verification for credential or sensitive-contact changes."
+     },
+     {
+      "id": "E01-07.C5",
+      "text": "Revoke affected sessions and notify through the approved channel."
+     }
+    ]
+   }
+  ],
+  "affectedFiles": [
+   "apps/api/src/config/env.ts:58",
+   "apps/api/src/config/env.ts:104",
+   "apps/api/src/security/security.service.ts:55",
+   "apps/api/src/security/security.service.ts:147"
+  ],
+  "implementationTask": "Require LIVE for production, or enforce a local rate floor even when external decisions are observational.",
+  "testRequirements": "Production startup matrix and endpoint-level 429 under accepted defaults; test explicit observational nonproduction configuration.",
+  "state": "VERIFIED_SOFTWARE",
+  "evidenceLocation": "evidence/checkpoint1.json; evidence/fpa02-http.log",
+  "externalGate": "Owner acceptance PENDING; original qualified legal/privacy/settlement/model-data approvals remain separately required",
+  "verificationScope": "Bounded local defect correction; not whole-story acceptance, production deployment or external approval",
+  "remainingVerification": "Current full regression passed. Genuine Arcjet/deployment behavior and complete original #78/#87 acceptance remain unverified; #38 software criteria reviewed in checkpoint5."
+ },
+ {
+  "findingId": "FPA-03",
+  "issues": [
+   73
+  ],
+  "severity": "P2",
+  "title": "Synthetic-ready closure assessment conflicts with native CHECK",
+  "originalCriteria": [
+   {
+    "issue": 73,
+    "storyId": "E10-14",
+    "criteria": [
+     {
+      "id": "E10-14.C1",
+      "text": "Closure blocks on unreconciled receivables, undisposed material costs, outstanding payables or open settlement disputes unless explicit authorized exception."
+     },
+     {
+      "id": "E10-14.C2",
+      "text": "Check buyer receivables, all artisan obligations, settlement disputes and material dispositions."
+     },
+     {
+      "id": "E10-14.C3",
+      "text": "Block closure when a required balance/evidence remains unresolved."
+     },
+     {
+      "id": "E10-14.C4",
+      "text": "Require a documented authorized and lawful disposition for any exception without erasing liability history."
+     },
+     {
+      "id": "E10-14.C5",
+      "text": "Record closure checklist, actor, time and ledger snapshot atomically."
+     }
+    ]
+   }
+  ],
+  "affectedFiles": [
+   "apps/api/src/modules/finance/finance.service.ts:1355",
+   "apps/api/src/modules/finance/finance.service.ts:1492",
+   "apps/api/prisma/migrations/20261027080000_financial_controls/migration.sql:113"
+  ],
+  "implementationTask": "Align persisted status vocabulary with explicitly synthetic assessment semantics using an additive migration; retain all live closure gates.",
+  "testRequirements": "Full HTTP assess/save/read flow, native statuses, rollback and all liability blockers; no real payment assertions.",
+  "state": "VERIFIED_SOFTWARE",
+  "evidenceLocation": "evidence/checkpoint2-restore-verified.log; evidence/checkpoint2-browser-verified.json",
+  "externalGate": "Owner acceptance PENDING; original qualified legal/privacy/settlement/model-data approvals remain separately required",
+  "verificationScope": "Bounded local defect correction; not whole-story acceptance, production deployment or external approval",
+  "remainingVerification": "Current full regression, native upgrade and restore pass. Actual legal/settlement/closure authorization remains blocked."
+ },
+ {
+  "findingId": "FPA-04",
+  "issues": [
+   176
+  ],
+  "severity": "P2",
+  "title": "Incomplete observed hours produce an available hourly rate",
+  "originalCriteria": [
+   {
+    "issue": 176,
+    "storyId": "E13-04",
+    "criteria": [
+     {
+      "id": "E13-04.C1",
+      "text": "Missing hours marked unknown, never assumed zero."
+     },
+     {
+      "id": "E13-04.C2",
+      "text": "Separate agreed/earned/paid compensation in earnings reports."
+     },
+     {
+      "id": "E13-04.C3",
+      "text": "Use consented observed hours with task/unit context and explicit reporting window."
+     },
+     {
+      "id": "E13-04.C4",
+      "text": "Mark missing/zero-invalid hours as unknown and distinguish estimated from observed effort."
+     },
+     {
+      "id": "E13-04.C5",
+      "text": "Restrict individual earnings to authorized users and publish only safe aggregates."
+     }
+    ]
+   }
+  ],
+  "affectedFiles": [
+   "apps/api/src/modules/intelligence/intelligence.service.ts:581",
+   "apps/api/src/modules/intelligence/intelligence.service.ts:616",
+   "packages/contracts/src/intelligence.ts:525"
+  ],
+  "implementationTask": "Require complete, nonoverlapping, consented time coverage for full compensation, or allocate compensation to precisely matched observed scope.",
+  "testRequirements": "Null/zero/overlap/partial-unit time cases at service and API; reporting UI unknown-state coverage.",
+  "state": "VERIFIED_SOFTWARE",
+  "evidenceLocation": "evidence/calculations/result.json; evidence/checkpoint2-http.log",
+  "externalGate": "Owner acceptance PENDING; original qualified legal/privacy/settlement/model-data approvals remain separately required",
+  "verificationScope": "Bounded local defect correction; not whole-story acceptance, production deployment or external approval",
+  "remainingVerification": "Current regression passed; genuine consent lifecycle, production-time withdrawal workflow and complete original reporting/operational acceptance remain unverified."
+ },
+ {
+  "findingId": "FPA-05",
+  "issues": [
+   152
+  ],
+  "severity": "P2",
+  "title": "Passed deadlines remain merely at risk for up to one day",
+  "originalCriteria": [
+   {
+    "issue": 152,
+    "storyId": "E11-04",
+    "criteria": [
+     {
+      "id": "E11-04.C1",
+      "text": "Thresholds tested against recorded progress, no fake ML accuracy."
+     },
+     {
+      "id": "E11-04.C2",
+      "text": "Use recorded progress, deadline, exceptions and data staleness with versioned thresholds."
+     },
+     {
+      "id": "E11-04.C3",
+      "text": "Explain triggering facts and distinguish unknown from low risk."
+     },
+     {
+      "id": "E11-04.C4",
+      "text": "Show time of evaluation and appropriate intervention owner."
+     },
+     {
+      "id": "E11-04.C5",
+      "text": "Validate rules against recorded examples and avoid unsupported ML accuracy claims."
+     }
+    ]
+   }
+  ],
+  "affectedFiles": [
+   "packages/contracts/src/intelligence.ts:100",
+   "packages/contracts/src/intelligence.ts:118"
+  ],
+  "implementationTask": "Compare timestamps for overdue; round only presentation durations.",
+  "testRequirements": "Before/equal/after deadline by one millisecond, within 24 hours, approved schedule replacement and Tunis boundary cases.",
+  "state": "VERIFIED_SOFTWARE",
+  "evidenceLocation": "evidence/calculations/result.json; evidence/checkpoint2-http.log",
+  "externalGate": "Owner acceptance PENDING; original qualified legal/privacy/settlement/model-data approvals remain separately required",
+  "verificationScope": "Bounded local defect correction; not whole-story acceptance, production deployment or external approval",
+  "remainingVerification": "Current full regression passed. Original whole-story/owner and genuine operational outcome acceptance remain separate."
+ },
+ {
+  "findingId": "FPA-06",
+  "issues": [
+   116
+  ],
+  "severity": "P2",
+  "title": "Reallocation never computes replacement delivery feasibility",
+  "originalCriteria": [
+   {
+    "issue": 116,
+    "storyId": "E05-05",
+    "criteria": [
+     {
+      "id": "E05-05.C1",
+      "text": "Capacity released and replacements tracked with audit trail."
+     },
+     {
+      "id": "E05-05.C2",
+      "text": "Return declined/expired quantities to replanning with history."
+     },
+     {
+      "id": "E05-05.C3",
+      "text": "Release corresponding tentative capacity only."
+     },
+     {
+      "id": "E05-05.C4",
+      "text": "Recompute candidates and delivery feasibility for replacements."
+     },
+     {
+      "id": "E05-05.C5",
+      "text": "Link replacement reasons without penalizing the original artisan."
+     }
+    ]
+   }
+  ],
+  "affectedFiles": [
+   "apps/api/src/modules/procurement/planning.ts:418",
+   "apps/api/src/modules/procurement/planning.ts:913",
+   "apps/api/test/planning-intelligence.scenarios.ts:808"
+  ],
+  "implementationTask": "Connect replacements to documented deterministic feasibility inputs and preserve the evaluated snapshot/reason; retain unknown for insufficient input.",
+  "testRequirements": "Known-feasible, known-infeasible, insufficient inputs, nonempty candidates and accepted-work invariants.",
+  "state": "VERIFIED_SOFTWARE",
+  "evidenceLocation": "evidence/checkpoint3/fpa06/README.md",
+  "externalGate": "Owner acceptance PENDING; original qualified legal/privacy/settlement/model-data approvals remain separately required",
+  "remainingVerification": "Current full regression and all five #116 software criteria verified. Owner acceptance and genuine operational approval remain pending."
+ },
+ {
+  "findingId": "FPA-07",
+  "issues": [
+   209
+  ],
+  "severity": "P2",
+  "title": "Buyer-feedback edit after lost response traps retries",
+  "originalCriteria": [
+   {
+    "issue": 209,
+    "storyId": "E18-06",
+    "criteria": [
+     {
+      "id": "E18-06.C1",
+      "text": "Feedback tied to delivered order and permission-scoped, with dispute status and follow-up owner."
+     },
+     {
+      "id": "E18-06.C2",
+      "text": "Link feedback to delivered order and authorized buyer participant."
+     },
+     {
+      "id": "E18-06.C3",
+      "text": "Record rating/category, comments, date, follow-up owner and status."
+     },
+     {
+      "id": "E18-06.C4",
+      "text": "Keep claims/disputes distinct from informal feedback and link formal cases."
+     },
+     {
+      "id": "E18-06.C5",
+      "text": "Restrict visibility and prevent publication/testimonials without specific permission."
+     }
+    ]
+   }
+  ],
+  "affectedFiles": [
+   "apps/web/src/components/order-feedback.tsx:48",
+   "apps/web/src/components/order-feedback.tsx:147",
+   "apps/web/src/components/order-feedback.tsx:180"
+  ],
+  "implementationTask": "Retain immutable submitted payload with its key; recover it, refresh authoritative state/version, then allow fresh edited intent.",
+  "testRequirements": "Both operations at both widths; committed/uncommitted response loss, editing, repeated retry, reload and accessibility announcements.",
+  "state": "VERIFIED_SOFTWARE",
+  "evidenceLocation": "evidence/checkpoint3/fpa07/result.json",
+  "externalGate": "Owner acceptance PENDING; original qualified legal/privacy/settlement/model-data approvals remain separately required",
+  "remainingVerification": "Current full regression and all five #209 software criteria verified. Owner acceptance pending; no public testimonials or real collection approval."
+ },
+ {
+  "findingId": "FPA-08",
+  "issues": [
+   112,
+   121,
+   122
+  ],
+  "severity": "P2",
+  "title": "Collaboration creation workflows are disconnected from UI",
+  "originalCriteria": [
+   {
+    "issue": 112,
+    "storyId": "E04-07",
+    "criteria": [
+     {
+      "id": "E04-07.C1",
+      "text": "No automatic acceptance; manager must approve modified terms."
+     },
+     {
+      "id": "E04-07.C2",
+      "text": "Propose quantity/deadline changes before acceptance."
+     },
+     {
+      "id": "E04-07.C3",
+      "text": "Show resulting pay, effort and material implications."
+     },
+     {
+      "id": "E04-07.C4",
+      "text": "Require manager review and new issued terms before artisan acceptance."
+     },
+     {
+      "id": "E04-07.C5",
+      "text": "Do not start production or reserve extra capacity merely on counteroffer."
+     }
+    ]
+   },
+   {
+    "issue": 121,
+    "storyId": "E06-05",
+    "criteria": [
+     {
+      "id": "E06-05.C1",
+      "text": "Exception visible to assigned coordinator; resolution logged."
+     },
+     {
+      "id": "E06-05.C2",
+      "text": "Link shortage/delay reports to the artisan's batch."
+     },
+     {
+      "id": "E06-05.C3",
+      "text": "Record affected quantity/date, requested help and optional evidence without health disclosure."
+     },
+     {
+      "id": "E06-05.C4",
+      "text": "Notify responsible coordinator and show open/acknowledged/resolved state."
+     },
+     {
+      "id": "E06-05.C5",
+      "text": "Attribute resolution without silently altering contract or pay."
+     }
+    ]
+   },
+   {
+    "issue": 122,
+    "storyId": "E06-06",
+    "criteria": [
+     {
+      "id": "E06-06.C1",
+      "text": "Change impact shown and affected parties approve revised commitments."
+     },
+     {
+      "id": "E06-06.C2",
+      "text": "Show impact on buyer deadlines, capacity, materials and transport."
+     },
+     {
+      "id": "E06-06.C3",
+      "text": "Preserve original/proposed dates and reason."
+     },
+     {
+      "id": "E06-06.C4",
+      "text": "Require affected-party approvals before contractual changes."
+     },
+     {
+      "id": "E06-06.C5",
+      "text": "Retain unresolved risk and communicate declined changes."
+     }
+    ]
+   }
+  ],
+  "affectedFiles": [
+   "apps/web/src/components/collaboration-workspace.tsx:102",
+   "apps/web/src/components/collaboration-workspace.tsx:177",
+   "apps/web/src/components/collaboration-workspace.tsx:254",
+   "apps/api/src/modules/collaboration/collaboration.controller.ts:68"
+  ],
+  "implementationTask": "Add scoped creation and preview flows, preserving downstream approval authority and original terms.",
+  "testRequirements": "Start from empty state without direct API seeding for the action under test; valid, denied, stale and declined-change browser cases.",
+  "state": "VERIFIED_SOFTWARE",
+  "evidenceLocation": "evidence/checkpoint3/fpa08/",
+  "externalGate": "Owner acceptance PENDING; original qualified legal/privacy/settlement/model-data approvals remain separately required",
+  "remainingVerification": "Creation defect repaired and full regression passed. #112 tentative-capacity comparison, #121 opted-in coordinator notification delivery, and #122 nonempty unresolved-risk rejection assertion remain criterion verification gaps."
+ },
+ {
+  "findingId": "FPA-09",
+  "issues": [
+   44
+  ],
+  "severity": "P2",
+  "title": "Preferred-language offer decisions are not implemented",
+  "originalCriteria": [
+   {
+    "issue": 44,
+    "storyId": "E04-02",
+    "criteria": [
+     {
+      "id": "E04-02.C1",
+      "text": "Offer includes quantity, estimated hours, rate, total agreed pay, deadline, craft specifications, material responsibility, payment conditions and ability to decline without penalty."
+     },
+     {
+      "id": "E04-02.C2",
+      "text": "Show quantity, effort range, rate, total pay, deadline and specification version."
+     },
+     {
+      "id": "E04-02.C3",
+      "text": "Include materials, quality/rework rules, payment conditions and expiry."
+     },
+     {
+      "id": "E04-02.C4",
+      "text": "Provide accept/decline/clarification in supported preferred language."
+     },
+     {
+      "id": "E04-02.C5",
+      "text": "Make all terms readable before decision and state no penalty for decline or wearable refusal."
+     }
+    ]
+   }
+  ],
+  "affectedFiles": [
+   "apps/web/src/components/commerce-workspace.tsx:854",
+   "apps/web/src/components/artisan-workspace.tsx:153",
+   "tests/e2e/production.spec.ts:97"
+  ],
+  "implementationTask": "Provide reviewed translations for offer terms and decisions with safe fallback and explicit unavailable-state handling.",
+  "testRequirements": "French/Arabic preferred-language complete decision and clarification flows, RTL, keyboard and screen-reader checks.",
+  "state": "PARTIAL",
+  "evidenceLocation": "evidence/checkpoint3/fpa09/result.json",
+  "externalGate": "Owner acceptance PENDING; original qualified legal/privacy/settlement/model-data approvals remain separately required",
+  "remainingVerification": "Software infrastructure/gate and current regression pass. Qualified FR/AR commercial translation review and direct approved-specification commerce projection assertion remain outstanding."
+ },
+ {
+  "findingId": "FPA-10",
+  "issues": [
+   192
+  ],
+  "severity": "LOW",
+  "title": "Database does not independently bind status header to latest history",
+  "originalCriteria": [
+   {
+    "issue": 192,
+    "storyId": "E15-06",
+    "criteria": [
+     {
+      "id": "E15-06.C1",
+      "text": "Shared database, input validation and abuse controls required."
+     },
+     {
+      "id": "E15-06.C2",
+      "text": "Capture permitted participant, relevant screen/story, category, comment and status."
+     },
+     {
+      "id": "E15-06.C3",
+      "text": "Persist feedback in shared storage with validation and abuse/rate limits."
+     },
+     {
+      "id": "E15-06.C4",
+      "text": "Restrict viewing/moderation to intended team scope."
+     },
+     {
+      "id": "E15-06.C5",
+      "text": "Display submission errors and preserve attributable moderation history."
+     }
+    ]
+   }
+  ],
+  "affectedFiles": [
+   "apps/api/prisma/migrations/20261028170000_demo_feedback/migration.sql:69",
+   "apps/api/src/modules/demo/demo-feedback.admin.ts:125"
+  ],
+  "implementationTask": "Consider a deferred invariant or controlled database write function; preserve migration history.",
+  "testRequirements": "Native mismatch must reject at commit; valid transactional updates and rollback remain supported.",
+  "state": "NOT_STARTED",
+  "evidenceLocation": "evidence/",
+  "externalGate": "Owner acceptance PENDING; original qualified legal/privacy/settlement/model-data approvals remain separately required",
+  "remainingVerification": "Deferred native correspondence hardening; see evidence/checkpoint4/low-hardening-decision.md."
+ },
+ {
+  "findingId": "B14-GET-POST-RATE-LOW",
+  "issues": [
+   192
+  ],
+  "severity": "LOW",
+  "title": "Feedback GET shares submission bucket",
+  "state": "NOT_STARTED",
+  "implementationTask": "Track separately after P1/P2 and native history hardening; preserve dedicated POST abuse limits",
+  "testRequirements": "Read/write bucket independence and visitor/IP abuse control",
+  "externalGate": "Owner acceptance PENDING",
+  "remainingVerification": "Deferred independent GET/POST budgets; dedicated POST 429 remains verified. See evidence/checkpoint4/low-hardening-decision.md."
+ },
+ {
+  "findingId": "CP5-G01",
+  "issues": [
+   85
+  ],
+  "severity": "P2",
+  "title": "Accountless authorization validity period is not represented",
+  "originalCriteria": [
+   {
+    "issue": 85,
+    "storyId": "E01-05",
+    "criteria": [
+     {
+      "id": "E01-05.C2",
+      "text": "Record artisan, helper, allowed actions, consent method and authorization period."
+     }
+    ]
+   }
+  ],
+  "affectedFiles": [
+   "packages/contracts/src/foundation.ts:12",
+   "apps/api/prisma/schema.prisma:486",
+   "apps/api/prisma/schema.prisma:1114",
+   "apps/api/src/modules/registry/registry.service.ts:70",
+   "apps/api/src/modules/registry/registry.service.ts:89",
+   "apps/api/src/modules/artisans/artisans.service.ts:42",
+   "apps/web/src/components/foundation-workspace.tsx:113"
+  ],
+  "implementationTask": "Design a separately scoped additive validity-period/history change and enforce expiry on accountless assisted operations.",
+  "testRequirements": "Focused positive, denied, boundary, attribution and preserved-history assertions matching the original criterion.",
+  "state": "NOT_STARTED",
+  "evidenceLocation": "evidence/checkpoint5/README.md",
+  "externalGate": "Owner acceptance PENDING; genuine authorization-method, language and privacy review remains required.",
+  "remainingVerification": "Source/contract gap recorded; implementation deliberately deferred after the bounded five-story verification group."
+ },
+ {
+  "findingId": "CP5-G02",
+  "issues": [
+   84,
+   111
+  ],
+  "severity": "LOW",
+  "title": "Contact visibility choice lacks audience explanation",
+  "originalCriteria": [
+   {
+    "issue": 84,
+    "storyId": "E01-03",
+    "criteria": [
+     {
+      "id": "E01-03.C3",
+      "text": "Explain visibility and allow correction before submission."
+     }
+    ]
+   },
+   {
+    "issue": 111,
+    "storyId": "E04-06",
+    "criteria": [
+     {
+      "id": "E04-06.C3",
+      "text": "Explain field visibility to planners and coordinators."
+     }
+    ],
+    "scope": "Same contact visibility audience-explanation omission."
+   }
+  ],
+  "affectedFiles": [
+   "packages/contracts/src/artisans.ts:13",
+   "apps/api/src/modules/artisans/artisans.service.ts:150",
+   "apps/api/src/modules/registry/registry.service.ts:347",
+   "apps/web/src/components/artisan-workspace.tsx:113"
+  ],
+  "implementationTask": "Explain actual recipients and sharing consequences without enabling new disclosure, then verify editable corrections and visibility.",
+  "testRequirements": "Focused positive, denied, boundary, attribution and preserved-history assertions matching the original criterion.",
+  "state": "NOT_STARTED",
+  "evidenceLocation": "evidence/checkpoint5/README.md",
+  "externalGate": "Owner acceptance PENDING; genuine authorization-method, language and privacy review remains required.",
+  "remainingVerification": "Source/contract gap recorded; implementation deliberately deferred after the bounded five-story verification group.",
+  "group15Extensions": [
+   {
+    "findingId": "CP5-G02",
+    "issues": [
+     111
+    ],
+    "criteria": [
+     "E04-06.C3"
+    ],
+    "scope": "Same contact visibility audience-explanation omission."
+   }
+  ]
+ },
+ {
+  "findingId": "CP5-G03",
+  "issues": [
+   35
+  ],
+  "severity": "P2",
+  "title": "Known logistics duration is ignored by the RFQ feasibility decision",
+  "state": "NOT_STARTED",
+  "affectedFiles": [
+   "packages/contracts/src/commercial.ts:198",
+   "packages/contracts/src/commercial.ts:154",
+   "apps/api/src/modules/procurement/commercial-decision.ts:96"
+  ],
+  "originalCriteria": [
+   {
+    "issue": 35,
+    "storyId": "E03-01",
+    "criteria": [
+     {
+      "id": "E03-01.C5",
+      "text": "Mark missing inputs unknown and prevent unsupported feasible labels."
+     }
+    ]
+   }
+  ],
+  "implementationTask": "Apply disclosed logistics duration to supported production completion/deadline comparison and expose the limiting constraint; preserve UNKNOWN when completion cannot be supported. Do not invent throughput or rewrite prior assessments.",
+  "testRequirements": [
+   "Exact-fit versus one-instant-late deadline",
+   "0/1/365-day leads and unknown lead",
+   "Current-source API and UI assertion with nonempty inputs",
+   "Persisted assumptions and deterministic recomputation"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group2-review.json",
+  "externalGate": "Owner acceptance PENDING; product remediation requires a separately authorized step."
+ },
+ {
+  "findingId": "CP5-G04",
+  "issues": [
+   35
+  ],
+  "severity": "P2",
+  "title": "RFQ feasibility omits the required estimated completion",
+  "state": "NOT_STARTED",
+  "affectedFiles": [
+   "packages/contracts/src/commercial.ts:120",
+   "apps/api/src/modules/procurement/commercial-decision.ts:406",
+   "apps/api/prisma/schema.prisma:1381",
+   "apps/web/src/components/procurement.tsx:790"
+  ],
+  "originalCriteria": [
+   {
+    "issue": 35,
+    "storyId": "E03-01",
+    "criteria": [
+     {
+      "id": "E03-01.C4",
+      "text": "Show shortages, estimated completion and material/sample constraints."
+     }
+    ]
+   }
+  ],
+  "implementationTask": "Integrate a supported deterministic completion result/unknown into RFQ assessment persistence, contract and UI, reusing reviewed planning only where its inputs exist. Keep original versions truthful.",
+  "testRequirements": [
+   "1000-unit known feasible/infeasible/missing-data completion",
+   "Effort unit and throughput provenance",
+   "Material-ready and calendar/lead boundaries",
+   "Persisted version display and deterministic rerun"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group2-review.json",
+  "externalGate": "Owner acceptance PENDING; product remediation requires a separately authorized step."
+ },
+ {
+  "findingId": "CP5-G05",
+  "issues": [
+   35
+  ],
+  "severity": "LOW",
+  "title": "Saved RFQ feasibility assumptions are omitted from the review projection",
+  "state": "NOT_STARTED",
+  "affectedFiles": [
+   "apps/api/src/modules/procurement/commercial-decision.ts:119",
+   "apps/api/src/modules/procurement/commercial-decision.ts:406",
+   "packages/contracts/src/procurement.ts:162",
+   "apps/web/src/components/procurement.tsx:790"
+  ],
+  "originalCriteria": [
+   {
+    "issue": 35,
+    "storyId": "E03-01",
+    "criteria": [
+     {
+      "id": "E03-01.C1",
+      "text": "Feasibility shows constraints, unmet capacity and assumptions."
+     }
+    ]
+   }
+  ],
+  "implementationTask": "Add a purpose-scoped assumption projection and accessible per-assessment display; preserve buyer/privacy restrictions and original versions.",
+  "testRequirements": [
+   "Nonempty saved assumptions roundtrip",
+   "Operator-only/private-source redaction",
+   "Historical version comparison",
+   "Keyboard-readable display"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group2-review.json",
+  "externalGate": "Owner acceptance PENDING; product remediation requires a separately authorized step."
+ },
+ {
+  "findingId": "CP5-G06",
+  "issues": [
+   37,
+   40
+  ],
+  "severity": "P2",
+  "title": "Buyer quote review omits issued payment and delivery terms before exact-term acceptance",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 37,
+    "storyId": "E03-03",
+    "criteria": [
+     {
+      "id": "E03-03.C2",
+      "text": "Show quantity, unit/total price, currency, tax, delivery assumptions and expiry."
+     },
+     {
+      "id": "E03-03.C4",
+      "text": "Explain quality/sample requirements, payment milestones and exclusions."
+     }
+    ]
+   },
+   {
+    "issue": 40,
+    "storyId": "E03-06",
+    "criteria": [
+     {
+      "id": "E03-06.C3",
+      "text": "Present exact terms and record explicit actor/date/version acceptance."
+     }
+    ]
+   }
+  ],
+  "affectedFiles": [
+   "apps/web/src/components/procurement.tsx:840",
+   "apps/web/src/components/procurement.tsx:870",
+   "apps/api/src/modules/procurement/commercial-decision.ts:310"
+  ],
+  "implementationTask": "Render a scoped immutable buyerTerms summary, including required quality/sample/exclusion information or explicit unknowns, and require review of that exact visible version. Keep internal costs/compensation private and qualified tax/legal gates pending.",
+  "testRequirements": [
+   "Nonempty distinctive payment/delivery/unit-price values visible before acceptance",
+   "Current/historical quote version comparison",
+   "Mobile/desktop keyboard and failed/stale submission",
+   "Buyer/internal-field separation and unchanged server hash binding"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group3-review.json",
+  "externalGate": "Owner acceptance PENDING; product remediation needs a separately authorized step."
+ },
+ {
+  "findingId": "CP5-G07",
+  "issues": [
+   36
+  ],
+  "severity": "LOW",
+  "title": "Saved cost view omits numeric planned contribution",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 36,
+    "storyId": "E03-02",
+    "criteria": [
+     {
+      "id": "E03-02.C3",
+      "text": "Distinguish fixed/variable costs and show subtotal, tax basis and contribution."
+     }
+    ]
+   }
+  ],
+  "affectedFiles": [
+   "apps/api/src/modules/procurement/commercial-decision.ts:434",
+   "apps/web/src/components/procurement.tsx:818",
+   "packages/contracts/src/commercial.ts:249"
+  ],
+  "implementationTask": "Project/show an exact planned contribution derived from saved selling minus subtotal, with margin basis and pending tax limitations. Preserve historical values and buyer confidentiality.",
+  "testRequirements": [
+   "Exact planned contribution for NONE/markup/selling-price margin",
+   "Quantity and transport revisions preserve history",
+   "Incomplete costs show unknown contribution",
+   "Accessible operator-only saved-version display"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group3-review.json",
+  "externalGate": "Owner acceptance PENDING; product remediation needs a separately authorized step."
+ },
+ {
+  "findingId": "CP5-G08",
+  "issues": [
+   47,
+   113,
+   118
+  ],
+  "severity": "P2",
+  "title": "Offer preparation and issuance trust stale eligibility after consent and participation changes",
+  "state": "IMPLEMENTED_NOT_VERIFIED",
+  "originalCriteria": [
+   {
+    "issue": 47,
+    "storyId": "E05-01",
+    "criteria": [
+     {
+      "id": "E05-01.C1",
+      "text": "Ineligible groups excluded and exclusions explained."
+     },
+     {
+      "id": "E05-01.C2",
+      "text": "Filter craft, equipment, declared availability and free capacity."
+     }
+    ]
+   },
+   {
+    "issue": 113,
+    "storyId": "E04-08",
+    "criteria": [
+     {
+      "id": "E04-08.C1",
+      "text": "No new offers until availability restored."
+     },
+     {
+      "id": "E04-08.C3",
+      "text": "Exclude paused artisans from new offers while preserving active work."
+     }
+    ],
+    "scope": "Pause-only stale eligibility bypass from existing independent reproduction; no new duplicate finding."
+   },
+   {
+    "issue": 118,
+    "storyId": "E05-07",
+    "criteria": [
+     {
+      "id": "E05-07.C4",
+      "text": "Keep hard capacity/qualification/consent guards active."
+     }
+    ],
+    "scope": "Same stale eligibility root at advisory override: actual paused candidate201; no duplicate security finding or direct production commitment claimed."
+   }
+  ],
+  "affectedFiles": [
+   "apps/api/src/modules/procurement/production-offers.ts:503",
+   "apps/api/src/modules/procurement/production-offers.ts:548",
+   "apps/api/src/modules/procurement/production-offers.ts:251",
+   "apps/api/src/modules/procurement/production-offers.ts:44"
+  ],
+  "implementationTask": "Revalidate current craft/equipment, participant/account/availability and participation authority in the same IAM transaction before prepare/issue; preserve immutable assessment provenance and existing capacity/race rules.",
+  "testRequirements": [
+   "Separate consent-only, pause-only and equipment-only revocation cases",
+   "Account/craft/membership changes and declaration revisions",
+   "Concurrent revocation versus issue and replay after authority loss",
+   "No failed-write offer/reservation/audit residue and no decline-history penalty"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group3-review.json",
+  "externalGate": "Owner acceptance PENDING; product remediation needs a separately authorized step.",
+  "group15Extensions": [
+   {
+    "findingId": "CP5-G08",
+    "issues": [
+     113
+    ],
+    "criteria": [
+     "E04-08.C1",
+     "E04-08.C3"
+    ],
+    "scope": "Pause-only stale eligibility bypass from existing independent reproduction; no new duplicate finding."
+   }
+  ],
+  "group16Extensions": [
+   {
+    "findingId": "CP5-G08",
+    "issues": [
+     118
+    ],
+    "criteria": [
+     "E05-07.C4"
+    ],
+    "scope": "Same stale eligibility root at advisory override: actual paused candidate201; no duplicate security finding or direct production commitment claimed."
+   }
+  ],
+  "remediationBatch": 1,
+  "remediationEvidence": "evidence/remediation-batch1/FIX_VERIFICATION.json"
+ },
+ {
+  "findingId": "CP5-G09",
+  "issues": [
+   48
+  ],
+  "severity": "P2",
+  "title": "Reviewing an earlier allocation draft collides with a later draft version",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 48,
+    "storyId": "E05-03",
+    "criteria": [
+     {
+      "id": "E05-03.C5",
+      "text": "Save draft plans without binding workers or starting production."
+     }
+    ]
+   }
+  ],
+  "criterionScope": "Dedicated plan-version defect related to C5 workflow. Exact C5 save-without-binding behavior remains verified; no invented acceptance text.",
+  "affectedFiles": [
+   "apps/api/src/modules/procurement/planning.ts:154",
+   "apps/api/src/modules/procurement/planning.ts:219",
+   "apps/api/prisma/schema.prisma:2086"
+  ],
+  "implementationTask": "Separate draft identity/sequence from per-plan concurrency revision, or allocate unique global revisions consistently. Use an additive reviewed migration if needed; preserve all39 historical migrations.",
+  "testRequirements": [
+   "Two-plus drafts reviewed in different orders",
+   "Concurrent draft creation/review and stale writes",
+   "Stable offer linkage/history and no partial changes"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group4-review.json",
+  "externalGate": "Owner acceptance PENDING; separately authorized product remediation required."
+ },
+ {
+  "findingId": "CP5-G10",
+  "issues": [
+   51
+  ],
+  "severity": "P2",
+  "title": "BOM lacks unit-aware procurement rounding for discrete stock",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 51,
+    "storyId": "E07-01",
+    "criteria": [
+     {
+      "id": "E07-01.C3",
+      "text": "Show per-unit usage, waste assumption and procurement rounding."
+     }
+    ]
+   }
+  ],
+  "criterionScope": "Direct original criterion gap.",
+  "affectedFiles": [
+   "packages/contracts/src/execution.ts:25",
+   "apps/api/src/modules/procurement/execution.ts:221",
+   "apps/api/src/modules/inventory/inventory.service.ts:597",
+   "apps/api/src/modules/inventory/inventory.service.ts:271",
+   "apps/web/src/components/execution-workspace.tsx:135"
+  ],
+  "implementationTask": "Separate exact usage from unit-aware rounded procurement requirement and disclose waste/rounding for the saved batch. Reconcile reservations without permitting arbitrary excess or rewriting historical released BOM.",
+  "testRequirements": [
+   "PIECES/UNITS ceil and METERS precision boundaries",
+   "Four250 batches and waste/no-waste cases",
+   "Full supported reservation/receipt readiness",
+   "Historical BOM and stock conservation"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group4-review.json",
+  "externalGate": "Owner acceptance PENDING; separately authorized product remediation required."
+ },
+ {
+  "findingId": "CP5-G11",
+  "issues": [
+   53,
+   92
+  ],
+  "severity": "P2",
+  "title": "Legacy work instructions label quotation version as specification version",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 53,
+    "storyId": "E06-02",
+    "criteria": [
+     {
+      "id": "E06-02.C1",
+      "text": "Product version, quantity, due date, material and quality criteria visible."
+     },
+     {
+      "id": "E06-02.C3",
+      "text": "Display locked specification, materials and quality checklist."
+     }
+    ]
+   },
+   {
+    "issue": 92,
+    "storyId": "E19-01",
+    "criteria": [
+     {
+      "id": "E19-01.C1",
+      "text": "Work instructions are versioned, images captioned and language chosen, with printable fallback."
+     },
+     {
+      "id": "E19-01.C4",
+      "text": "Bind instructions to the batch's immutable version and highlight approved amendments."
+     }
+    ],
+    "scope": "Wronglegacydisplayversion,notrewrittenQA/catalogueauthority"
+   }
+  ],
+  "criterionScope": "Direct original criterion gap.",
+  "affectedFiles": [
+   "apps/api/src/modules/procurement/execution.ts:1151",
+   "apps/web/src/components/execution-workspace.tsx:408"
+  ],
+  "implementationTask": "Project the locked ProcurementRevision version, retain catalogue revision numbering when bound, and label quotation version separately.",
+  "testRequirements": [
+   "Two quote versions on one specification",
+   "Two specification revisions with their quotes",
+   "Bound catalogue and legacy branches",
+   "UI/API/release identifier consistency"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group4-review.json",
+  "externalGate": "Owner acceptance PENDING; separately authorized product remediation required.",
+  "group11Extensions": [
+   {
+    "findingId": "CP5-G11",
+    "issues": [
+     92
+    ],
+    "criteria": [
+     "E19-01.C1",
+     "E19-01.C4"
+    ],
+    "scope": "Wronglegacydisplayversion,notrewrittenQA/catalogueauthority",
+    "evidence": "Fourcurrentbrowserwidthsshowquote2asSpecification2;lockedfixtureandcurrent/retainedoperatorQA1. BoundcatalogueAPIv1remainscorrect."
+   }
+  ]
+ },
+ {
+  "findingId": "CP5-G12",
+  "issues": [
+   53
+  ],
+  "severity": "LOW",
+  "title": "Completed batches remain in the active-work feed",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 53,
+    "storyId": "E06-02",
+    "criteria": [
+     {
+      "id": "E06-02.C2",
+      "text": "Show only owned accepted/active batches with quantity, deadline and state."
+     }
+    ]
+   }
+  ],
+  "criterionScope": "Direct original criterion gap.",
+  "affectedFiles": [
+   "apps/api/src/modules/procurement/execution.ts:53",
+   "apps/web/src/components/execution-workspace.tsx:360"
+  ],
+  "implementationTask": "Filter current statuses or add an explicit accessible history view without deleting prior work records.",
+  "testRequirements": [
+   "Owned accepted/active versus completed terminal cases",
+   "Other artisan and coordinator scope",
+   "Empty current-work with preserved history"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group4-review.json",
+  "externalGate": "Owner acceptance PENDING; separately authorized product remediation required."
+ },
+ {
+  "findingId": "CP5-G13",
+  "issues": [
+   53,
+   88,
+   92
+  ],
+  "severity": "P2",
+  "title": "Instruction facts use invalid definition-list markup",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 53,
+    "storyId": "E06-02",
+    "criteria": [
+     {
+      "id": "E06-02.C5",
+      "text": "Handle empty/missing-document states accessibly on mobile."
+     }
+    ]
+   },
+   {
+    "issue": 88,
+    "storyId": "E16-02",
+    "criteria": [
+     {
+      "id": "E16-02.C1",
+      "text": "Keyboard and small-screen critical flows tested; reduced-motion honored."
+     },
+     {
+      "id": "E16-02.C3",
+      "text": "Provide labels, keyboard controls, visible focus and understandable validation."
+     },
+     {
+      "id": "E16-02.C5",
+      "text": "Test representative low-end device/browser conditions and fix blocking barriers."
+     }
+    ],
+    "scope": "Same semantic definition-list/dlitem root cause; accessibility remains FAIL"
+   },
+   {
+    "issue": 92,
+    "storyId": "E19-01",
+    "criteria": [
+     {
+      "id": "E19-01.C1",
+      "text": "Work instructions are versioned, images captioned and language chosen, with printable fallback."
+     },
+     {
+      "id": "E19-01.C3",
+      "text": "Support selected accessible language and printable/offline fallback."
+     }
+    ],
+    "scope": "SameFactsdefinition-list/dlitemsemanticfailure inactualinstructionpages"
+   }
+  ],
+  "criterionScope": "Direct original criterion gap.",
+  "affectedFiles": [
+   "apps/web/src/components/execution-workspace.tsx:25",
+   "apps/web/src/components/execution-workspace.tsx:405"
+  ],
+  "implementationTask": "Use allowed direct dt/dd groups or div wrappers; preserve labels, visual grouping and print layout.",
+  "testRequirements": [
+   "Zero definition-list/dlitem violations on both widths",
+   "Missing-document/empty/error/retry contexts",
+   "Keyboard/print and no overflow regression"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group4-review.json",
+  "externalGate": "Owner acceptance PENDING; separately authorized product remediation required.",
+  "group10Extensions": [
+   {
+    "findingId": "CP5-G13",
+    "issues": [
+     88
+    ],
+    "criteria": [
+     "E16-02.C1",
+     "E16-02.C3",
+     "E16-02.C5"
+    ],
+    "scope": "Same semantic definition-list/dlitem root cause; accessibility remains FAIL",
+    "evidence": "Fresh production-accessibility.spec.ts at360/390/768/1280; production-observed-width.json, artisan-axe-width.json and retained acceptance failure traces"
+   }
+  ],
+  "group11Extensions": [
+   {
+    "findingId": "CP5-G13",
+    "issues": [
+     92
+    ],
+    "criteria": [
+     "E19-01.C1",
+     "E19-01.C3"
+    ],
+    "scope": "SameFactsdefinition-list/dlitemsemanticfailure inactualinstructionpages",
+    "evidence": "Fourcurrentbrowsercasesfailaxe, nooverflowobserved;no duplicatedfinding."
+   }
+  ]
+ },
+ {
+  "findingId": "CP5-G14",
+  "issues": [
+   55,
+   129
+  ],
+  "severity": "P2",
+  "title": "Inspection metadata and missing-checklist readiness are incompletely presented",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 55,
+    "storyId": "E08-01",
+    "criteria": [
+     {
+      "id": "E08-01.C3",
+      "text": "Present tolerances, units, defect codes and inspection method."
+     },
+     {
+      "id": "E08-01.C5",
+      "text": "Mark missing checklist/approval as inspection-readiness blocker."
+     }
+    ]
+   },
+   {
+    "issue": 129,
+    "storyId": "E08-04",
+    "criteria": [
+     {
+      "id": "E08-04.C2",
+      "text": "Link evidence/code to inspection attempt and affected quantity."
+     }
+    ],
+    "scope": "Same missing structured defect/inspection method metadata; no duplicate finding."
+   }
+  ],
+  "criterionScope": "Direct original gap",
+  "affectedFiles": [
+   "apps/api/src/modules/procurement/execution.ts:1031",
+   "apps/api/src/modules/procurement/execution.ts:1050",
+   "packages/contracts/src/execution.ts:138",
+   "apps/api/prisma/schema.prisma:854",
+   "apps/web/src/components/execution-workspace.tsx:171"
+  ],
+  "implementationTask": "Extend additive checklist metadata/projections and render complete inspector guidance plus a dedicated readiness blocker; preserve locked revisions and existing immutable evidence.",
+  "testRequirements": [
+   "Nonempty metadata visible to inspector",
+   "Missing checklist/approval marked before submission and mutation still denied",
+   "Legacy/catalogue version binding",
+   "No weakening required-results guard"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group5-review.json",
+  "externalGate": "Owner acceptance PENDING; separate product-remediation authorization required.",
+  "group19Extensions": [
+   {
+    "findingId": "CP5-G14",
+    "issues": [
+     129
+    ],
+    "criteria": [
+     "E08-04.C2"
+    ],
+    "scope": "Same missing structured defect/inspection method metadata; no duplicate finding."
+   }
+  ]
+ },
+ {
+  "findingId": "CP5-G15",
+  "issues": [
+   56,
+   88
+  ],
+  "severity": "P2",
+  "title": "Operator UI submits only the first inspection criterion",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 56,
+    "storyId": "E08-02",
+    "criteria": [
+     {
+      "id": "E08-02.C5",
+      "text": "Record defects/evidence and update QA totals transactionally."
+     }
+    ]
+   },
+   {
+    "issue": 88,
+    "storyId": "E16-02",
+    "criteria": [
+     {
+      "id": "E16-02.C1",
+      "text": "Keyboard and small-screen critical flows tested; reduced-motion honored."
+     },
+     {
+      "id": "E16-02.C2",
+      "text": "Make buyer RFQ, artisan decisions/progress and operator review usable on small screens."
+     },
+     {
+      "id": "E16-02.C5",
+      "text": "Test representative low-end device/browser conditions and fix blocking barriers."
+     }
+    ],
+    "scope": "Functional dependency blocks required representative operator QA journey; no duplicate accessibility root cause"
+   }
+  ],
+  "criterionScope": "Direct original gap",
+  "affectedFiles": [
+   "apps/web/src/components/execution-workspace.tsx:228",
+   "apps/web/src/components/execution-workspace.tsx:241",
+   "apps/web/src/components/execution-workspace.tsx:273",
+   "apps/api/src/modules/procurement/execution.ts:889"
+  ],
+  "implementationTask": "Render per-criterion controls keyed by authoritative batch-bound ID, required/evidence rules and outcomes. Preserve failed form input and server validation.",
+  "testRequirements": [
+   "Two-plus required criteria through actual UI at mobile/desktop",
+   "Mixed optional/required and evidence-required notes",
+   "Reinspection multi-criterion form",
+   "No approval when required result omitted"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group5-review.json",
+  "externalGate": "Owner acceptance PENDING; separate product-remediation authorization required.",
+  "group10Extensions": [
+   {
+    "findingId": "CP5-G15",
+    "issues": [
+     88
+    ],
+    "criteria": [
+     "E16-02.C1",
+     "E16-02.C2",
+     "E16-02.C5"
+    ],
+    "scope": "Functional dependency blocks required representative operator QA journey; no duplicate accessibility root cause",
+    "evidence": "Fresh production-accessibility.spec.ts at360/390/768/1280; production-observed-width.json, artisan-axe-width.json and retained acceptance failure traces"
+   }
+  ]
+ },
+ {
+  "findingId": "CP5-G16",
+  "issues": [
+   57
+  ],
+  "severity": "P2",
+  "title": "Unresolved production quantity disputes do not block fulfillment claims",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 57,
+    "storyId": "E08-03",
+    "criteria": [
+     {
+      "id": "E08-03.C4",
+      "text": "Exclude disputed and rework units from fulfillment claims."
+     }
+    ]
+   }
+  ],
+  "criterionScope": "Direct original gap",
+  "affectedFiles": [
+   "apps/api/src/modules/procurement/execution.ts:440",
+   "apps/api/src/modules/procurement/execution.ts:716",
+   "apps/api/src/modules/procurement/execution.ts:940"
+  ],
+  "implementationTask": "Model attributable scoped holds/resolution and deduct or gate affected units in current projection and preparation/shipment checks within the same transaction.",
+  "testRequirements": [
+   "Dispute before/after QA and preparation",
+   "Scoped hold quantity and authorized resolution",
+   "Concurrent dispute versus reservation",
+   "No silent compensation or evidence rewrite"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group5-review.json",
+  "externalGate": "Owner acceptance PENDING; separate product-remediation authorization required."
+ },
+ {
+  "findingId": "CP5-G17",
+  "issues": [
+   57,
+   58,
+   119
+  ],
+  "severity": "LOW",
+  "title": "Fulfillment summary omits inspected total and remaining order quantity",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 57,
+    "storyId": "E08-03",
+    "criteria": [
+     {
+      "id": "E08-03.C3",
+      "text": "Separate reported, inspected, accepted, rejected, pending and shipped."
+     }
+    ]
+   },
+   {
+    "issue": 58,
+    "storyId": "E09-01",
+    "criteria": [
+     {
+      "id": "E09-01.C5",
+      "text": "Show partial fulfillment and remaining order quantity."
+     }
+    ]
+   },
+   {
+    "issue": 119,
+    "storyId": "E06-04",
+    "criteria": [
+     {
+      "id": "E06-04.C1",
+      "text": "Dashboard distinguishes produced, inspected, accepted and shipped."
+     },
+     {
+      "id": "E06-04.C2",
+      "text": "Separate planned, accepted work, produced, inspected, approved and shipped."
+     }
+    ],
+    "scope": "Same missing inspected/remaining fulfillment summary fields. Submitted is not substituted for inspected."
+   }
+  ],
+  "criterionScope": "Direct original gap",
+  "affectedFiles": [
+   "apps/api/src/modules/procurement/execution.ts:984",
+   "packages/contracts/src/execution.ts:224",
+   "apps/web/src/components/execution-workspace.tsx:36"
+  ],
+  "implementationTask": "Add clearly defined derived inspected and remaining fulfillment projections; distinguish reserved, shipped, buyer-received and buyer-accepted bases.",
+  "testRequirements": [
+   "Pending partial inspection and reinspection totals",
+   "Partial multi-batch preparations and dispatch",
+   "No double deduction of reserved and shipped",
+   "Buyer-accepted versus dispatched remaining labels"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group5-review.json",
+  "externalGate": "Owner acceptance PENDING; separate product-remediation authorization required.",
+  "group17Extensions": [
+   {
+    "findingId": "CP5-G17",
+    "issues": [
+     119
+    ],
+    "criteria": [
+     "E06-04.C1",
+     "E06-04.C2"
+    ],
+    "scope": "Same missing inspected/remaining fulfillment summary fields. Submitted is not substituted for inspected."
+   }
+  ]
+ },
+ {
+  "findingId": "CP5-G18",
+  "issues": [
+   56,
+   88
+  ],
+  "severity": "LOW",
+  "title": "Mobile production review overflows horizontally with valid persona labels",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 56,
+    "storyId": "E08-02",
+    "criteria": [
+     {
+      "id": "E08-02.C5",
+      "text": "Record defects/evidence and update QA totals transactionally."
+     }
+    ]
+   },
+   {
+    "issue": 88,
+    "storyId": "E16-02",
+    "criteria": [
+     {
+      "id": "E16-02.C1",
+      "text": "Keyboard and small-screen critical flows tested; reduced-motion honored."
+     },
+     {
+      "id": "E16-02.C2",
+      "text": "Make buyer RFQ, artisan decisions/progress and operator review usable on small screens."
+     },
+     {
+      "id": "E16-02.C5",
+      "text": "Test representative low-end device/browser conditions and fix blocking barriers."
+     }
+    ],
+    "scope": "Same production intrinsic-width/wrapping failure,now360/390/768 with realistic longname; no new root cause"
+   }
+  ],
+  "criterionScope": "Related workflow usability finding, not additional original criterion failure",
+  "affectedFiles": [
+   "apps/web/src/components/execution-workspace.tsx:78",
+   "apps/web/src/components/execution-workspace.tsx:228",
+   "apps/web/src/components/production-offers.tsx:154",
+   "apps/web/src/components/workspace-ui.tsx:207",
+   "apps/web/src/components/ui/button.tsx:8"
+  ],
+  "implementationTask": "Constrain responsive card/flex/grid minimum widths and wrap long action labels; inspect computed styles before choosing exact fix.",
+  "testRequirements": [
+   "360/390/1280 real production and inspection pages",
+   "Long valid artisan names and action labels",
+   "Actual scrollWidth<=clientWidth assertion",
+   "Retained zero-violation accessibility acceptance after semantic markup fix"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group5-review.json",
+  "externalGate": "Owner acceptance PENDING; separate product-remediation authorization required.",
+  "group10Extensions": [
+   {
+    "findingId": "CP5-G18",
+    "issues": [
+     88
+    ],
+    "criteria": [
+     "E16-02.C1",
+     "E16-02.C2",
+     "E16-02.C5"
+    ],
+    "scope": "Same production intrinsic-width/wrapping failure,now360/390/768 with realistic longname; no new root cause",
+    "evidence": "Fresh production-accessibility.spec.ts at360/390/768/1280; production-observed-width.json, artisan-axe-width.json and retained acceptance failure traces"
+   }
+  ]
+ },
+ {
+  "findingId": "CP5-G19",
+  "issues": [
+   59,
+   135
+  ],
+  "severity": "P2",
+  "title": "Custody records do not conserve source/receiver balances",
+  "state": "RESOLVED_PENDING_OWNER_REVIEW",
+  "originalCriteria": [
+   {
+    "issue": 59,
+    "storyId": "E09-04",
+    "criteria": [
+     {
+      "id": "E09-04.C4",
+      "text": "Reject quantities exceeding current custody balance."
+     }
+    ]
+   },
+   {
+    "issue": 135,
+    "storyId": "E09-02",
+    "criteria": [
+     {
+      "id": "E09-02.C4",
+      "text": "Show persisted event time and quantity scope."
+     }
+    ],
+    "scope": "Same current shipment-custody scope/conservation counterexample; status separation still works."
+   }
+  ],
+  "criterionScope": "Direct original criterion gaps; missing completion and policy gates distinguished from an exploitable money-transfer vulnerability",
+  "affectedFiles": [
+   "apps/api/src/modules/procurement/logistics.ts:195",
+   "apps/api/src/modules/procurement/logistics.ts:203",
+   "apps/api/src/modules/procurement/logistics.ts:236",
+   "apps/api/src/modules/procurement/logistics.ts:260"
+  ],
+  "implementationTask": "Define incremental/cumulative custody semantics, enforce remaining source/receiver balances transactionally, and append explicit shortage/correction events without deleting history.",
+  "testRequirements": [
+   "Multiple partial/new-key collections",
+   "1-of30 hub receipt and dispatch bound",
+   "Concurrent collection/confirmation",
+   "Short/damage correction and immutable history"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group6-review.json",
+  "externalGate": "Owner acceptance PENDING; separate remediation authorization; actual financial use requires qualified policy/authority and genuine external evidence.",
+  "group20Extensions": [
+   {
+    "findingId": "CP5-G19",
+    "issues": [
+     135
+    ],
+    "criteria": [
+     "E09-02.C4"
+    ],
+    "scope": "Same current shipment-custody scope/conservation counterexample; status separation still works."
+   }
+  ],
+  "remediationBatch": 1,
+  "remediationEvidence": "evidence/remediation-batch1/FIX_VERIFICATION.json"
+ },
+ {
+  "findingId": "CP5-G20",
+  "issues": [
+   60,
+   135
+  ],
+  "severity": "P2",
+  "title": "Short operator delivery report suppresses shipment shortage",
+  "state": "RESOLVED_PENDING_OWNER_REVIEW",
+  "originalCriteria": [
+   {
+    "issue": 60,
+    "storyId": "E09-05",
+    "criteria": [
+     {
+      "id": "E09-05.C1",
+      "text": "Shortage/dispute branch supported before commercial acceptance."
+     },
+     {
+      "id": "E09-05.C3",
+      "text": "Separate receipt from commercial acceptance and allow shortage/damage disputes."
+     }
+    ]
+   },
+   {
+    "issue": 135,
+    "storyId": "E09-02",
+    "criteria": [
+     {
+      "id": "E09-02.C4",
+      "text": "Show persisted event time and quantity scope."
+     }
+    ],
+    "scope": "Same shipment baseline shortage suppressed by underreported delivery; no duplicatefinding or excessivepay claim."
+   }
+  ],
+  "criterionScope": "Direct original criterion gaps; missing completion and policy gates distinguished from an exploitable money-transfer vulnerability",
+  "affectedFiles": [
+   "apps/api/src/modules/procurement/logistics.ts:298",
+   "apps/api/src/modules/procurement/logistics.ts:356",
+   "packages/contracts/src/logistics.ts:139"
+  ],
+  "implementationTask": "Reconcile shipped/custody, operator-reported and buyer-received counts with explicit partial-delivery remainder/discrepancy; do not overwrite prior evidence.",
+  "testRequirements": [
+   "30shipped20reported20received",
+   "Buyer missing declaration against shipped baseline",
+   "Multi-shipment partial fulfillment",
+   "No payable for missing/damaged units"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group6-review.json",
+  "externalGate": "Owner acceptance PENDING; separate remediation authorization; actual financial use requires qualified policy/authority and genuine external evidence.",
+  "group20Extensions": [
+   {
+    "findingId": "CP5-G20",
+    "issues": [
+     135
+    ],
+    "criteria": [
+     "E09-02.C4"
+    ],
+    "scope": "Same shipment baseline shortage suppressed by underreported delivery; no duplicatefinding or excessivepay claim."
+   }
+  ],
+  "remediationBatch": 1,
+  "remediationEvidence": "evidence/remediation-batch1/FIX_VERIFICATION.json"
+ },
+ {
+  "findingId": "CP5-G21",
+  "issues": [
+   60
+  ],
+  "severity": "P2",
+  "title": "Delivery discrepancies do not notify operations or finance",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 60,
+    "storyId": "E09-05",
+    "criteria": [
+     {
+      "id": "E09-05.C5",
+      "text": "Notify operations/finance and preserve open discrepancy before closure."
+     }
+    ]
+   }
+  ],
+  "criterionScope": "Direct original criterion gaps; missing completion and policy gates distinguished from an exploitable money-transfer vulnerability",
+  "affectedFiles": [
+   "apps/api/src/modules/procurement/logistics.ts:336",
+   "apps/api/src/modules/foundation/audit.ts:30",
+   "apps/api/src/jobs/commerce-consumer.ts:87"
+  ],
+  "implementationTask": "Add scoped durable discrepancy notification/consumer and replay-safe delivery records; preserve pending providers as unavailable.",
+  "testRequirements": [
+   "Nonempty discrepancy notification to authorized recipients",
+   "Outbox retry/dedup and rollback",
+   "Cross-tenant recipient exclusion",
+   "Unresolved discrepancy still blocks closure"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group6-review.json",
+  "externalGate": "Owner acceptance PENDING; separate remediation authorization; actual financial use requires qualified policy/authority and genuine external evidence."
+ },
+ {
+  "findingId": "CP5-G22",
+  "issues": [
+   61,
+   72,
+   143
+  ],
+  "severity": "P2",
+  "title": "Payable recognition ignores agreed earning milestone",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 61,
+    "storyId": "E10-06",
+    "criteria": [
+     {
+      "id": "E10-06.C2",
+      "text": "Create obligation from the accepted offer's agreed milestone and rate snapshot."
+     }
+    ]
+   },
+   {
+    "issue": 72,
+    "storyId": "E10-10",
+    "criteria": [
+     {
+      "id": "E10-10.C3",
+      "text": "Calculate buyer credits, artisan obligations and approved costs separately."
+     }
+    ],
+    "scope": "Source-proven entitlement dependency; no repeated earning-milestone audit"
+   },
+   {
+    "issue": 143,
+    "storyId": "E10-02",
+    "criteria": [
+     {
+      "id": "E10-02.C3",
+      "text": "Link each amount to accepted terms and milestone/evidence."
+     }
+    ],
+    "scope": "Same hardcoded buyer-acceptance milestone versus accepted earning terms; distinct from correct separation of statement amount classes."
+   }
+  ],
+  "criterionScope": "Direct original criterion gaps; missing completion and policy gates distinguished from an exploitable money-transfer vulnerability",
+  "affectedFiles": [
+   "apps/api/src/modules/procurement/logistics.ts:784",
+   "apps/api/src/modules/procurement/logistics.ts:1008",
+   "apps/api/src/modules/procurement/production-offers.ts:627",
+   "apps/api/prisma/migrations/20261027050000_logistics_traceability/migration.sql:178"
+  ],
+  "implementationTask": "Model reviewed structured earning milestone/term snapshot at offer acceptance and recognize from it; preserve existing obligations and require additive migration/policy review.",
+  "testRequirements": [
+   "QA milestone before buyer confirmation",
+   "Buyer-acceptance milestone",
+   "No buyer cash dependency",
+   "Idempotent exact partial amounts and historical obligations"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group6-review.json",
+  "externalGate": "Owner acceptance PENDING; separate remediation authorization; actual financial use requires qualified policy/authority and genuine external evidence.",
+  "group8Extensions": [
+   {
+    "findingId": "CP5-G22",
+    "issues": [
+     72
+    ],
+    "criteria": [
+     "E10-10.C3"
+    ],
+    "scope": "Source-proven entitlement dependency; no repeated earning-milestone audit",
+    "evidence": "Accepted terms snapshot retained; compensation policy remainsnull and no credit/entitlement calculator replaces fixed milestone limitations."
+   }
+  ],
+  "group21Extensions": [
+   {
+    "findingId": "CP5-G22",
+    "issues": [
+     143
+    ],
+    "criteria": [
+     "E10-02.C3"
+    ],
+    "scope": "Same hardcoded buyer-acceptance milestone versus accepted earning terms; distinct from correct separation of statement amount classes."
+   }
+  ]
+ },
+ {
+  "findingId": "CP5-G23",
+  "issues": [
+   62
+  ],
+  "severity": "P2",
+  "title": "Approval review omits beneficiary/evidence and explicit provenance",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 62,
+    "storyId": "E10-07",
+    "criteria": [
+     {
+      "id": "E10-07.C2",
+      "text": "Show beneficiary, amount, due obligation and evidence before approval."
+     },
+     {
+      "id": "E10-07.C4",
+      "text": "Record approver, time, authority, reason and payable version."
+     }
+    ]
+   }
+  ],
+  "criterionScope": "Direct original criterion gaps; missing completion and policy gates distinguished from an exploitable money-transfer vulnerability",
+  "affectedFiles": [
+   "apps/web/src/components/finance-workspace.tsx:219",
+   "apps/web/src/components/finance-workspace.tsx:247",
+   "apps/api/src/modules/finance/finance.service.ts:108",
+   "apps/api/src/modules/finance/finance.service.ts:342",
+   "apps/api/prisma/schema.prisma:1858"
+  ],
+  "implementationTask": "Project authorized beneficiary/source/terms/due evidence into approval UI and persist authority plus immutable payable fingerprint/version with approval.",
+  "testRequirements": [
+   "Two beneficiaries with same amount",
+   "Evidence visible before approval",
+   "Authority/content fingerprint in immutable history",
+   "Mobile/desktop self-denial and approved pending state"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group6-review.json",
+  "externalGate": "Owner acceptance PENDING; separate remediation authorization; actual financial use requires qualified policy/authority and genuine external evidence."
+ },
+ {
+  "findingId": "CP5-G24",
+  "issues": [
+   63,
+   72
+  ],
+  "severity": "P2",
+  "title": "Payout lifecycle stops at unverified manual reports",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 63,
+    "storyId": "E10-08",
+    "criteria": [
+     {
+      "id": "E10-08.C1",
+      "text": "Failed, pending and paid states distinct, verified reference required."
+     },
+     {
+      "id": "E10-08.C2",
+      "text": "Record initiated transfer separately from pending, failed and settled outcomes."
+     },
+     {
+      "id": "E10-08.C3",
+      "text": "Require verifiable settlement reference, amount/currency and timestamp for settled status."
+     },
+     {
+      "id": "E10-08.C5",
+      "text": "Reconcile partial settlements and prevent total payout exceeding outstanding liability."
+     }
+    ]
+   },
+   {
+    "issue": 72,
+    "storyId": "E10-10",
+    "criteria": [
+     {
+      "id": "E10-10.C3",
+      "text": "Calculate buyer credits, artisan obligations and approved costs separately."
+     }
+    ],
+    "scope": "Source-proven settlement dependency, distinct from preservation criterion"
+   }
+  ],
+  "criterionScope": "Direct original criterion gaps; missing completion and policy gates distinguished from an exploitable money-transfer vulnerability",
+  "affectedFiles": [
+   "packages/contracts/src/finance.ts:22",
+   "apps/api/src/modules/finance/finance.service.ts:376",
+   "apps/api/prisma/migrations/20261027080000_financial_controls/migration.sql:107",
+   "apps/web/src/components/finance-workspace.tsx:267"
+  ],
+  "implementationTask": "After qualified policy/authority approval, implement bounded reconciliation with verifiable source/reference/amount/currency/time and immutable partial settlement ledger. Keep simulation separate; automated provider integration is separate E10-12 and not required merely to replace a reviewed manual workflow.",
+  "testRequirements": [
+   "Initiated/unknown/failure/retry transitions",
+   "Verified manual/provider reference reconciliation",
+   "Partial settlements and duplicate source references",
+   "External evidence denial and no false paid claim",
+   "Real evidence remains separately owner-approved"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group6-review.json",
+  "externalGate": "Owner acceptance PENDING; separate remediation authorization; actual financial use requires qualified policy/authority and genuine external evidence.",
+  "group8Extensions": [
+   {
+    "findingId": "CP5-G24",
+    "issues": [
+     72
+    ],
+    "criteria": [
+     "E10-10.C3"
+    ],
+    "scope": "Source-proven settlement dependency, distinct from preservation criterion",
+    "evidence": "Manual/simulated payout is not verified settlement; proposal review leaves balances unchanged and closure blocked."
+   }
+  ]
+ },
+ {
+  "findingId": "CP5-G25",
+  "issues": [
+   64
+  ],
+  "severity": "P2",
+  "title": "Versioned reviewed finance tax configuration is absent",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 64,
+    "storyId": "E03-10",
+    "criteria": [
+     {
+      "id": "E03-10.C1",
+      "text": "Configuration versioned and reserved for authorized finance role."
+     },
+     {
+      "id": "E03-10.C2",
+      "text": "Restrict reviewed tax treatment configuration to authorized finance administrators."
+     },
+     {
+      "id": "E03-10.C3",
+      "text": "Validate precision, effective dates and nonoverlapping applicability."
+     },
+     {
+      "id": "E03-10.C4",
+      "text": "Preserve versions used by issued quotes/invoices."
+     },
+     {
+      "id": "E03-10.C5",
+      "text": "Block retrospective document edits and audit policy lifecycle."
+     }
+    ]
+   }
+  ],
+  "criterionScope": "Original criterion completion gap",
+  "affectedFiles": [
+   "packages/contracts/src/procurement.ts:54",
+   "apps/api/src/modules/procurement/procurement.service.ts:946",
+   "apps/api/src/modules/procurement/procurement.service.ts:1008",
+   "apps/api/src/modules/procurement/commercial-decision.ts:327",
+   "apps/web/src/components/procurement.tsx:711"
+  ],
+  "implementationTask": "Implement reviewed versioned tax configuration and effective-date/overlap/precision/lifecycle controls after qualified policy decisions; preserve old snapshots.",
+  "testRequirements": [
+   "Finance role denials",
+   "Effective/overlap boundaries",
+   "Quote/invoice policy pinning and immutable versions",
+   "Explicit unknown/illustrative/reviewed/approved labels"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group7-review.json",
+  "externalGate": "Qualified tax/accounting approval and owner acceptance; no jurisdictional rate inferred"
+ },
+ {
+  "findingId": "CP5-G26",
+  "issues": [
+   65
+  ],
+  "severity": "P2",
+  "title": "Billing stops at immutable synthetic quote-copy documents",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 65,
+    "storyId": "E10-04",
+    "criteria": [
+     {
+      "id": "E10-04.C1",
+      "text": "Numbered, versioned documents generated under tax policy."
+     },
+     {
+      "id": "E10-04.C2",
+      "text": "Generate document lines from approved order/milestones with exact quantities, prices and tax policy."
+     },
+     {
+      "id": "E10-04.C4",
+      "text": "Preserve issued records and use approved credit/correction workflow instead of silent edits."
+     }
+    ]
+   }
+  ],
+  "criterionScope": "Original criterion completion gap",
+  "affectedFiles": [
+   "apps/api/src/modules/procurement/procurement.service.ts:919",
+   "apps/api/src/modules/procurement/procurement.service.ts:1196",
+   "apps/api/src/modules/procurement/procurement.service.ts:1240",
+   "apps/api/prisma/schema.prisma:1473"
+  ],
+  "implementationTask": "Add reviewed billing authority/line/tax references and additive correction/credit/void records without editing issued content.",
+  "testRequirements": [
+   "Exact approved line totals",
+   "Review/issue authority",
+   "Corrections preserve original and reference lineage",
+   "No invoice implies paid"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group7-review.json",
+  "externalGate": "Qualified invoice/tax/credit policy plus owner acceptance"
+ },
+ {
+  "findingId": "CP5-G27",
+  "issues": [
+   65,
+   102
+  ],
+  "severity": "P2",
+  "title": "Buyer invoice download exposes internal costing and margin",
+  "state": "RESOLVED_PENDING_OWNER_REVIEW",
+  "originalCriteria": [
+   {
+    "issue": 65,
+    "storyId": "E10-04",
+    "criteria": [
+     {
+      "id": "E10-04.C5",
+      "text": "Restrict issue/download permissions and mark drafts/voids clearly."
+     }
+    ]
+   },
+   {
+    "issue": 102,
+    "storyId": "E02-08",
+    "criteria": [
+     {
+      "id": "E02-08.C1",
+      "text": "Documents downloadable only for authorized organization."
+     }
+    ],
+    "scope": "Same internal cost/margin buyer document projection leak; organization isolation still works."
+   }
+  ],
+  "criterionScope": "Original criterion completion gap",
+  "affectedFiles": [
+   "apps/api/src/modules/procurement/commercial-decision.ts:348",
+   "apps/api/src/modules/procurement/procurement.service.ts:1223",
+   "apps/api/src/modules/procurement/procurement.service.ts:1279"
+  ],
+  "implementationTask": "Keep full immutable source snapshot private and serialize a separate allowlisted buyer invoice/download projection; apply same rule to historical documents.",
+  "testRequirements": [
+   "Real nonempty costed quote\u2192accept\u2192invoice buyer download",
+   "Buyer JSON excludes internal nested keys",
+   "Operator retains scoped evidence",
+   "Foreign/suspended membership denied"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group7-review.json",
+  "externalGate": "Owner acceptance PENDING; separate product remediation authorization",
+  "group13Extensions": [
+   {
+    "findingId": "CP5-G27",
+    "issues": [
+     102
+    ],
+    "criteria": [
+     "E02-08.C1"
+    ],
+    "scope": "Same internal cost/margin buyer document projection leak; organization isolation still works."
+   }
+  ],
+  "remediationBatch": 1,
+  "remediationEvidence": "evidence/remediation-batch1/FIX_VERIFICATION.json"
+ },
+ {
+  "findingId": "CP5-G28",
+  "issues": [
+   66
+  ],
+  "severity": "P2",
+  "title": "Buyer deposit reconciliation and positive funding approval are absent",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 66,
+    "storyId": "E10-05",
+    "criteria": [
+     {
+      "id": "E10-05.C1",
+      "text": "Paid status requires reconciliation evidence; idempotent recording."
+     },
+     {
+      "id": "E10-05.C3",
+      "text": "Match evidence to buyer/order and identify partial, unmatched or duplicate receipts."
+     },
+     {
+      "id": "E10-05.C4",
+      "text": "Confirm funding only after authorized reconciliation or documented credit approval."
+     }
+    ]
+   }
+  ],
+  "criterionScope": "Original criterion completion gap",
+  "affectedFiles": [
+   "apps/api/src/modules/finance/finance.service.ts:201",
+   "apps/api/src/modules/finance/finance.service.ts:268",
+   "packages/contracts/src/finance.ts:7",
+   "apps/api/prisma/schema.prisma:1840"
+  ],
+  "implementationTask": "After qualified authority/source approval implement receipt matching, reconciled balances and documented credit approval separately from synthetic claims.",
+  "testRequirements": [
+   "Partial/unmatched/duplicate matching",
+   "Independent reconciliation evidence",
+   "Funding current approved balance/credit only",
+   "No synthetic upgrade to verified cash"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group7-review.json",
+  "externalGate": "Genuine bank/manual/provider evidence and qualified financial/legal authority; software implementation also missing"
+ },
+ {
+  "findingId": "CP5-G29",
+  "issues": [
+   67,
+   72
+  ],
+  "severity": "P2",
+  "title": "Reviewed accepted-batch cancellation workflow is absent",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 67,
+    "storyId": "E06-08",
+    "criteria": [
+     {
+      "id": "E06-08.C1",
+      "text": "Reasons, completed work, materials and payment implications preserved."
+     },
+     {
+      "id": "E06-08.C2",
+      "text": "Require authorized actor, reason, effective time and version."
+     },
+     {
+      "id": "E06-08.C3",
+      "text": "Snapshot completed work, issued materials and financial obligations."
+     },
+     {
+      "id": "E06-08.C4",
+      "text": "Release remaining capacity appropriately and create settlement tasks."
+     }
+    ]
+   },
+   {
+    "issue": 72,
+    "storyId": "E10-10",
+    "criteria": [
+     {
+      "id": "E10-10.C1",
+      "text": "Agreed work and materials obligations reconciled first."
+     }
+    ],
+    "scope": "Directly reobserved conservative cancellation denial; no successful workflow inferred"
+   }
+  ],
+  "criterionScope": "Original criterion completion gap",
+  "affectedFiles": [
+   "packages/contracts/src/commerce/domain.ts:95",
+   "packages/contracts/src/commerce/domain.ts:355",
+   "packages/contracts/src/commerce/contracts.ts:80",
+   "apps/api/src/modules/commerce/commerce.service.ts:718",
+   "apps/api/src/modules/commerce/commerce.service.ts:836",
+   "apps/api/src/modules/artisans/capacity.ts:29",
+   "apps/api/src/modules/finance/finance.service.ts:1443"
+  ],
+  "implementationTask": "Implement reviewed additive batch cancellation/entitlement/disposition workflow; release only justified unearned capacity and retain earned liabilities.",
+  "testRequirements": [
+   "Partial production and QA cancellation",
+   "Issued materials and accepted payables retained",
+   "Consent/role/version and concurrent cancellation",
+   "Capacity and settlement tasks"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group7-review.json",
+  "externalGate": "Reviewed contractual/cancellation compensation policy, owner acceptance",
+  "group8Extensions": [
+   {
+    "findingId": "CP5-G29",
+    "issues": [
+     72
+    ],
+    "criteria": [
+     "E10-10.C1"
+    ],
+    "scope": "Directly reobserved conservative cancellation denial; no successful workflow inferred",
+    "evidence": "Actual partialQA/material/earned60.000/request5.000 scenario denies cancellation and preserves obligations; lacks cancellation disposition/tasks."
+   }
+  ]
+ },
+ {
+  "findingId": "CP5-G30",
+  "issues": [
+   66,
+   78
+  ],
+  "severity": "LOW",
+  "title": "Malformed deposit amount throws500 instead of field validation",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 66,
+    "storyId": "E10-05",
+    "criteria": [
+     {
+      "id": "E10-05.C2",
+      "text": "Record actual receipt amount, currency, date and external reference separately from invoice amount."
+     }
+    ]
+   },
+   {
+    "issue": 78,
+    "storyId": "E16-05",
+    "criteria": [
+     {
+      "id": "E16-05.C1",
+      "text": "Zod validation, rate limits, resource-level RBAC and error contracts."
+     },
+     {
+      "id": "E16-05.C2",
+      "text": "Validate payload/query schemas and return consistent safe errors."
+     }
+    ],
+    "scope": "Direct validation/error contract failure; safe500 not data leak or unauthorized money write"
+   }
+  ],
+  "criterionScope": "Related validation error; no valid-record C2 acceptance removal",
+  "affectedFiles": [
+   "packages/contracts/src/finance.ts:7",
+   "packages/contracts/src/commerce/contracts.ts:11",
+   "packages/contracts/src/domain.ts:44"
+  ],
+  "implementationTask": "Use guarded single amount validation/refinement pipeline so invalid parse never throws outside validation.",
+  "testRequirements": [
+   "Negative/excess precision/type/oversize values400",
+   "No deposit/event/command write",
+   "Valid millime and zero behavior",
+   "UI amount feedback"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group7-review.json",
+  "externalGate": "Owner acceptance PENDING; separate product remediation authorization",
+  "group9Extensions": [
+   {
+    "findingId": "CP5-G30",
+    "issues": [
+     78
+    ],
+    "criteria": [
+     "E16-05.C1",
+     "E16-05.C2"
+    ],
+    "scope": "Direct validation/error contract failure; safe500 not data leak or unauthorized money write",
+    "evidence": "Fresh actual HTTP negative/excessprecision deposit payload returns500 INTERNAL_ERROR without echo or deposit write; Group7 authoritative nonempty authorized order evidence unchanged."
+   }
+  ]
+ },
+ {
+  "findingId": "CP5-G31",
+  "issues": [
+   72,
+   132,
+   139
+  ],
+  "severity": "P2",
+  "title": "Partial/cancellation remedy remains an uncalculated policy-pending proposal",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 72,
+    "storyId": "E10-10",
+    "criteria": [
+     {
+      "id": "E10-10.C1",
+      "text": "Agreed work and materials obligations reconciled first."
+     },
+     {
+      "id": "E10-10.C2",
+      "text": "Inventory accepted terms, completed/rejected/disputed work and issued/returned materials."
+     },
+     {
+      "id": "E10-10.C3",
+      "text": "Calculate buyer credits, artisan obligations and approved costs separately."
+     },
+     {
+      "id": "E10-10.C4",
+      "text": "Require evidence and authorized agreement for any deduction or negotiated remedy."
+     }
+    ]
+   },
+   {
+    "issue": 132,
+    "storyId": "E08-07",
+    "criteria": [
+     {
+      "id": "E08-07.C1",
+      "text": "Settlement and schedule impact documented."
+     },
+     {
+      "id": "E08-07.C2",
+      "text": "Record remedy, units, parties and authorized reason."
+     },
+     {
+      "id": "E08-07.C3",
+      "text": "Calculate schedule/material/compensation consequences."
+     }
+    ],
+    "scope": "Same uncalculated reviewed remedy/settlement consequence gap."
+   },
+   {
+    "issue": 139,
+    "storyId": "E13-07",
+    "criteria": [
+     {
+      "id": "E13-07.C1",
+      "text": "Define direct artisan compensation divided by agreed basis, label gross versus net where relevant, handle refunds and do not disclose individual rates publicly."
+     },
+     {
+      "id": "E13-07.C4",
+      "text": "Specify refunds, cancellations, partial fulfillment and zero/missing denominator handling."
+     }
+    ],
+    "scope": "Unimplemented calculated refund/cancellation/partial remedy policy directly limits aggregate adjustment integration; pure share refund arithmetic exists."
+   }
+  ],
+  "criterionScope": "Original completion gap; effective safety denials and external policy limits distinguished",
+  "affectedFiles": [
+   "apps/api/src/modules/finance/finance.service.ts:521",
+   "apps/api/src/modules/finance/finance.service.ts:548",
+   "apps/api/src/modules/finance/finance.service.ts:1218",
+   "apps/web/src/components/finance-workspace.tsx:319"
+  ],
+  "implementationTask": "Build reviewed calculation and agreement/disposition workflow after qualified entitlement policy, preserving immutable obligations; keep historical proposals and distinguish unverified inputs.",
+  "testRequirements": [
+   "Nonempty partial QA/material/payout/dispute inventory",
+   "Separate credit/obligation/approved cost exact results",
+   "Current agreement/authority and rejection/reapproval",
+   "Idempotent application only under approved policy; no liability erasure"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group8-review.json",
+  "externalGate": "Qualified cancellation/compensation/material valuation/settlement policies; owner acceptance PENDING",
+  "group19Extensions": [
+   {
+    "findingId": "CP5-G31",
+    "issues": [
+     132
+    ],
+    "criteria": [
+     "E08-07.C1",
+     "E08-07.C2",
+     "E08-07.C3"
+    ],
+    "scope": "Same uncalculated reviewed remedy/settlement consequence gap."
+   }
+  ],
+  "group21Extensions": [
+   {
+    "findingId": "CP5-G31",
+    "issues": [
+     139
+    ],
+    "criteria": [
+     "E13-07.C1",
+     "E13-07.C4"
+    ],
+    "scope": "Unimplemented calculated refund/cancellation/partial remedy policy directly limits aggregate adjustment integration; pure share refund arithmetic exists."
+   }
+  ]
+ },
+ {
+  "findingId": "CP5-G32",
+  "issues": [
+   73
+  ],
+  "severity": "P2",
+  "title": "Lawful closure exception/disposition workflow is unavailable",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 73,
+    "storyId": "E10-14",
+    "criteria": [
+     {
+      "id": "E10-14.C4",
+      "text": "Require a documented authorized and lawful disposition for any exception without erasing liability history."
+     }
+    ]
+   }
+  ],
+  "criterionScope": "Original completion gap; effective safety denials and external policy limits distinguished",
+  "affectedFiles": [
+   "apps/api/src/modules/finance/finance.service.ts:1180",
+   "apps/api/src/modules/finance/finance.service.ts:1282",
+   "apps/web/src/components/finance-workspace.tsx:397"
+  ],
+  "implementationTask": "After qualified approval implement explicit versioned lawful disposition/exception authority and immutable rationale/ledger effects, retaining hard blocks for all unsupported cases.",
+  "testRequirements": [
+   "Current unresolved debt/dispute exception denial",
+   "Valid policy-controlled disposition without history erasure",
+   "Revocation/concurrency/rollback and safe replays",
+   "Never promote simulation or unverified reports to settled evidence"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group8-review.json",
+  "externalGate": "Approved legal/financial exception and liability disposition policy, genuine settlement evidence where applicable, owner acceptance PENDING"
+ },
+ {
+  "findingId": "CP5-G33",
+  "issues": [
+   81
+  ],
+  "severity": "LOW",
+  "title": "Owner-assigned buyer/hardware assumption register is not established",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 81,
+    "storyId": "E00-09",
+    "criteria": [
+     {
+      "id": "E00-09.C1",
+      "text": "Buyer needs, hardware availability, available board/IMU, Bluetooth feasibility, participant access and unresolved unknowns are recorded with owners."
+     },
+     {
+      "id": "E00-09.C2",
+      "text": "Link each promised buyer workflow to evidence or a labeled hypothesis."
+     },
+     {
+      "id": "E00-09.C3",
+      "text": "Inventory board, IMU, vibration motor, power and connection options with availability owners."
+     },
+     {
+      "id": "E00-09.C5",
+      "text": "Select a labeled simulator fallback and assign unresolved hardware/participant questions."
+     }
+    ]
+   }
+  ],
+  "criterionScope": "Original artifact/completion-notice gap,notnewruntimeexploit",
+  "affectedFiles": [
+   "../docs/HirfaCare_FINAL_Full_Project_Backlog.md:140",
+   "../iot/README.md:3",
+   "../iot/simulator/README.md:3",
+   "../iot/simulator/src/fixtures.ts",
+   "docs/engineering/EVIDENCE_PROVENANCE_POLICY.md:3",
+   "docs/engineering/DEMO_SCENARIO_GUIDE.md:1"
+  ],
+  "implementationTask": "Create a versioned owner-assigned register linking exact buyer promises to evidence/hypotheses and hardware/participant unknowns; document available/unavailable inventory and fallback without invented measurements.",
+  "testRequirements": [
+   "Every original named assumption/topic mapped to source or hypothesis",
+   "Availability/unknown owner and validation action recorded",
+   "Simulator fallback explicitly labeled and remaining questions assigned",
+   "Hardware connection criterion stays blocked until actual observed compatibility evidence"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group10-review.json",
+  "externalGate": "Owner assignment/review and real buyer/hardware/participant evidence; no new software module required."
+ },
+ {
+  "findingId": "CP5-G34",
+  "issues": [
+   87
+  ],
+  "severity": "LOW",
+  "title": "Completed credential reset/change lacks security-change notification",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 87,
+    "storyId": "E01-07",
+    "criteria": [
+     {
+      "id": "E01-07.C5",
+      "text": "Revoke affected sessions and notify through the approved channel."
+     }
+    ]
+   }
+  ],
+  "criterionScope": "Original artifact/completion-notice gap,notnewruntimeexploit",
+  "affectedFiles": [
+   "apps/api/src/modules/auth/auth.service.ts:83",
+   "apps/api/src/modules/auth/auth.service.ts:95",
+   "apps/api/src/modules/auth/auth.gateway.ts:213",
+   "apps/api/src/modules/mail/mail.service.ts:20"
+  ],
+  "implementationTask": "Add bounded reliable secret-free completion security notifications for reset/change through existing approved channel; preserve atomic credential/session behavior and honest delivery failure state.",
+  "testRequirements": [
+   "Completed reset and password change generate one attributable security notice",
+   "No proof/password/session secret in notice or audit",
+   "Invalid/replayed attempts create no completion notice",
+   "Sessions remain correctly revoked",
+   "Delivery failure observable without undoing or repeating credential change"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group10-review.json",
+  "externalGate": "Approve notice wording/channel/delivery policy for real users; existing local SMTP can verify software without real mail."
+ },
+ {
+  "findingId": "CP5-G35",
+  "issues": [
+   89
+  ],
+  "severity": "P2",
+  "title": "Required offline PWA and durable progress synchronization are absent",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 89,
+    "storyId": "E01-08",
+    "criteria": [
+     {
+      "id": "E01-08.C1",
+      "text": "Responsive PWA, queued progress updates with conflict warnings, clear sync state."
+     },
+     {
+      "id": "E01-08.C2",
+      "text": "Make offer, active-work and statement views usable on small screens with weak connectivity."
+     },
+     {
+      "id": "E01-08.C3",
+      "text": "Cache minimal authorized data and visibly mark stale content."
+     },
+     {
+      "id": "E01-08.C4",
+      "text": "Queue permitted progress with operation IDs and pending/synced/conflict/failed states."
+     },
+     {
+      "id": "E01-08.C5",
+      "text": "Reconcile versions on reconnect; do not finalize contracts or payments offline."
+     },
+     {
+      "id": "E01-08.C6",
+      "text": "Clear protected local caches appropriately on sign-out."
+     }
+    ]
+   }
+  ],
+  "criterionScope": "Originalimplementationgap/nativehardening,notproductionexploitclaim",
+  "affectedFiles": [
+   "apps/web/src/app/layout.tsx:14",
+   "apps/web/src/lib/api.ts:24",
+   "apps/web/src/lib/server-api.ts:4",
+   "apps/web/src/components/execution-workspace.tsx:21",
+   "apps/api/src/app.ts:45",
+   "apps/web/src/components/interactive-presentation.tsx:109"
+  ],
+  "implementationTask": "Implement bounded scopedPWA/offlinecache/queue with currentauthority/versionreconciliation andsignoutclearing; neverfinalizecontracts/payments offline.",
+  "testRequirements": [
+   "Installmanifest/scope/icons",
+   "Offlineactivework/stalemarker",
+   "QueueIDs/state/reconnectconflict/noduplicates",
+   "Logout/revokedauthority/accountswitch no olduserdata",
+   "Nativeinstallation separately observed"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group11-review.json",
+  "externalGate": "Owner acceptance PENDING; no product remediation authorized by this audit."
+ },
+ {
+  "findingId": "CP5-G36",
+  "issues": [
+   90
+  ],
+  "severity": "P2",
+  "title": "Opt-in verified completed-work portfolio is not implemented",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 90,
+    "storyId": "E04-10",
+    "criteria": [
+     {
+      "id": "E04-10.C1",
+      "text": "Opt-in publication, controlled personal visibility, evidence of completed crafts."
+     },
+     {
+      "id": "E04-10.C2",
+      "text": "Let artisans select completed examples and approved evidence."
+     },
+     {
+      "id": "E04-10.C3",
+      "text": "Show verification source and craft/specification without buyer-confidential designs."
+     },
+     {
+      "id": "E04-10.C4",
+      "text": "Require publication consent and allow withdrawal."
+     },
+     {
+      "id": "E04-10.C5",
+      "text": "Exclude pay, home location and wearable data."
+     }
+    ]
+   }
+  ],
+  "criterionScope": "Originalimplementationgap/nativehardening,notproductionexploitclaim",
+  "affectedFiles": [
+   "apps/api/src/modules/artisans/artisans.service.ts:42",
+   "apps/api/src/modules/artisans/artisan.projection.ts:1",
+   "apps/web/src/components/artisan-workspace.tsx:45",
+   "packages/contracts/src/artisans.ts:13",
+   "apps/api/prisma/schema.prisma:430"
+  ],
+  "implementationTask": "Add distinctopt-inportfolio/evidenceownership/audiences/withdrawal withoutusingprocessingconsent orassistanceasfinalconsent.",
+  "testRequirements": [
+   "Private default,owneroptin,foreign/coordinatordenial",
+   "Completedexample/source/provenance",
+   "Confidentialdesign/pay/home/wearableexclusion",
+   "Withdrawal/cachedlinkrevocation/currentauthority",
+   "SyntheticnonemptyUI/API tests"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group11-review.json",
+  "externalGate": "Qualified privacy/evidence/photograph/accountless authorization review and genuine participant-specific consent before real publication; owner acceptance PENDING."
+ },
+ {
+  "findingId": "CP5-G37",
+  "issues": [
+   91
+  ],
+  "severity": "P2",
+  "title": "Supported order acceptance still permits unbound free-text specifications",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 91,
+    "storyId": "E20-01",
+    "criteria": [
+     {
+      "id": "E20-01.C1",
+      "text": "Every order/batch references immutable approved spec version, measurements and optional acceptance sample."
+     }
+    ]
+   }
+  ],
+  "criterionScope": "Originalimplementationgap/nativehardening,notproductionexploitclaim",
+  "affectedFiles": [
+   "apps/api/src/modules/catalog/catalog.service.ts:245",
+   "apps/api/src/modules/catalog/catalog.service.ts:318",
+   "apps/api/src/modules/catalog/catalog.service.ts:775",
+   "apps/api/src/modules/procurement/execution.ts:190",
+   "apps/api/src/modules/procurement/execution.ts:1272",
+   "apps/api/src/modules/commerce/commerce.service.ts:625",
+   "apps/api/prisma/schema.prisma:733"
+  ],
+  "implementationTask": "Define explicitlegacycutover thenrequireapprovedstructuredspec fornewwork whilepreservingacceptedhistory; bindbeforeoffers.",
+  "testRequirements": [
+   "Neworder/batchcannotomitapprovedspec/measurements",
+   "Legacyhistorypreserved/migrationpolicyexplicit",
+   "Validexactversion/samplepositive",
+   "No tenant oridempotencyregression"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group11-review.json",
+  "externalGate": "Owner-approved legacycutover and qualifiedsample/commercialapproval policy; no historical obligations silently rewritten."
+ },
+ {
+  "findingId": "CP5-G38",
+  "issues": [
+   91,
+   103
+  ],
+  "severity": "LOW",
+  "title": "Native approved-specification immutability can be bypassed by status demotion",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 91,
+    "storyId": "E20-01",
+    "criteria": [
+     {
+      "id": "E20-01.C4",
+      "text": "Bind order/batch to exact approved version and prevent silent edits."
+     }
+    ]
+   },
+   {
+    "issue": 103,
+    "storyId": "E20-04",
+    "criteria": [
+     {
+      "id": "E20-04.C1",
+      "text": "SKU versions, compatible crafts, materials and historical validated lead times stored without overriding active orders."
+     },
+     {
+      "id": "E20-04.C4",
+      "text": "Manage active/superseded/discontinued states without rewriting active orders."
+     }
+    ],
+    "scope": "Same native approved specification demotion/content guard gap; no newly alleged HTTP bypass."
+   }
+  ],
+  "criterionScope": "Originalimplementationgap/nativehardening,notproductionexploitclaim",
+  "affectedFiles": [
+   "apps/api/prisma/migrations/20261028120000_sample_ledger_and_approval_authority/migration.sql:18",
+   "apps/api/prisma/schema.prisma:2172"
+  ],
+  "implementationTask": "Add additive approved-ever/native transition/contentguard; separateapprovedcontentfromstatus orretainapprovalstamp invariant.",
+  "testRequirements": [
+   "Directedit/deleteblocked",
+   "Approved\u2192draft/unknown\u2192edit blocked",
+   "Validreview/supersessionworks",
+   "Boundhistoryunchanged",
+   "Rollback/restore/migrationcompatibility"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group11-review.json",
+  "externalGate": "Owner-reviewed additive database hardening; current API remains scoped and no product migration created.",
+  "group13Extensions": [
+   {
+    "findingId": "CP5-G38",
+    "issues": [
+     103
+    ],
+    "criteria": [
+     "E20-04.C1",
+     "E20-04.C4"
+    ],
+    "scope": "Same native approved specification demotion/content guard gap; no newly alleged HTTP bypass."
+   }
+  ]
+ },
+ {
+  "findingId": "CP5-G39",
+  "issues": [
+   93,
+   94
+  ],
+  "severity": "P2",
+  "title": "Voluntary verified skills-progress record is absent beyond replaceable declarations",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 93,
+    "storyId": "E19-05",
+    "criteria": [
+     {
+      "id": "E19-05.C1",
+      "text": "Progress based on verified work/training, exportable and removable where appropriate, not a covert productivity score."
+     },
+     {
+      "id": "E19-05.C2",
+      "text": "Record craft/work/training achievement only with participant choice and evidence."
+     },
+     {
+      "id": "E19-05.C3",
+      "text": "Distinguish attendance, self-declaration and verified achievement."
+     },
+     {
+      "id": "E19-05.C4",
+      "text": "Allow authorized correction/export and visibility withdrawal under retention rules."
+     }
+    ]
+   },
+   {
+    "issue": 94,
+    "storyId": "E01-09",
+    "criteria": [
+     {
+      "id": "E01-09.C2",
+      "text": "Let the artisan select their own skills, work and training records."
+     },
+     {
+      "id": "E01-09.C3",
+      "text": "Include verification sources, dates and readable field labels."
+     }
+    ],
+    "scope": "Existing absence of verified progress/training evidence affects portable output; no duplicated achievement-model finding. G40 is export selection/projection completeness."
+   }
+  ],
+  "criterionScope": "Originalimplementationgap/nativehardening,notproductionexploitclaim",
+  "affectedFiles": [
+   "apps/api/src/modules/artisans/artisans.service.ts:249",
+   "apps/api/src/modules/artisans/artisans.service.ts:264",
+   "apps/api/src/modules/governance/governance.service.ts:273",
+   "apps/api/src/modules/governance/governance.service.ts:376",
+   "apps/web/src/components/artisan-workspace.tsx:219",
+   "packages/contracts/src/artisans.ts:27",
+   "apps/api/prisma/schema.prisma:430"
+  ],
+  "implementationTask": "Implementoptionalchoice/source-specificachievementtypes/verificationhistory/correction/export/withdrawal;preservenormalworkwhenoptingout.",
+  "testRequirements": [
+   "Separateattendance/declaration/verified/certification",
+   "Ownerchoice/coordinatorattribution/currentgrant/foreigndenial",
+   "Historicalcorrection/export/visibilitywithdrawal",
+   "No involuntaryprofiling orcovertscore",
+   "No automaticcommercialpenalty"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group11-review.json",
+  "externalGate": "Qualified evidence/retention/audience and accountless authorization review; genuine achievement sources not fabricated.",
+  "group12Extensions": [
+   {
+    "findingId": "CP5-G39",
+    "issues": [
+     94
+    ],
+    "criteria": [
+     "E01-09.C2",
+     "E01-09.C3"
+    ],
+    "scope": "Existing absence of verified progress/training evidence affects portable output; no duplicated achievement-model finding. G40 is export selection/projection completeness.",
+    "evidence": "Fresh own export contains replaceable declared evidence/proficiency only; no verified achievement history is inferred."
+   }
+  ]
+ },
+ {
+  "findingId": "CP5-G40",
+  "issues": [
+   94
+  ],
+  "severity": "P2",
+  "title": "Privacy JSON export does not implement selective portable work and training records",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 94,
+    "storyId": "E01-09",
+    "criteria": [
+     {
+      "id": "E01-09.C2",
+      "text": "Let the artisan select their own skills, work and training records."
+     },
+     {
+      "id": "E01-09.C3",
+      "text": "Include verification sources, dates and readable field labels."
+     }
+    ]
+   }
+  ],
+  "criterionScope": "Export acceptance gap",
+  "affectedFiles": [
+   "apps/api/src/modules/governance/governance.service.ts:273",
+   "apps/api/src/modules/governance/governance.service.ts:376",
+   "apps/api/src/modules/governance/governance.controller.ts:90",
+   "apps/web/src/components/governance.tsx:95"
+  ],
+  "implementationTask": "Design a scoped selectable portable projection over actual record sources with readable dates/source labels and confidentiality filtering. Keep declarations distinct; do not invent missing training/verified achievements.",
+  "testRequirements": [
+   "Nonempty selected/unselected own work and training",
+   "Foreign/withdrawn access denial",
+   "Truthful declared versus verified source/date",
+   "Confidential buyer/other artisan/wearable exclusions",
+   "Actual usable download and retention explanation"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group12-review.json",
+  "externalGate": "Genuine achievement/training evidence and owner-approved privacy/retention rules; owner acceptance PENDING."
+ },
+ {
+  "findingId": "CP5-G41",
+  "issues": [
+   95
+  ],
+  "severity": "LOW",
+  "title": "Attachment uploader retains stale native file selection after successful upload",
+  "state": "NOT_STARTED",
+  "originalCriteria": [
+   {
+    "issue": 95,
+    "storyId": "E02-03",
+    "criteria": [
+     {
+      "id": "E02-03.C3",
+      "text": "Show filename, preview, progress and draft removal controls."
+     }
+    ]
+   }
+  ],
+  "criterionScope": "Adjacent retry limitation; original controls independently verified",
+  "affectedFiles": [
+   "apps/web/src/components/procurement.tsx:334",
+   "apps/web/src/components/procurement.tsx:371",
+   "apps/web/src/components/procurement.tsx:382"
+  ],
+  "implementationTask": "Reset native file input and progress consistently after success/removal, then test same-file reselection. Do not change server authorization/storage.",
+  "testRequirements": [
+   "Same file success\u2192remove\u2192select/upload at360/1280",
+   "Unsafe first upload corrected without losing draft",
+   "Visible state and keyboard/screen-reader association",
+   "No duplicated attachment on retry"
+  ],
+  "evidenceLocation": "evidence/checkpoint5/group12-review.json",
+  "externalGate": "Owner may retain Done with disclosed LOW follow-up; no approval fabricated."
+ },
+ {
+  "findingId": "CP5-G42",
+  "severity": "P2",
+  "issues": [
+   105,
+   108
+  ],
+  "title": "Costing has no structured approved-rate and measured-task provenance snapshot",
+  "relatedCriteria": [
+   "E03-04.C1",
+   "E03-11.C1",
+   "E03-11.C2",
+   "E03-11.C3",
+   "E03-11.C4"
+  ],
+  "source": [
+   "apps/api/src/modules/procurement/commercial-decision.ts:144",
+   "apps/api/src/modules/procurement/commercial-decision.ts:175",
+   "apps/api/src/modules/procurement/commercial-decision.ts:348",
+   "packages/contracts/src/commercial.ts:35",
+   "packages/contracts/src/planning.ts:439"
+  ],
+  "reproduction": "Run batch-groups13-17/run-domain.py. Valid free source effort/cost/pricing inputs parse, while timingSampleIds/ratePolicyVersion/approvedBy are strict-field rejections. Inspect actual recordCost/issueCostedQuote snapshot and nonempty shared commercial/pricing scenarios.",
+  "expected": "Issued costing references measured task samples/context/effort range and approved rate policy/version/approver; assumed, insufficient and measured are explicitly distinct.",
+  "actual": "Effort source/version and author are stored, but free-text source and caller-set artisan rate have no structured measured-study/rate-policy reference. Planning policy version is not an approved compensation policy.",
+  "impact": "Original economic provenance cannot be audited against a qualified approved baseline. No inference of sales-percentage pay or real underpayment is claimed.",
+  "minimalRemediation": "Design additive provenance references/approved rate policy and truthful evidence classes, preserve exact issued snapshots, and keep absence/assumptions visible. Do not fabricate measured studies or approvals.",
+  "implementationTask": "Add reviewed time-study/rate-policy provenance to costing snapshots without rewriting issued history.",
+  "testRequirements": [
+   "Nonempty measured/assumed/insufficient samples",
+   "Policy approval/current authority",
+   "Rate/context/source version pinned after later edits",
+   "Missing evidence warnings and exact arithmetic",
+   "Tenant denial and transactional rollback"
+  ],
+  "externalGate": "Genuine consented time studies and qualified compensation policy approval remain external.",
+  "state": "NOT_STARTED",
+  "evidenceLocation": "evidence/checkpoint5/group14-review.json"
+ },
+ {
+  "findingId": "CP5-G43",
+  "severity": "P2",
+  "issues": [
+   107,
+   130,
+   132
+  ],
+  "title": "Accepted-contract amendment workflow covers deadlines but not commercial scope changes",
+  "relatedCriteria": [
+   "E03-09.C1",
+   "E03-09.C2",
+   "E03-09.C3",
+   "E03-09.C4"
+  ],
+  "source": [
+   "apps/api/src/modules/collaboration/collaboration.service.ts:511",
+   "apps/api/src/modules/collaboration/collaboration.service.ts:563",
+   "packages/contracts/src/collaboration.ts:395",
+   "apps/api/src/modules/procurement/procurement.service.ts:443"
+  ],
+  "reproduction": "Run domain-probe.ts: deadline proposal parses; quantity/pay/material/affected-party proposal rejected by strict schema. Shared schedule scenarios prove real deadline-only buyer/artisan approval. Accepted RFQ content edits409 AMENDMENT_REQUIRED, with no general commercial amendment workflow found.",
+  "expected": "Proposed quantity,cost,schedule/material/funding changes identify affected parties and obtain required current approvals before taking effect.",
+  "actual": "Safe accepted edit denial and schedule-only approval exist; general commercial amendment proposal/impact/reapproval is absent. Counteroffers occur before acceptance and do not supply that missing workflow.",
+  "impact": "Required renegotiation capability incomplete; no silent overwrite or bypass is demonstrated by safe denial.",
+  "minimalRemediation": "Add explicit immutable commercial amendment proposals and impact snapshots with all affected approvals; preserve existing contracts and reuse current stale/version/idempotency guards.",
+  "implementationTask": "Implement independently reviewed general commercial amendments under E03-09.",
+  "testRequirements": [
+   "Nonempty quantity/cost/material/funding amendment",
+   "All required parties current authority",
+   "Rejected/incomplete/stale approvals have no effect",
+   "Concurrent final effect once",
+   "Old terms/history remain immutable"
+  ],
+  "externalGate": "Qualified legal/financial policy and genuine party approval required separately.",
+  "state": "NOT_STARTED",
+  "evidenceLocation": "evidence/checkpoint5/group14-review.json",
+  "group19Extensions": [
+   {
+    "findingId": "CP5-G43",
+    "issues": [
+     130,
+     132
+    ],
+    "criteria": [
+     "E08-05.C1",
+     "E08-05.C3",
+     "E08-05.C4",
+     "E08-07.C2",
+     "E08-07.C4"
+    ],
+    "scope": "Changed rework/replacement financial/material obligations need the same absent general commercial amendment/reapproval workflow; original agreed rework gate is implemented."
+   }
+  ],
+  "originalCriteria": [
+   {
+    "issue": 130,
+    "storyId": "E08-05",
+    "criteria": [
+     {
+      "id": "E08-05.C1",
+      "text": "Deadline and responsibility explicitly agreed."
+     },
+     {
+      "id": "E08-05.C3",
+      "text": "State scope, deadline, material responsibility and compensation."
+     },
+     {
+      "id": "E08-05.C4",
+      "text": "Require agreement for changed obligations and provide dispute option."
+     }
+    ],
+    "scope": "Changed rework/replacement financial/material obligations need the same absent general commercial amendment/reapproval workflow; original agreed rework gate is implemented."
+   },
+   {
+    "issue": 132,
+    "storyId": "E08-07",
+    "criteria": [
+     {
+      "id": "E08-07.C2",
+      "text": "Record remedy, units, parties and authorized reason."
+     },
+     {
+      "id": "E08-07.C4",
+      "text": "Obtain affected-party agreement for new obligations."
+     }
+    ],
+    "scope": "Changed rework/replacement financial/material obligations need the same absent general commercial amendment/reapproval workflow; original agreed rework gate is implemented."
+   }
+  ]
+ },
+ {
+  "findingId": "CP5-G44",
+  "severity": "P2",
+  "issues": [
+   120
+  ],
+  "relatedCriteria": [
+   "E05-08.C1",
+   "E05-08.C2",
+   "E05-08.C3",
+   "E05-08.C4",
+   "E05-08.C5"
+  ],
+  "title": "Prioritized joint scheduling across multiple orders is not implemented",
+  "source": [
+   "apps/api/src/modules/procurement/planning.ts:42",
+   "apps/api/src/modules/procurement/planning.ts:136",
+   "apps/api/src/modules/procurement/planning.ts:702",
+   "packages/contracts/src/planning.ts:856"
+  ],
+  "reproduction": "Run scheduling-probe.ts. Current valid single-order scenario parses and reproducibly simulates known/unknown capacity; adding multiple order IDs/priorities is rejected. Targeted source discovery finds per-order allocation and scenario models/routes only, no joint order-priority optimization/approval artifact.",
+  "expected": "Evaluate competing order priorities, accepted commitments, material/deadline constraints together, retain reproducible alternatives/unmet constraints and require manager plus affected artisan reapproval for changed commitments.",
+  "actual": "Per-order plan/scenario and separate schedule approval exist, but no joint multi-order proposal/priority model/workflow. Existing accepted capacity subtracts cross-order consumption, which is not joint scheduling.",
+  "impact": "Original multi-order planning capability incomplete. No existing accepted terms altered by missing feature; no false external execution claim.",
+  "minimalRemediation": "Design an additive versioned joint planning artifact with explicit priority/material/capacity constraints and safe separate affected-party approvals; retain every existing commitment.",
+  "implementationTask": "Implement joint multi-order schedule proposals and review without rewriting accepted history.",
+  "testRequirements": [
+   "Two genuinely competing nonempty orders",
+   "Priorities/materials/deadlines and capacity jointly applied",
+   "Deterministic alternatives/unmet constraints",
+   "No changed accepted commitment before all approvals",
+   "Tenant,stale,concurrency and rollback guards"
+  ],
+  "externalGate": "Owner-approved priority policy and genuine participant/legal agreement remain external.",
+  "state": "NOT_STARTED",
+  "evidenceLocation": "evidence/checkpoint5/group17-review.json"
+ },
+ {
+  "findingId": "CP5-G45",
+  "severity": "P2",
+  "issues": [
+   124
+  ],
+  "relatedCriteria": [
+   "E06-09.C1",
+   "E06-09.C2",
+   "E06-09.C4"
+  ],
+  "title": "Assisted progress relies on assignment without explicit progress delegation or artisan notification",
+  "source": [
+   "apps/api/src/modules/procurement/execution.ts:355",
+   "apps/api/src/modules/procurement/execution.ts:1328",
+   "apps/api/src/modules/procurement/execution.ts:1382",
+   "packages/contracts/src/artisans.ts:60"
+  ],
+  "reproduction": "Run run-boundary.py. Actual helper report201 with zero prior explicit grants, then only expired PROFILE_READ grant; suspend current association membership and identical report404/no event,restore membership and report201. Notice count unchanged; source has no progress-notice emission/consumer branch.",
+  "expected": "Check current explicit progress authority for represented artisan/batch and notify artisan with correction/dispute route.",
+  "actual": "Current assignment+management+association.production.update suffice; no explicit progress delegation enum/lookup. Actor/source recorded and artisan flag exists, but no report notification.",
+  "impact": "Original assistance authority/notification requirement incomplete; not a claim that a profile-read grant currently controls production or an unauthorized final artisan acceptance was made.",
+  "minimalRemediation": "Define explicit progress assistance authority/expiry/revocation and report notification, preserve actor attribution and existing accepted work.",
+  "implementationTask": "Define explicit progress assistance authority/expiry/revocation and report notification, preserve actor attribution and existing accepted work.",
+  "testRequirements": [
+   "Nonempty valid current progress delegation",
+   "Missing/expired/revoked scope denied",
+   "Membership suspension denied without writes",
+   "Artisan notice and flag/correction path",
+   "Same-key/stale/concurrent quantity guards"
+  ],
+  "externalGate": "Owner acceptance PENDING; genuine consent and qualified operational policy remain external.",
+  "state": "NOT_STARTED",
+  "evidenceLocation": "evidence/checkpoint5/group18-review.json"
+ },
+ {
+  "findingId": "CP5-G46",
+  "severity": "P2",
+  "issues": [
+   125,
+   129
+  ],
+  "relatedCriteria": [
+   "E06-10.C1",
+   "E06-10.C2",
+   "E06-10.C3",
+   "E06-10.C4",
+   "E06-10.C5",
+   "E08-04.C1",
+   "E08-04.C3"
+  ],
+  "title": "Optional private production and quality evidence uploads are absent",
+  "source": [
+   "apps/api/src/modules/procurement/execution.ts:355",
+   "apps/api/src/modules/procurement/execution.ts:863",
+   "packages/contracts/src/execution.ts:166",
+   "apps/web/src/components/execution-workspace.tsx:467"
+  ],
+  "reproduction": "Run run-contract.py. Valid note-only progress/criterion evidence parses; binary file payload rejected. Actual source explicitly says photographs are not stored; targeted schema/controller/UI inventory has no production/quality file storage/access/retention workflow.",
+  "expected": "Optional authorized event/inspection-linked files with format/size validation,private current scope,metadata/retention policy and truthful provenance.",
+  "actual": "Only text notes/evidence references; other RFQ/support attachments are separate surfaces and do not implement this feature.",
+  "impact": "Original private evidence capability absent; no actual private-file disclosure or independently verified production claimed.",
+  "minimalRemediation": "Implement dedicated scoped optional evidence lifecycle with safe formats,metadata stripping,retention/withdrawal and current authorization; do not treat photos as verified work.",
+  "implementationTask": "Implement dedicated scoped optional evidence lifecycle with safe formats,metadata stripping,retention/withdrawal and current authorization; do not treat photos as verified work.",
+  "testRequirements": [
+   "Nonempty authorized upload/download",
+   "Foreign/revoked/unsafe/duplicate denial",
+   "Optional no-file success",
+   "Metadata/location/retention policy",
+   "Preserved immutable event/inspection linkage"
+  ],
+  "externalGate": "Owner acceptance PENDING; genuine consent and qualified operational policy remain external.",
+  "state": "NOT_STARTED",
+  "evidenceLocation": "evidence/checkpoint5/group18-review.json"
+ },
+ {
+  "findingId": "CP5-G47",
+  "severity": "P2",
+  "issues": [
+   128
+  ],
+  "relatedCriteria": [
+   "E07-07.C1",
+   "E07-07.C2",
+   "E07-07.C3",
+   "E07-07.C4",
+   "E07-07.C5"
+  ],
+  "title": "Approved supplier comparison and versioned performance history are not implemented",
+  "source": [
+   "packages/contracts/src/inventory.ts:10",
+   "apps/api/src/modules/inventory/inventory.service.ts:192",
+   "apps/api/prisma/schema.prisma:1747",
+   "apps/web/src/components/inventory-workspace.tsx:161"
+  ],
+  "reproduction": "Run run-contract.py: lot supplierReference accepted; supplierApprovalVersion/observedLeadDays/unitPrice strict rejected. Targeted source/model/controller/UI discovery finds no supplier entity,approval,term history or comparison.",
+  "expected": "Approved scoped suppliers with versioned terms and observed price/unit/lead/quality context distinct from unverified promises.",
+  "actual": "Lot has free supplierReference/evidenceReference only. ApprovedProduct lead-time history is a product feature, not vendor history.",
+  "impact": "Supplier selection/comparison acceptance missing; no invented supplier stock,prices or approvals.",
+  "minimalRemediation": "Design versioned supplier approval/terms/observations and authorized comparison, preserving historical procurement sources.",
+  "implementationTask": "Design versioned supplier approval/terms/observations and authorized comparison, preserving historical procurement sources.",
+  "testRequirements": [
+   "Multiple nonempty eligible suppliers",
+   "Comparable units/quantity/periods",
+   "Unverified promises labeled",
+   "Stale/version/foreign denial",
+   "Historical term preservation"
+  ],
+  "externalGate": "Owner acceptance PENDING; genuine consent and qualified operational policy remain external.",
+  "state": "NOT_STARTED",
+  "evidenceLocation": "evidence/checkpoint5/group18-review.json"
+ },
+ {
+  "findingId": "CP5-G48",
+  "severity": "P2",
+  "issues": [
+   127
+  ],
+  "relatedCriteria": [
+   "E07-05.C1",
+   "E07-05.C3",
+   "E07-05.C4"
+  ],
+  "title": "Material receipt discrepancies do not create the required resolution case",
+  "source": [
+   "apps/api/src/modules/inventory/inventory.service.ts:384",
+   "apps/api/src/modules/inventory/inventory.service.ts:601",
+   "apps/web/src/components/inventory-workspace.tsx:1"
+  ],
+  "reproduction": "Run run-material.py. Actual short/damaged receipt201 sets DISCREPANCY_REPORTED; SupportTicket,SupportCase and ProductionException counts remain unchanged.",
+  "expected": "A short/damaged/incorrect receipt opens attributable exception/case with coordinator and optional evidence while preserving expected/actual values.",
+  "actual": "Receipt/shortage/damage/status and manual reconcile exist, but no linked resolution case/owner workflow created.",
+  "impact": "Operational differences can lack required case assignment/tracking; stock readiness still blocks on unresolved discrepancy. No physical delivery evidence claimed.",
+  "minimalRemediation": "Create replay-safe linked discrepancy case and coordinator routing transactionally with receipt,retain exact quantities and receipt provenance.",
+  "implementationTask": "Create replay-safe linked discrepancy case and coordinator routing transactionally with receipt,retain exact quantities and receipt provenance.",
+  "testRequirements": [
+   "Short/damage/incorrect receipt creates onecase",
+   "Case owner/optional evidence",
+   "Concurrent same-key replay no duplicate",
+   "Resolution/adjustment preserves originals",
+   "Denied receiver leaves no rows"
+  ],
+  "externalGate": "Owner acceptance PENDING; genuine consent and qualified operational policy remain external.",
+  "state": "NOT_STARTED",
+  "evidenceLocation": "evidence/checkpoint5/group18-review.json"
+ },
+ {
+  "findingId": "CP5-G49",
+  "severity": "P2",
+  "issues": [
+   126
+  ],
+  "relatedCriteria": [
+   "E06-11.C1",
+   "E06-11.C3"
+  ],
+  "title": "Production event ledger replaces source occurrence time with recording time",
+  "source": [
+   "apps/api/src/modules/procurement/execution.ts:355",
+   "apps/api/src/modules/procurement/execution.ts:1465"
+  ],
+  "reproduction": "Run run-boundary.py. Helper progress event retains submitted historical occurredAt2026-10-02; corresponding PROGRESS_REPORTED ledger entry occurredAt is actual audit recording instant instead. Inspect progress-boundary-observations.json.",
+  "expected": "Ledger occurrence and recording timestamps remain distinct and reconcile to source event occurrence time,including proxy actions.",
+  "actual": "Ledger helper always sets occurredAt=new Date(),not the report/correction source occurrence; source progress event itself is correct.",
+  "impact": "Event chronology/provenance becomes misleading for backdated/offline reports. Quantities and actor IDs remain correct in exercised path.",
+  "minimalRemediation": "Pass the validated source occurrence instant/reference into ledger writes,keep recordedAt system-generated and append corrections without rewriting originals.",
+  "implementationTask": "Pass the validated source occurrence instant/reference into ledger writes,keep recordedAt system-generated and append corrections without rewriting originals.",
+  "testRequirements": [
+   "Past occurredAt retains separate recordedAt",
+   "Direct/proxy report and correction linkage",
+   "Native immutability",
+   "Same-key replay once",
+   "Atomic header/source/ledger/audit/outbox rollback"
+  ],
+  "externalGate": "Owner acceptance PENDING; genuine consent and qualified operational policy remain external.",
+  "state": "NOT_STARTED",
+  "evidenceLocation": "evidence/checkpoint5/group18-review.json"
+ },
+ {
+  "findingId": "CP5-G50",
+  "severity": "P2",
+  "issues": [
+   131
+  ],
+  "relatedCriteria": [
+   "E08-06.C3",
+   "E08-06.C4"
+  ],
+  "title": "Quality cases lack independent appeal review and contested-unit fulfillment holds",
+  "source": [
+   "apps/api/src/modules/collaboration/collaboration.service.ts:1030",
+   "apps/api/src/modules/collaboration/collaboration.service.ts:1060",
+   "apps/api/src/modules/procurement/execution.ts:626",
+   "apps/api/src/modules/procurement/execution.ts:716"
+  ],
+  "reproduction": "Run run-quality.py. Artisan opens QUALITY case naming exact initial inspection/rejected scope. Same inspector with explicit SUPPORT role can be assigned owner; original inspection remains immutable. Reinspection raises approved quantity and consolidation201 prepares35 while quality case remains ASSIGNED.",
+  "expected": "An appeal links specific decision/units to an independent reviewer and holds contested units pending reasoned review,without erasing QA.",
+  "actual": "Generic quality support case/response target exists but accepts same-inspector owner and does not gate reinspection/fulfillment; no dedicated decision/unit appeal link.",
+  "impact": "Original independent appeal/hold requirements incomplete. This is a quality decision case,not a production progress flag or financial PaymentDispute; G16/G24 are not duplicated.",
+  "minimalRemediation": "Add explicit inspection/scope appeal links,independence rule,contested-unit hold and reasoned review/remedy events; preserve original QA and worker rights.",
+  "implementationTask": "Add explicit inspection/scope appeal links,independence rule,contested-unit hold and reasoned review/remedy events; preserve original QA and worker rights.",
+  "testRequirements": [
+   "Specific rejected inspection appeal with evidence",
+   "Inspector cannot own independent review",
+   "No contested fulfillment until decision",
+   "Safe reasoned remedy/no worker penalty",
+   "Cross-tenant,current-role,concurrency and append-only history"
+  ],
+  "externalGate": "Owner acceptance PENDING; genuine consent and qualified operational policy remain external.",
+  "state": "NOT_STARTED",
+  "evidenceLocation": "evidence/checkpoint5/group19-review.json"
+ },
+ {
+  "findingId": "CP5-G51",
+  "severity": "P2",
+  "issues": [
+   133
+  ],
+  "relatedCriteria": [
+   "E08-08.C1",
+   "E08-08.C2",
+   "E08-08.C3",
+   "E08-08.C4",
+   "E08-08.C5"
+  ],
+  "title": "Aggregate defect and reinspection improvement analysis is absent",
+  "source": [
+   "apps/api/src/modules/intelligence/intelligence.service.ts:23",
+   "packages/contracts/src/intelligence.ts:337",
+   "apps/api/src/modules/procurement/execution.ts:527"
+  ],
+  "reproduction": "Inspect source-discovery and current actual intelligence workspace used by shared42 scenarios. It projects production risk/approved quantity/fairness/finance,not defect rates by inspected denominator/specification/period or first-vs-reinspection analysis. No defect-analysis model/route/UI found in targeted searches.",
+  "expected": "Scoped defect aggregates with explicit inspected denominator,event dedup/specification/period,first/reinspection separation,small-cohort suppression and improvement links.",
+  "actual": "Individual inspection attempts and generic production metrics exist; required defect-analysis feature not implemented.",
+  "impact": "Required analysis capability missing; do not infer zero defects,real pilot outcomes or privacy acceptance from absent outputs.",
+  "minimalRemediation": "Implement source-linked aggregate defect analysis and disclosure/suppression rules over immutable inspection attempts; keep worker health outside the model.",
+  "implementationTask": "Implement source-linked aggregate defect analysis and disclosure/suppression rules over immutable inspection attempts; keep worker health outside the model.",
+  "testRequirements": [
+   "Nonempty initial/reinspection denominator",
+   "Repeated events not double-counted",
+   "Specification/time/tenant scope",
+   "Small-cohort and missing-data suppression",
+   "Design/training review link without health profiling"
+  ],
+  "externalGate": "Owner acceptance PENDING; genuine consent and qualified operational policy remain external.",
+  "state": "NOT_STARTED",
+  "evidenceLocation": "evidence/checkpoint5/group19-review.json"
+ },
+ {
+  "findingId": "CP5-G52",
+  "severity": "P2",
+  "issues": [
+   138
+  ],
+  "relatedCriteria": [
+   "E09-07.C1",
+   "E09-07.C2",
+   "E09-07.C3",
+   "E09-07.C4",
+   "E09-07.C5"
+  ],
+  "title": "Versioned buyer shipment manifest download is not implemented",
+  "source": [
+   "apps/api/src/modules/procurement/procurement.service.ts:1201",
+   "apps/api/src/modules/procurement/logistics.ts:40",
+   "apps/web/src/components/logistics-workspace.tsx:1"
+  ],
+  "reproduction": "Inspect actual shipment view and document routes; current delivery document copies accepted quote terms/order delivered count but no shipment/batch-item manifest snapshot,version or manifest download. Targeted schema/controller/UI discovery has no manifest resource.",
+  "expected": "Buyer-scope immutable manifest versions bind shipment,approved spec,batches and distinct shipped/received/accepted quantities,with private financial fields excluded.",
+  "actual": "Shipment detail and QUOTE/CONTRACT/INVOICE/DELIVERY documents exist,not a versioned shipment manifest.",
+  "impact": "Required manifest capability absent; no hypothetical costing leak is asserted for an absent manifest. ExistingG27 remains actual invoice/delivery projection scope only.",
+  "minimalRemediation": "Add explicit immutable shipment manifest projection/version,source quantities and current buyer-scope downloads using allowlisted fields.",
+  "implementationTask": "Add explicit immutable shipment manifest projection/version,source quantities and current buyer-scope downloads using allowlisted fields.",
+  "testRequirements": [
+   "Nonempty delivered shipment manifest",
+   "Version/source/batch linkage",
+   "Foreign/revoked download denied",
+   "History immutable after correction",
+   "Private costing/pay/unsupported origin excluded"
+  ],
+  "externalGate": "Owner acceptance PENDING; genuine consent and qualified operational policy remain external.",
+  "state": "NOT_STARTED",
+  "evidenceLocation": "evidence/checkpoint5/group20-review.json"
+ },
+ {
+  "findingId": "CP5-G53",
+  "severity": "P2",
+  "issues": [
+   134
+  ],
+  "relatedCriteria": [
+   "E08-09.C4"
+  ],
+  "title": "Controlled rejected finished-unit disposal and write-off workflow is absent",
+  "source": [
+   "apps/api/src/modules/procurement/execution.ts:626",
+   "apps/api/src/modules/procurement/execution.ts:716",
+   "packages/contracts/src/execution.ts:201"
+  ],
+  "reproduction": "Execute current reinspection scenarios and inspect typed routes. Finished-unit rejection supports fresh QA approval,not a reasoned/evidenced disposal/write-off/reversal artifact. Inventory return disposition is material stock,not rejected finished production.",
+  "expected": "Approved or disposed rejected units require authorized attributed evidence and conserved disposition history.",
+  "actual": "Reinspection/quantity conservation work; controlled rejected-output disposal path missing.",
+  "impact": "Unresolved physical disposition cannot be recorded as required; no disposal or unearned quantity fabricated.",
+  "minimalRemediation": "Implement additive finished-unit disposition and reversal policy/events with current authorization/evidence,keeping QA and stock/financial consequences distinct.",
+  "implementationTask": "Implement additive finished-unit disposition and reversal policy/events with current authorization/evidence,keeping QA and stock/financial consequences distinct.",
+  "testRequirements": [
+   "Nonempty rejected-unit disposal",
+   "Reason/evidence and current authority",
+   "No disposed unit double-approved/shipped",
+   "Reversal append-only",
+   "Conservation/replay/concurrency"
+  ],
+  "externalGate": "Owner acceptance PENDING; genuine consent and qualified operational policy remain external.",
+  "state": "NOT_STARTED",
+  "evidenceLocation": "evidence/checkpoint5/group20-review.json"
+ },
+ {
+  "findingId": "CP5-G54",
+  "severity": "P2",
+  "issues": [
+   136
+  ],
+  "relatedCriteria": [
+   "E09-03.C4"
+  ],
+  "title": "Pickup scheduling does not surface overlapping coordinator assignments at different hubs",
+  "source": [
+   "apps/api/src/modules/procurement/logistics.ts:56",
+   "apps/api/src/modules/procurement/logistics.ts:132",
+   "apps/api/src/modules/procurement/logistics.ts:1420"
+  ],
+  "reproduction": "Run run-shipping.py. Two one-piece pickups for same coordinator and identical time window at distinct hubs both201 without conflict indication; cancel both before continuing original journey.",
+  "expected": "Surface overlapping incompatible coordinator/hub windows before confirmation while keeping shared same-hub collection possible.",
+  "actual": "Validation only windowend>start and current coordinator membership; no cross-schedule collision check/output.",
+  "impact": "Operational assignment may conflict. Scheduling remains synthetic and is not physical pickup/custody confirmation.",
+  "minimalRemediation": "Add scoped coordinator/hub window conflict detection/explanation and appropriate confirmation policy,with replay-safe cancellation/reschedule.",
+  "implementationTask": "Add scoped coordinator/hub window conflict detection/explanation and appropriate confirmation policy,with replay-safe cancellation/reschedule.",
+  "testRequirements": [
+   "Two distinct hubs overlapping coordinator",
+   "Compatible shared pickup distinguished",
+   "Current scope/unready-output denial",
+   "Concurrent schedule collision handling",
+   "History/cancellation preserves work"
+  ],
+  "externalGate": "Owner acceptance PENDING; genuine consent and qualified operational policy remain external.",
+  "state": "NOT_STARTED",
+  "evidenceLocation": "evidence/checkpoint5/group20-review.json"
+ },
+ {
+  "findingId": "CP5-G55",
+  "severity": "P2",
+  "issues": [
+   143
+  ],
+  "relatedCriteria": [
+   "E10-02.C4"
+  ],
+  "title": "Artisan statements omit recorded contractual due-date history",
+  "source": [
+   "apps/api/src/modules/finance/finance.service.ts:569",
+   "apps/web/src/components/finance-workspace.tsx:502",
+   "apps/api/src/modules/finance/finance.service.ts:1010"
+  ],
+  "reproduction": "Run run-finance.py. Select actual own payable with nonempty ContractualDueDate history; my-statement200 includes matching batch/payable but no dueAt or contractual date/history fields; source UI renders payables/reports/disputes only.",
+  "expected": "Statement explains recorded due dates and correction/evidence context alongside adjustment/dispute/payment states.",
+  "actual": "Due dates exist in separate finance history/metrics but are omitted from own statement projection and rendering.",
+  "impact": "Artisan cannot see an already recorded due date through their payment statement. No verified payment or contractual amendment is claimed.",
+  "minimalRemediation": "Project authorized current contractual date/evidence/correction history into own statement,keep unknown dates explicit and do not amend accepted terms.",
+  "implementationTask": "Project authorized current contractual date/evidence/correction history into own statement,keep unknown dates explicit and do not amend accepted terms.",
+  "testRequirements": [
+   "Own nonempty known due date shown",
+   "Unknown/corrected date truthful",
+   "Foreign/current access denied",
+   "Exact source/evidence history",
+   "No payment status promotion"
+  ],
+  "externalGate": "Owner acceptance PENDING; genuine consent and qualified operational policy remain external.",
+  "state": "NOT_STARTED",
+  "evidenceLocation": "evidence/checkpoint5/group21-review.json"
+ },
+ {
+  "findingId": "CP5-G56",
+  "severity": "P2",
+  "issues": [
+   142,
+   146
+  ],
+  "relatedCriteria": [
+   "E10-01.C2",
+   "E10-11.C1",
+   "E10-11.C3"
+  ],
+  "title": "Finance projections omit issued invoices from required source reconciliation",
+  "source": [
+   "apps/api/src/modules/finance/finance.service.ts:720",
+   "apps/api/src/modules/finance/finance.service.ts:892",
+   "apps/api/src/modules/finance/analysis.ts:149",
+   "apps/api/src/modules/procurement/procurement.service.ts:1201"
+  ],
+  "reproduction": "Run run-finance.py. Issue actual immutable invoice201 for accepted order; accounting export200 still reconciled:true with identical CSV/rowcount and no invoiceID. Source analysis also has no invoiced-revenue projection.",
+  "expected": "Dashboard distinguishes invoiced amounts and export reconciles invoice/receipt/liability/payout sources with explicit source-only limitations.",
+  "actual": "Export sums supported cost/liability/receipt/payout/reference rows but does not read invoice documents or an invoice subledger; dashboard does not expose invoiced totals.",
+  "impact": "Original invoice-reconciliation coverage incomplete. Current SOURCE_SUBLEDGERS_NO_TAX_MAPPING label is not misrepresented as bank reconciliation, and source-row sums remain exact.",
+  "minimalRemediation": "Add invoice source projection/reconciliation with stable versioned references and separate evidence classes; retain existing contract-reference versus recognized-revenue distinction.",
+  "implementationTask": "Add invoice source projection/reconciliation with stable versioned references and separate evidence classes; retain existing contract-reference versus recognized-revenue distinction.",
+  "testRequirements": [
+   "Nonempty invoice appears in reconcile source",
+   "No duplicateinvoice across repeatedexports",
+   "Corrections/voids/periods preserved",
+   "Receipts/liabilities/payouts not double-counted",
+   "Current scoped safe beneficiary projection"
+  ],
+  "externalGate": "Owner acceptance PENDING; genuine consent and qualified operational policy remain external.",
+  "state": "NOT_STARTED",
+  "evidenceLocation": "evidence/checkpoint5/group21/finding-F56-supplement.json",
+  "group22Extensions": [
+   {
+    "findingId": "CP5-G56",
+    "issues": [
+     146
+    ],
+    "criteria": [
+     "E10-11.C1",
+     "E10-11.C3"
+    ],
+    "scope": "Same actual issued-invoice omission in finance reconciliation; source-row sums and safe disclosure stillwork."
+   }
+  ],
+  "originalCriteria": [
+   {
+    "issue": 146,
+    "storyId": "E10-11",
+    "criteria": [
+     {
+      "id": "E10-11.C1",
+      "text": "Exports balance to source events and restrict sensitive details."
+     },
+     {
+      "id": "E10-11.C3",
+      "text": "Reconcile totals to invoice, receipt, liability and payout subledgers."
+     }
+    ],
+    "scope": "Same actual issued-invoice omission in finance reconciliation; source-row sums and safe disclosure stillwork."
+   }
+  ]
+ },
+ {
+  "findingId": "CP5-G57",
+  "severity": "P2",
+  "issues": [
+   147
+  ],
+  "relatedCriteria": [
+   "E10-12.C1",
+   "E10-12.C2",
+   "E10-12.C3",
+   "E10-12.C4",
+   "E10-12.C5"
+  ],
+  "title": "Approved payment-provider adapter and signed callback reconciliation are absent",
+  "source": [
+   "apps/api/src/modules/finance/finance.service.ts:376",
+   "packages/contracts/src/finance.ts:22",
+   "apps/api/src/config/env.ts:1",
+   "apps/api/src/modules/finance/finance.controller.ts:1"
+  ],
+  "reproduction": "Targeted source/config/controller discovery: payout execution accepts operator-entered reference/evidence/outcomeREPORTED/FAILED only; no payment-provider adapter,sandbox/live config,signed callback route,transaction-auth/replay/reconciliation machinery. Actual unit/API scopes forbid bankVerified or VERIFIED_SETTLED fabrication. No real provider contacted.",
+  "expected": "Approved isolated provider configuration and authenticated amount/currency/reference-checked callbacks with idempotent/out-of-order handling and reconciled settlement/manual exceptions.",
+  "actual": "Manual unverified payout reports and isolated simulations exist; provider software integration absent.",
+  "impact": "Original integration capability missing. This is distinct from G24 incomplete manual reconciliation,not an assertion that current unverified reports become paid or credentials leaked.",
+  "minimalRemediation": "Design reviewed provider adapter,separate secret/config boundaries,signed replay-safe callbacks,reference/amount reconciliation and explicit pending/unknown/partial/failure/manual-review states in authorized sandbox first.",
+  "implementationTask": "Design reviewed provider adapter,separate secret/config boundaries,signed replay-safe callbacks,reference/amount reconciliation and explicit pending/unknown/partial/failure/manual-review states in authorized sandbox first.",
+  "testRequirements": [
+   "Local signed/forged/replayedcallback fixtures",
+   "Currency/amount/reference/order matching",
+   "Duplicateinitiation/out-of-order notification",
+   "Partialsettlement/reconciliation/incidentrevocation",
+   "No live/provider credentials during audit"
+  ],
+  "externalGate": "Qualified provider/legal/financial approval,managed sandbox/live secret authorization and genuine independently verified receipts remain external; none fabricated.",
+  "state": "NOT_STARTED",
+  "evidenceLocation": "evidence/checkpoint5/group22-review.json"
+ }
+]

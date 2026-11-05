@@ -1,0 +1,10 @@
+# Remediation impact — bounded findings
+
+**INCOMPLETE — interrupted by external removal of the acceptance registry and historical audit evidence. No owner acceptance or GitHub synchronization is asserted.**
+
+- CP5-G71: identity-based partial aggregation and simulation exclusion passed244 API tests and PostgreSQL probes before evidence loss. Payout relations were inspected. Verified settlement remains blocked by D1 and database constraints. Not fully resolved.
+- CP5-G27: corrected confidentiality confirmed again over native PostgreSQL HTTP. Legacy buyer invoice projection drops seven private sentinels; unauthorized401/404 and internal finance projection are asserted.
+- CP5-G08: current pause denial works, but requested-craft matching remains incomplete. New own-reservation double counting rejects valid acceptance; #45 and #49 require attention. Do not call this fix complete.
+- CP5-G19: service probe preserved cumulative custody and refused overcollection. The process exited0 but its replay observation was {ok:false,noNewRow:true}; this does not prove successful replay return semantics. Raw initial probe log was externally deleted.
+- CP5-G20: service projection preserves shortage and separates operator/buyer attribution. Two added native-backed browser tests passed at390/1280px, with JSON results preserved. Original #60.C5 is notification to operations/finance, not the rewritten UI-label criterion in the batch revalidation; commerce-only consumer still does not route logistics notices. Do not promote the entire story from corrected arithmetic/copy.
+- CP5-G95: native service verifies accepted-order transition, preserved revision, stale-version rejection, no-evidence denial and rejection of smuggled reference. Signed-contract string branch remains unreachable through current strict schemas; it is not an implemented signed-contract workflow. Historical accepted RFQ can satisfy the guard independently of current proposal status; no signed or legally reviewed contract is claimed. Entire #204 certification still requires restored C1–C4 evidence.

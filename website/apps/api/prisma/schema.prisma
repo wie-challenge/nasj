@@ -1,0 +1,2962 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum AccountStatus {
+  ACTIVE
+  SUSPENDED
+  DISABLED
+}
+
+model User {
+ recordedContractualDates ContractualDueDate[]
+ prospectRevisions ProspectRevision[]
+ proposalRevisions PilotProposalRevision[]
+  demoIdentity DemoIdentity?
+  revisionsAuthored                ProcurementRevision[]       @relation("RevisionAuthor")
+  procurementActivities            ProcurementActivity[]       @relation("ActivityActor")
+  procurementAttachments           ProcurementAttachment[]     @relation("AttachmentAuthor")
+  procurementQuestions             ProcurementQuestion[]       @relation("QuestionAuthor")
+  procurementAnswers               ProcurementQuestion[]       @relation("QuestionAnswerer")
+  procurementMessages              ProcurementMessage[]        @relation("MessageAuthor")
+  procurementSamples               ProcurementSample[]         @relation("SampleAuthor")
+  procurementDecisions             ProcurementSampleDecision[] @relation("SampleSignatory")
+  procurementQuotes                ProcurementQuote[]          @relation("QuoteAuthor")
+  procurementAcceptances           ProcurementAcceptance[]     @relation("QuoteSignatory")
+  procurementQuoteRejections       ProcurementQuoteRejection[] @relation("QuoteRejector")
+  procurementProducts              ApprovedProductVersion[]    @relation("ProductAuthor")
+  procurementDocuments             ProcurementDocument[]       @relation("DocumentAuthor")
+  effortAssumptions                EffortAssumption[]          @relation("EffortAuthor")
+  feasibilityAssessments           FeasibilityAssessment[]     @relation("FeasibilityAuthor")
+  costEstimates                    CostEstimate[]              @relation("CostAuthor")
+  eligibilityAssessments           EligibilityAssessment[]     @relation("EligibilityAuthor")
+  assistedDecisionsRecorded       AssistedOfferDecision[]     @relation("AssistedDecisionRecorder")
+  batchReleases                    BatchRelease[]              @relation("BatchReleaseActor")
+  progressReports                  ProductionProgressEvent[]   @relation("ProgressReporter")
+  productionEvents                 ProductionLedgerEvent[]     @relation("ProductionEventActor")
+  qualityAttempts                  QualityInspectionAttempt[]  @relation("QualityInspectorActor")
+  shipmentPreparations             ShipmentPreparation[]       @relation("ShipmentPreparer")
+  shipmentsCreated                 Shipment[]                  @relation("ShipmentCreator")
+  pickupsCoordinated               PickupSchedule[]            @relation("PickupCoordinator")
+  pickupsOperated                  PickupSchedule[]            @relation("PickupOperator")
+  pickupsRecorded                  PickupSchedule[]            @relation("PickupRecorder")
+  custodyHandovers                 CustodyHandover[]           @relation("CustodyActor")
+  deliveryReports                  DeliveryReport[]            @relation("DeliveryReporter")
+  buyerConfirmations               BuyerDeliveryConfirmation[] @relation("BuyerReceiptActor")
+  buyerFeedbackReported            BuyerOrderFeedback[]        @relation("BuyerFeedbackReporter")
+  buyerFeedbackRevisions           BuyerOrderFeedbackRevision[] @relation("BuyerFeedbackRevisionActor")
+  buyerFeedbackFollowUps           BuyerOrderFeedbackRevision[] @relation("BuyerFeedbackFollowUpOwner")
+  traceabilityPublications         TraceabilityPublication[]   @relation("TraceabilityAuthor")
+  traceabilityRevisions            TraceabilityRevision[]      @relation("TraceabilityReviewer")
+  settlementEvents                 SimulatedSettlementEvent[]  @relation("SettlementActor")
+  artisanProfilesCreated           ArtisanProfile[]            @relation("ArtisanCreator")
+  registryManagements              ArtisanManagement[]         @relation("ManagementRecorder")
+  registryAssignmentsGiven         ArtisanAssignment[]         @relation("ArtisanAssigner")
+  registryAssignmentsHeld          ArtisanAssignment[]         @relation("ResponsibleCoordinator")
+  authorizationPoliciesReviewed    AuthorizationPolicy[]       @relation("PolicyReviewer")
+  onboardingAuthorizationsRecorded OnboardingAuthorization[]   @relation("AuthorizationRecorder")
+  membershipPermissionsGranted     MembershipPermission[]      @relation("PermissionGrantor")
+  operatorAccounts                 OperatorAssignment[]        @relation("Operator")
+  operatorAssignmentsGiven         OperatorAssignment[]        @relation("OperatorAssigner")
+  concernsReviewed                 ParticipantConcern[]        @relation("ConcernReviewer")
+  twoFactorEnabled                 Boolean                     @default(false)
+  twoFactor                        TwoFactor?
+  id                               String                      @id
+  name                             String
+  email                            String                      @unique
+  emailVerified                    Boolean                     @default(false)
+  image                            String?
+  createdAt                        DateTime                    @default(now())
+  updatedAt                        DateTime                    @updatedAt
+  role                             Role                        @default(USER)
+  status                           AccountStatus               @default(ACTIVE)
+  preferredLanguage                String                      @default("en")
+  organizationMemberships          OrganizationMember[]
+  artisanProfile                   ArtisanProfile?
+  organizationsCreated             Organization[]              @relation("OrganizationCreator")
+  organizationsReviewed            Organization[]              @relation("OrganizationReviewer")
+  rolesAssigned                    MembershipRole[]            @relation("RoleAssigner")
+  invitationsCreated               Invitation[]
+  capacityDeclarations             CapacityDeclaration[]
+  delegatedGrants                  DelegationGrant[]           @relation("Delegate")
+  consents                         ConsentRecord[]
+  auditEvents                      AuditEvent[]
+  privacyRequests                  PrivacyRequest[]            @relation("PrivacySubject")
+  privacyReviews                   PrivacyRequest[]            @relation("PrivacyReviewer")
+  demoFeedbackEvents               DemoFeedbackEvent[]         @relation("DemoFeedbackEventActor")
+  notificationPreferences          NotificationPreference[]
+  supportCases                     SupportCase[]               @relation("CaseSubject")
+  assignedCases                    SupportCase[]               @relation("CaseAssignee")
+  sessions                         Session[]
+  accounts                         Account[]
+
+  @@index([role, status])
+  recommendationSnapshots RecommendationSnapshot[] @relation("RecommendationAuthor")
+  allocationPlans         AllocationPlan[]         @relation("AllocationPlanAuthor")
+  reviewedAllocationPlans AllocationPlan[]         @relation("AllocationPlanReviewer")
+  allocationOverrides     AllocationOverride[]     @relation("OverrideActor")
+  scheduleScenarios       ScheduleScenario[]       @relation("ScheduleScenarioAuthor")
+  productSpecifications   ProductSpecification[]         @relation("SpecAuthor")
+  specRevisions           ProductSpecificationRevision[] @relation("SpecRevisionAuthor")
+  submittedSpecRevisions  ProductSpecificationRevision[] @relation("SpecRevisionSubmitter")
+  approvedSpecRevisions   ProductSpecificationRevision[] @relation("SpecRevisionApprover")
+  sampleRequests          ProductSampleRequest[]         @relation("SampleRequestAuthor")
+  acceptedSampleTerms ProductSampleRequest[] @relation("SampleTermsAcceptor")
+  sampleEvaluations       SampleEvaluation[]             @relation("SampleInspector")
+  sampleApprovals         BuyerSampleApproval[]          @relation("SampleApprovalActor")
+  discussions        OrderDiscussion[]    @relation("DiscussionAuthor")
+  discussionMessages DiscussionMessage[]   @relation("DiscussionMessageAuthor")
+  reportedExceptions ProductionException[] @relation("ExceptionReporter")
+  coordinatedExceptions ProductionException[] @relation("ExceptionCoordinator")
+  scheduleRevisions  ScheduleRevision[]   @relation("ScheduleRevisionAuthor")
+  approvedScheduleRevisions ScheduleRevision[] @relation("ScheduleRevisionApprover")
+  counteroffers      Counteroffer[]       @relation("CounterofferAuthor")
+  reviewedCounteroffers Counteroffer[]    @relation("CounterofferReviewer")
+  acceptedCounteroffers Counteroffer[]    @relation("CounterofferAcceptor")
+  availabilityPauses AvailabilityPause[]  @relation("PauseAuthor")
+  resumedPauses      AvailabilityPause[]  @relation("PauseResumer")
+  supportTickets     SupportTicket[]      @relation("TicketReporter")
+  ownedTickets       SupportTicket[]      @relation("TicketOwner")
+  ticketEvents       SupportTicketEvent[] @relation("TicketEventActor")
+  notifications      NotificationDelivery[] @relation("NotificationRecipient")
+  supportAttachments SupportTicketAttachment[] @relation("TicketAttachmentAuthor")
+  buyerScheduleRevisions   ScheduleRevision[] @relation("ScheduleRevisionBuyer")
+  artisanScheduleRevisions ScheduleRevision[] @relation("ScheduleRevisionArtisan")
+  forecastSnapshots     ForecastSnapshot[]   @relation("ForecastAuthor")
+  timeRecords           ProductionTimeRecord[] @relation("TimeReporter")
+  acknowledgedAlerts    BatchAlert[]         @relation("AlertAcknowledger")
+  reviewedPolicies      ReportingPolicy[]    @relation("PolicyReviewer")
+}
+
+model Session {
+  mfaVerifiedAt DateTime?
+  id            String    @id
+  token         String    @unique
+  expiresAt     DateTime
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  ipAddress     String?
+  userAgent     String?
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, accountId])
+  @@index([userId])
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@index([expiresAt])
+}
+
+model RateBucket {
+  key     String   @id
+  count   Int      @default(1)
+  resetAt DateTime
+
+  @@index([resetAt])
+}
+
+enum OrganizationType {
+  PARTNER_COOPERATIVE
+  BUYER_BUSINESS
+  ASSOCIATION
+  INTERNAL
+}
+
+enum ApprovalStatus {
+  DRAFT
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+  SUSPENDED
+}
+
+enum MembershipStatus {
+  ACTIVE
+  SUSPENDED
+  REVOKED
+  LEFT
+}
+
+enum BusinessRole {
+  BUYER_REPRESENTATIVE
+  NASJ_OPERATOR
+  BUYER
+  ARTISAN
+  ASSOCIATION_COORDINATOR
+  PRODUCTION_MANAGER
+  FINANCE_MANAGER
+  QUALITY_INSPECTOR
+  INVENTORY_LOGISTICS_COORDINATOR
+  SUPPORT
+  RESEARCHER_ANALYST
+  PRODUCT_DESIGNER
+  BUSINESS_DEVELOPMENT
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  CANCELLED
+}
+
+enum AvailabilityStatus {
+  AVAILABLE
+  PAUSED
+}
+
+enum RelationshipStatus {
+  ACTIVE
+  REVOKED
+}
+
+enum DelegationScope {
+  PROFILE_READ
+  PROFILE_UPDATE
+  SKILLS_MANAGE
+  CAPACITY_READ
+  CAPACITY_UPDATE
+}
+
+enum PrivacyRequestType {
+  EXPORT
+  CORRECTION
+  DELETION
+}
+
+enum PrivacyRequestStatus {
+  SUBMITTED
+  IN_REVIEW
+  RESOLVED
+  REJECTED
+}
+
+enum NotificationChannel {
+  EMAIL
+  IN_APP
+}
+
+enum CaseStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+}
+
+model Organization {
+  marketProducts      MarketProduct[]
+  marketCartItems     MarketCartItem[]
+  marketBuyerOrders   MarketOrder[] @relation("MarketBuyer")
+  marketAssociationOrders MarketOrder[] @relation("MarketAssociation")
+  marketFiles         MarketFile[]
+  marketBilling       MarketBillingProfile?
+ salesOperatorProspects CommercialProspect[] @relation("SalesOperator")
+ salesBuyerProspects CommercialProspect[] @relation("SalesBuyer")
+  managingArtisans       ArtisanManagement[]
+  assignedArtisans       ArtisanAssignment[]
+  assignedOperators      OperatorAssignment[]
+  pickupSchedules        PickupSchedule[]
+  buyerRfqs              CommercialRfq[]         @relation("RfqBuyer")
+  operatorRfqs           CommercialRfq[]         @relation("RfqOperator")
+  id                     String                  @id @default(cuid())
+  name                   String
+  slug                   String                  @unique
+  type                   OrganizationType
+  approvalStatus         ApprovalStatus          @default(DRAFT)
+  country                String                  @default("TN")
+  region                 String
+  description            String
+  contactEmail           String
+  contactPhone           String?
+  representativeName     String
+  createdByUserId        String
+  createdBy              User                    @relation("OrganizationCreator", fields: [createdByUserId], references: [id], onDelete: Restrict)
+  approvedByUserId       String?
+  approvedBy             User?                   @relation("OrganizationReviewer", fields: [approvedByUserId], references: [id], onDelete: Restrict)
+  approvedAt             DateTime?
+  approvalReason         String?
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  members                OrganizationMember[]
+  invitations            Invitation[]
+  associationMemberships AssociationMembership[]
+  delegations            DelegationGrant[]
+  productionOffers       CommercialOffer[]
+  progressAssociations   ProductionProgressEvent[] @relation("ProgressAssociation")
+  auditEvents            AuditEvent[]
+  supportCases           SupportCase[]
+
+  @@index([approvalStatus, createdAt])
+  ownedProductSpecifications ProductSpecification[] @relation("ProductOwner")
+  sampleRequests             ProductSampleRequest[] @relation("SampleBuyer")
+  sampleRequestsAsOperator   ProductSampleRequest[] @relation("SampleOperator")
+  sampleApprovals            BuyerSampleApproval[]   @relation("SampleApprovalBuyer")
+  discussions        OrderDiscussion[]
+  supportTickets     SupportTicket[]
+}
+
+model OrganizationMember {
+  id               String                 @id @default(cuid())
+  organizationId   String
+  organization     Organization           @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  userId           String
+  user             User                   @relation(fields: [userId], references: [id], onDelete: Restrict)
+  status           MembershipStatus       @default(ACTIVE)
+  isManager        Boolean                @default(false)
+  joinedAt         DateTime               @default(now())
+  suspendedAt      DateTime?
+  revokedAt        DateTime?
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  roles            MembershipRole[]
+  isCoordinator    Boolean                @default(false)
+  permissionGrants MembershipPermission[]
+
+  @@unique([organizationId, userId])
+  @@index([userId, status])
+}
+
+model MembershipRole {
+  id               String             @id @default(cuid())
+  membershipId     String
+  membership       OrganizationMember @relation(fields: [membershipId], references: [id], onDelete: Restrict)
+  role             BusinessRole
+  assignedByUserId String
+  assignedBy       User               @relation("RoleAssigner", fields: [assignedByUserId], references: [id], onDelete: Restrict)
+  assignedAt       DateTime           @default(now())
+
+  @@unique([membershipId, role])
+}
+
+model Invitation {
+  id              String           @id @default(cuid())
+  organizationId  String
+  organization    Organization     @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  email           String
+  tokenHash       String           @unique
+  roles           BusinessRole[]
+  isManager       Boolean          @default(false)
+  status          InvitationStatus @default(PENDING)
+  expiresAt       DateTime
+  acceptedAt      DateTime?
+  createdByUserId String
+  createdBy       User             @relation(fields: [createdByUserId], references: [id], onDelete: Restrict)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@index([organizationId, status])
+  @@index([email, status])
+}
+
+model ArtisanProfile {
+  marketOrders          MarketOrderArtisan[]
+  marketDetail          MarketArtisanDetail?
+  createdBy             User?                     @relation("ArtisanCreator", fields: [createdById], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "ArtisanProfile_createdById_fk")
+  createdById           String?
+  participantStatus     String                    @default("ACTIVE")
+  managements           ArtisanManagement[]
+  assignments           ArtisanAssignment[]
+  authorizations        OnboardingAuthorization[]
+  commercialOffers      CommercialOffer[]
+  commercialBatches     CommercialBatch[]
+  progressEvents        ProductionProgressEvent[]
+  id                    String                    @id @default(cuid())
+  userId                String?                   @unique
+  user                  User?                     @relation(fields: [userId], references: [id], onDelete: Restrict)
+  displayName           String
+  region                String
+  preferredLanguage     String                    @default("en")
+  contactPhone          String?
+  contactVisibility     String                    @default("PRIVATE")
+  availabilityStatus    AvailabilityStatus        @default(AVAILABLE)
+  experienceDescription String                    @default("")
+  equipment             String[]
+  createdAt             DateTime                  @default(now())
+  updatedAt             DateTime                  @updatedAt
+  skills                ArtisanSkill[]
+  capacityDeclarations  CapacityDeclaration[]
+  associations          AssociationMembership[]
+  delegations           DelegationGrant[]
+  eligibilityAssessments EligibilityAssessment[]
+  payables               ArtisanPayable[]
+  allocationItems       AllocationPlanItem[]
+  sampleRequests        ProductSampleRequest[]
+  availabilityPauses AvailabilityPause[]
+  samplePayables        SamplePayable[]
+  timeRecords           ProductionTimeRecord[]
+}
+
+model CraftSkill {
+  rfqs        CommercialRfq[]
+  id          String                @id @default(cuid())
+  name        String                @unique
+  category    String
+  description String                @default("")
+  isActive    Boolean               @default(true)
+  artisans    ArtisanSkill[]
+  capacities  CapacityDeclaration[]
+  effortAssumptions EffortAssumption[]
+  productSpecifications ProductSpecification[]
+}
+
+model ArtisanSkill {
+  id               String         @id @default(cuid())
+  artisanProfileId String
+  artisanProfile   ArtisanProfile @relation(fields: [artisanProfileId], references: [id], onDelete: Restrict)
+  craftSkillId     String
+  craftSkill       CraftSkill     @relation(fields: [craftSkillId], references: [id], onDelete: Restrict)
+  proficiency      String?
+  evidence         String?
+
+  @@unique([artisanProfileId, craftSkillId])
+  @@index([craftSkillId])
+}
+
+model CapacityDeclaration {
+  version               Int                   @default(1)
+  previousDeclarationId String?                @unique
+  previousDeclaration   CapacityDeclaration?   @relation("CapacityRevision", fields: [previousDeclarationId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  nextDeclaration       CapacityDeclaration?   @relation("CapacityRevision")
+  authorization    OnboardingAuthorization? @relation(fields: [authorizationId], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "CapacityDeclaration_authorizationId_fk")
+  authorizationId  String?
+  commercialOffers CommercialOffer[]
+  supersededAt     DateTime?
+  id               String                   @id @default(cuid())
+  artisanProfileId String
+  artisanProfile   ArtisanProfile           @relation(fields: [artisanProfileId], references: [id], onDelete: Restrict)
+  craftSkillId     String
+  craftSkill       CraftSkill               @relation(fields: [craftSkillId], references: [id], onDelete: Restrict)
+  unitType         String
+  quantity         Decimal                  @db.Decimal(12, 2)
+  effectiveFrom    DateTime
+  effectiveTo      DateTime
+  declaredByUserId String
+  declaredBy       User                     @relation(fields: [declaredByUserId], references: [id], onDelete: Restrict)
+  createdAt        DateTime                 @default(now())
+
+  @@index([artisanProfileId, effectiveFrom])
+}
+
+model AssociationMembership {
+  id               String             @id @default(cuid())
+  artisanProfileId String
+  artisanProfile   ArtisanProfile     @relation(fields: [artisanProfileId], references: [id], onDelete: Restrict)
+  organizationId   String
+  organization     Organization       @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  status           RelationshipStatus @default(ACTIVE)
+  consentRecordId  String
+  consentRecord    ConsentRecord      @relation(fields: [consentRecordId], references: [id], onDelete: Restrict)
+  startedAt        DateTime           @default(now())
+  endedAt          DateTime?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  @@unique([artisanProfileId, organizationId])
+  @@index([organizationId, status])
+}
+
+model DelegationGrant {
+  id               String             @id @default(cuid())
+  artisanProfileId String
+  artisanProfile   ArtisanProfile     @relation(fields: [artisanProfileId], references: [id], onDelete: Restrict)
+  delegateUserId   String
+  delegate         User               @relation("Delegate", fields: [delegateUserId], references: [id], onDelete: Restrict)
+  organizationId   String
+  organization     Organization       @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  scopes           DelegationScope[]
+  status           RelationshipStatus @default(ACTIVE)
+  grantedAt        DateTime           @default(now())
+  expiresAt        DateTime
+  revokedAt        DateTime?
+  createdAt        DateTime           @default(now())
+
+  @@index([artisanProfileId, delegateUserId, status])
+  @@index([organizationId])
+}
+
+model ConsentRecord {
+  id                     String                  @id @default(cuid())
+  userId                 String
+  user                   User                    @relation(fields: [userId], references: [id], onDelete: Restrict)
+  purpose                String
+  policyVersion          String
+  decision               Boolean
+  collectedAt            DateTime                @default(now())
+  withdrawnAt            DateTime?
+  collectionContext      String
+  associationMemberships AssociationMembership[]
+
+  @@index([userId, purpose])
+}
+
+model AuditEvent {
+  id             String        @id @default(cuid())
+  actorId        String
+  actor          User          @relation(fields: [actorId], references: [id], onDelete: Restrict)
+  targetType     String
+  targetId       String
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  action         String
+  timestamp      DateTime      @default(now())
+  correlationId  String
+  reason         String?
+  before         Json?
+  after          Json?
+
+  @@index([organizationId, timestamp])
+  @@index([actorId, timestamp])
+  @@index([targetType, targetId])
+}
+
+model PrivacyRequest {
+  id                  String               @id @default(cuid())
+  userId              String
+  user                User                 @relation("PrivacySubject", fields: [userId], references: [id], onDelete: Restrict)
+  type                PrivacyRequestType
+  status              PrivacyRequestStatus @default(SUBMITTED)
+  details             String
+  submittedAt         DateTime             @default(now())
+  assignedReviewerId  String?
+  assignedReviewer    User?                @relation("PrivacyReviewer", fields: [assignedReviewerId], references: [id], onDelete: Restrict)
+  resolvedAt          DateTime?
+  resolutionNotes     String?
+  retentionExceptions String?
+
+  @@index([userId, submittedAt])
+  @@index([status, submittedAt])
+}
+
+model NotificationPreference {
+  id        String              @id @default(cuid())
+  userId    String
+  user      User                @relation(fields: [userId], references: [id], onDelete: Restrict)
+  language  String              @default("en")
+  channel   NotificationChannel @default(EMAIL)
+  category  String
+  optedIn   Boolean             @default(false)
+  updatedAt DateTime            @updatedAt
+
+  @@unique([userId, channel, category])
+}
+
+model SupportCase {
+  id               String        @id @default(cuid())
+  userId           String
+  user             User          @relation("CaseSubject", fields: [userId], references: [id], onDelete: Restrict)
+  organizationId   String?
+  organization     Organization? @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  subject          String
+  description      String
+  status           CaseStatus    @default(OPEN)
+  assignedToUserId String?
+  assignedTo       User?         @relation("CaseAssignee", fields: [assignedToUserId], references: [id], onDelete: Restrict)
+  resolution       String?
+  dueAt            DateTime?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([userId, createdAt])
+  @@index([organizationId, status])
+}
+
+model TwoFactor {
+  id                      String    @id
+  userId                  String    @unique
+  user                    User      @relation(fields: [userId], references: [id], onDelete: Restrict)
+  secret                  String
+  backupCodes             String
+  verified                Boolean   @default(true)
+  failedVerificationCount Int       @default(0)
+  lockedUntil             DateTime?
+
+  @@index([secret])
+}
+
+// Outcome is committed atomically with the authorized capacity mutation.
+model CommandOutcome {
+  id          String   @id @default(cuid())
+  actorId     String
+  resourceId  String
+  operation   String
+  keyHash     String
+  payloadHash String
+  result      Json
+  createdAt   DateTime @default(now())
+
+  @@unique([actorId, resourceId, operation, keyHash])
+}
+
+enum OutboxStatus {
+  PENDING
+  RETRY
+  DELIVERED
+  FAILED
+}
+
+// Metadata only: never copy user-entered text, audit snapshots or wearable data.
+model OutboxEvent {
+  id             String           @id
+  auditEventId   String           @unique
+  eventType      String
+  version        Int              @default(1)
+  actorId        String
+  organizationId String?
+  targetType     String
+  targetId       String
+  correlationId  String
+  createdAt      DateTime         @default(now())
+  status         OutboxStatus     @default(PENDING)
+  attempts       Int              @default(0)
+  availableAt    DateTime         @default(now())
+  deliveredAt    DateTime?
+  lastErrorCode  String?
+  durationMs     Int?
+  notices        CommerceNotice[]
+  receipt        EventReceipt?
+
+  @@index([status, availableAt])
+}
+
+// Internal durable consumer; not evidence of external publication or commerce ETL.
+model EventReceipt {
+  eventId    String      @id
+  event      OutboxEvent @relation(fields: [eventId], references: [id], onDelete: Restrict)
+  receivedAt DateTime    @default(now())
+}
+
+model CommercialRfq {
+ pilotProposalRevisions PilotProposalRevision[]
+  demoScenario DemoScenario?
+  revisions              ProcurementRevision[]
+  activities             ProcurementActivity[]
+  attachments            ProcurementAttachment[]
+  questions              ProcurementQuestion[]
+  messages               ProcurementMessage[]
+  samples                ProcurementSample[]
+  quotes                 ProcurementQuote[]
+  products               ApprovedProductVersion[] @relation("ProductSource")
+  documents              ProcurementDocument[]
+  feasibilityAssessments FeasibilityAssessment[]
+  costEstimates          CostEstimate[]
+  procurementManaged     Boolean                  @default(false)
+  sourceProductId        String?
+  sourceProduct          ApprovedProductVersion?  @relation("ReorderSource", fields: [sourceProductId], references: [id], onDelete: Restrict)
+  id                     String                   @id @default(cuid())
+  buyerOrganizationId    String
+  buyerOrganization      Organization             @relation("RfqBuyer", fields: [buyerOrganizationId], references: [id], onDelete: Restrict)
+  operatorOrganizationId String
+  operatorOrganization   Organization             @relation("RfqOperator", fields: [operatorOrganizationId], references: [id], onDelete: Restrict)
+  craftSkillId           String
+  craftSkill             CraftSkill               @relation(fields: [craftSkillId], references: [id], onDelete: Restrict)
+  title                  String
+  specification          String
+  designRequirements     String
+  quantity               Int
+  deliveryAt             DateTime
+  deliveryLocation       String
+  status                 String                   @default("DRAFT")
+  version                Int                      @default(1)
+  provenance             String                   @default("SYNTHETIC")
+  quoteMillimes          BigInt?
+  quoteExpiresAt         DateTime?
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+  order                  CommercialOrder?
+
+  @@index([buyerOrganizationId, createdAt])
+  @@index([operatorOrganizationId, status])
+}
+
+model CommercialOrder {
+ financeRecordEvents FinanceRecordEvent[]
+  products          ApprovedProductVersion[]
+  documents         ProcurementDocument[]
+  acceptance        ProcurementAcceptance?
+  projection        CommerceProjection?
+  id                String                   @id @default(cuid())
+  rfqId             String                   @unique
+  rfq               CommercialRfq            @relation(fields: [rfqId], references: [id], onDelete: Restrict)
+  status            String                   @default("APPROVED")
+  version           Int                      @default(1)
+  delivered         Int                      @default(0)
+  materialsResolved Boolean                  @default(false)
+  dispositionNote   String?
+  provenance        String                   @default("SYNTHETIC")
+  createdAt         DateTime                 @default(now())
+  offers            CommercialOffer[]
+  batches           CommercialBatch[]
+  payments          SyntheticPayment[]
+  eligibilityAssessments EligibilityAssessment[]
+  shipmentPreparations ShipmentPreparation[]
+  productionEvents     ProductionLedgerEvent[]
+  shipments            Shipment[]
+  traceability         TraceabilityPublication[]
+  payables             ArtisanPayable[]
+  settlements          SimulatedSettlement[]
+  recommendationSnapshots RecommendationSnapshot[]
+  allocationPlans       AllocationPlan[]
+  scheduleScenarios     ScheduleScenario[]
+  discussions        OrderDiscussion[]
+  exceptions         ProductionException[]
+  scheduleRevisions  ScheduleRevision[]
+  catalogueProcurementRevisionId String? @unique
+  catalogueProcurementRevision ProcurementRevision? @relation("CatalogueOrderRevision", fields: [catalogueProcurementRevisionId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  productSpecificationRevisionId String?
+  productSpecificationRevision   ProductSpecificationRevision? @relation(fields: [productSpecificationRevisionId], references: [id], onDelete: Restrict)
+  buyerFeedback      BuyerOrderFeedback[] @relation("BuyerFeedbackOrder")
+  @@index([productSpecificationRevisionId])
+}
+
+model CommercialOffer {
+  id                    String              @id @default(cuid())
+  orderId               String
+  order                 CommercialOrder     @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  capacityDeclarationId String
+  capacityDeclaration   CapacityDeclaration @relation(fields: [capacityDeclarationId], references: [id], onDelete: Restrict)
+  artisanProfileId      String
+  artisanProfile        ArtisanProfile      @relation(fields: [artisanProfileId], references: [id], onDelete: Restrict)
+  quantity              Int
+  unitPayMillimes       BigInt
+  estimatedHours        String
+  expiresAt             DateTime
+  deliveryDeadline      DateTime?
+  materials             String
+  reworkTerms           String
+  paymentConditions     String
+  status                String              @default("PLANNED")
+  version               Int                 @default(1)
+  provenance            String              @default("SYNTHETIC")
+  acceptedAt            DateTime?
+  decidedByUserId       String?
+  createdAt             DateTime            @default(now())
+  quoteId               String?
+  quote                 ProcurementQuote?   @relation(fields: [quoteId], references: [id], onDelete: Restrict)
+  eligibilityAssessmentId String?
+  eligibilityAssessment EligibilityAssessment? @relation(fields: [eligibilityAssessmentId], references: [id], onDelete: Restrict)
+  compensationMethod    String?
+  collectionArrangement String?
+  instructions          String?
+  termsSha256           String?
+  associationOrganizationId String?
+  association           Organization?       @relation(fields: [associationOrganizationId], references: [id], onDelete: Restrict)
+  batch                 CommercialBatch?
+  assistedDecision      AssistedOfferDecision?
+  payables              ArtisanPayable[]
+
+  @@index([orderId, status])
+  @@index([artisanProfileId, status])
+  @@index([capacityDeclarationId, status])
+  @@index([eligibilityAssessmentId])
+  allocationItem AllocationPlanItem?
+  counteroffers      Counteroffer[]
+  revisedCounteroffer Counteroffer? @relation("RevisedCounterOffer")
+  samplePayables    SamplePayable[] @relation("SamplePayableOffer")
+}
+
+model CommercialBatch {
+  id               String                 @id @default(cuid())
+  orderId          String
+  order            CommercialOrder        @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  offerId          String                 @unique
+  offer            CommercialOffer        @relation(fields: [offerId], references: [id], onDelete: Restrict)
+  artisanProfileId String
+  artisanProfile   ArtisanProfile         @relation(fields: [artisanProfileId], references: [id], onDelete: Restrict)
+  status           String                 @default("ACCEPTED")
+  version          Int                    @default(1)
+  produced         Int                    @default(0)
+  submitted        Int                    @default(0)
+  approved         Int                    @default(0)
+  rejected         Int                    @default(0)
+  pending          Int                    @default(0)
+  provenance       String                 @default("SYNTHETIC")
+  createdAt        DateTime               @default(now())
+  inspections      CommercialInspection[]
+  payments         SyntheticPayment[]
+  revisionId       String?
+  revision         ProcurementRevision?        @relation("LockedBatchRevision", fields: [revisionId], references: [id], onDelete: Restrict)
+  release          BatchRelease?
+  materialRequirements BatchMaterialRequirement[]
+  progressEvents   ProductionProgressEvent[]
+  productionEvents ProductionLedgerEvent[]
+  qualityAttempts  QualityInspectionAttempt[]
+  preparationItems ShipmentPreparationItem[]
+  payables         ArtisanPayable[]
+
+  @@index([orderId])
+  @@index([artisanProfileId, status])
+  @@index([revisionId])
+  exceptions         ProductionException[]
+  scheduleRevisions  ScheduleRevision[]
+  forecasts         ForecastSnapshot[]
+  timeRecords       ProductionTimeRecord[]
+  alerts            BatchAlert[]
+}
+
+model CommercialInspection {
+  id           String          @id @default(cuid())
+  batchId      String
+  batch        CommercialBatch @relation(fields: [batchId], references: [id], onDelete: Restrict)
+  batchVersion Int
+  inspectorId  String
+  approved     Int
+  rejected     Int
+  pending      Int
+  submitted    Int
+  defectReason String
+  createdAt    DateTime        @default(now())
+
+  @@unique([batchId, batchVersion])
+}
+
+model SpecificationMaterialLine {
+  id           String              @id @default(cuid())
+  revisionId   String
+  revision     ProcurementRevision @relation(fields: [revisionId], references: [id], onDelete: Restrict)
+  materialCode String
+  name         String
+  unit         String
+  perItemMilli Int
+  wastageBps   Int                 @default(0)
+  createdAt    DateTime            @default(now())
+
+  @@unique([revisionId, materialCode])
+}
+
+model InspectionCriterion {
+  id               String                      @id @default(cuid())
+  revisionId       String
+  revision         ProcurementRevision         @relation(fields: [revisionId], references: [id], onDelete: Restrict)
+  code             String
+  description      String
+  expected         String
+  tolerance        String                      @default("")
+  required         Boolean
+  evidenceRequired Boolean                     @default(false)
+  version          Int                         @default(1)
+  createdAt        DateTime                    @default(now())
+  results          InspectionCriterionResult[]
+
+  @@unique([revisionId, code])
+}
+
+model BatchRelease {
+  id                  String                     @id @default(cuid())
+  batchId             String                     @unique
+  batch               CommercialBatch            @relation(fields: [batchId], references: [id], onDelete: Restrict)
+  actorId             String
+  actor               User                       @relation("BatchReleaseActor", fields: [actorId], references: [id], onDelete: Restrict)
+  revisionId          String
+  revision            ProcurementRevision        @relation("ReleaseRevision", fields: [revisionId], references: [id], onDelete: Restrict)
+  sampleId            String
+  sample              ProcurementSample          @relation(fields: [sampleId], references: [id], onDelete: Restrict)
+  fundingAttestation  String
+  materialAttestation String
+  createdAt           DateTime                   @default(now())
+  requirements        BatchMaterialRequirement[]
+}
+
+model BatchMaterialRequirement {
+  id             String          @id @default(cuid())
+  batchId        String
+  batch          CommercialBatch @relation(fields: [batchId], references: [id], onDelete: Restrict)
+  releaseId      String
+  release        BatchRelease    @relation(fields: [releaseId], references: [id], onDelete: Restrict)
+  materialCode   String
+  name           String
+  unit           String
+  perItemMilli   Int
+  wastageBps     Int
+  batchQuantity  Int
+  requiredMilli  Int
+  readiness      String
+  createdAt      DateTime        @default(now())
+
+  @@unique([batchId, materialCode])
+}
+
+model ProductionProgressEvent {
+  id                        String                    @id @default(cuid())
+  batchId                   String
+  batch                     CommercialBatch           @relation(fields: [batchId], references: [id], onDelete: Restrict)
+  artisanProfileId          String
+  artisan                   ArtisanProfile            @relation(fields: [artisanProfileId], references: [id], onDelete: Restrict)
+  actorId                   String
+  actor                     User                      @relation("ProgressReporter", fields: [actorId], references: [id], onDelete: Restrict)
+  associationOrganizationId String?
+  association               Organization?             @relation("ProgressAssociation", fields: [associationOrganizationId], references: [id], onDelete: Restrict)
+  kind                      String
+  mode                      String
+  source                    String
+  cumulative                Int
+  previousCumulative        Int
+  delta                     Int
+  priorEventId              String?
+  priorEvent                ProductionProgressEvent?  @relation("ProgressCorrection", fields: [priorEventId], references: [id], onDelete: Restrict)
+  corrections               ProductionProgressEvent[] @relation("ProgressCorrection")
+  note                      String                    @default("")
+  permissionUsed            String
+  occurredAt                DateTime
+  recordedAt                DateTime                  @default(now())
+
+  @@index([batchId, recordedAt])
+}
+
+model ProductionLedgerEvent {
+  id               String           @id @default(cuid())
+  orderId          String
+  order            CommercialOrder  @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  batchId          String?
+  batch            CommercialBatch? @relation(fields: [batchId], references: [id], onDelete: Restrict)
+  action           String
+  actorId          String
+  actor            User             @relation("ProductionEventActor", fields: [actorId], references: [id], onDelete: Restrict)
+  artisanProfileId String?
+  source           String
+  quantity         Int?
+  reason           String           @default("")
+  correlationId    String
+  occurredAt       DateTime
+  recordedAt       DateTime         @default(now())
+
+  @@index([orderId, recordedAt])
+  @@index([batchId, recordedAt])
+}
+
+model QualityInspectionAttempt {
+  id             String                     @id @default(cuid())
+  batchId        String
+  batch          CommercialBatch            @relation(fields: [batchId], references: [id], onDelete: Restrict)
+  attempt        Int
+  kind           String
+  priorAttemptId String?                    @unique
+  priorAttempt   QualityInspectionAttempt?  @relation("Reinspection", fields: [priorAttemptId], references: [id], onDelete: Restrict)
+  reinspection   QualityInspectionAttempt?  @relation("Reinspection")
+  inspectorId    String
+  inspector      User                       @relation("QualityInspectorActor", fields: [inspectorId], references: [id], onDelete: Restrict)
+  scopeQuantity  Int
+  approved       Int
+  rejected       Int
+  pending        Int
+  defectReason   String                     @default("")
+  createdAt      DateTime                   @default(now())
+  results        InspectionCriterionResult[]
+
+  @@unique([batchId, attempt])
+}
+
+model InspectionCriterionResult {
+  id          String                   @id @default(cuid())
+  attemptId   String
+  attempt     QualityInspectionAttempt @relation(fields: [attemptId], references: [id], onDelete: Restrict)
+  criterionId String
+  criterion   InspectionCriterion      @relation(fields: [criterionId], references: [id], onDelete: Restrict)
+  outcome     String
+  note        String                   @default("")
+
+  @@unique([attemptId, criterionId])
+}
+
+model ShipmentPreparation {
+  id        String                    @id @default(cuid())
+  orderId   String
+  order     CommercialOrder           @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  status    String                    @default("PREPARED")
+  actorId   String
+  actor     User                      @relation("ShipmentPreparer", fields: [actorId], references: [id], onDelete: Restrict)
+  createdAt DateTime                  @default(now())
+  items     ShipmentPreparationItem[]
+
+  @@index([orderId, createdAt])
+}
+
+model ShipmentPreparationItem {
+  id            String              @id @default(cuid())
+  preparationId String
+  preparation   ShipmentPreparation @relation(fields: [preparationId], references: [id], onDelete: Restrict)
+  batchId       String
+  batch         CommercialBatch     @relation(fields: [batchId], references: [id], onDelete: Restrict)
+  quantity      Int
+  shipmentItems ShipmentItem[]
+
+  @@index([batchId])
+}
+
+model SyntheticPayment {
+  id             String           @id @default(cuid())
+  orderId        String
+  order          CommercialOrder  @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  batchId        String?
+  batch          CommercialBatch? @relation(fields: [batchId], references: [id], onDelete: Restrict)
+  kind           String
+  amountMillimes BigInt
+  status         String           @default("SCHEDULED")
+  version        Int              @default(1)
+  provenance     String           @default("SYNTHETIC")
+  evidenceType   String?
+  createdAt      DateTime         @default(now())
+
+  @@index([orderId, kind, status])
+  @@index([batchId, status])
+}
+
+// Rebuildable derived values only. No user-entered text or wearable data.
+model CommerceProjection {
+  orderId           String          @id
+  order             CommercialOrder @relation(fields: [orderId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  definitionVersion Int             @default(1)
+  asOf              DateTime        @default(now())
+  metrics           Json
+}
+
+// Static event-code inbox. Scope is a buyer/internal organization or artisan account.
+model CommerceNotice {
+  id        String      @id @default(cuid())
+  eventId   String
+  event     OutboxEvent @relation(fields: [eventId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  audience  String
+  scopeId   String
+  code      String
+  createdAt DateTime    @default(now())
+
+  @@unique([eventId, audience, scopeId])
+  @@index([audience, scopeId, createdAt])
+}
+
+// Explicit authority, never inferred from a buyer finance job title.
+model MembershipPermission {
+  enabled      Boolean            @default(true)
+  grantedBy    User               @relation("PermissionGrantor", fields: [grantedById], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "MembershipPermission_grantedById_fk")
+  id           String             @id @default(cuid())
+  membershipId String
+  membership   OrganizationMember @relation(fields: [membershipId], references: [id], onDelete: Restrict)
+  permission   String
+  grantedById  String
+  reason       String
+  createdAt    DateTime           @default(now())
+
+  @@unique([membershipId, permission])
+}
+
+model ArtisanManagement {
+  organization     Organization   @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "ArtisanManagement_organizationId_fk")
+  recordedBy       User           @relation("ManagementRecorder", fields: [recordedById], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "ArtisanManagement_recordedById_fk")
+  id               String         @id @default(cuid())
+  artisanProfileId String
+  artisan          ArtisanProfile @relation(fields: [artisanProfileId], references: [id], onDelete: Restrict)
+  organizationId   String
+  startedAt        DateTime       @default(now())
+  endedAt          DateTime?
+  reason           String
+  recordedById     String
+
+  @@index([organizationId, endedAt])
+  @@index([artisanProfileId, endedAt])
+}
+
+model ArtisanAssignment {
+  organization     Organization   @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "ArtisanAssignment_organizationId_fk")
+  coordinator      User           @relation("ResponsibleCoordinator", fields: [coordinatorId], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "ArtisanAssignment_coordinatorId_fk")
+  assignedBy       User           @relation("ArtisanAssigner", fields: [assignedById], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "ArtisanAssignment_assignedById_fk")
+  id               String         @id @default(cuid())
+  artisanProfileId String
+  artisan          ArtisanProfile @relation(fields: [artisanProfileId], references: [id], onDelete: Restrict)
+  coordinatorId    String
+  organizationId   String
+  assignedById     String
+  startedAt        DateTime       @default(now())
+  endedAt          DateTime?
+  reason           String
+
+  @@index([coordinatorId, organizationId, endedAt])
+}
+
+model AuthorizationPolicy {
+  reviewedBy      User                      @relation("PolicyReviewer", fields: [reviewedById], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "AuthorizationPolicy_reviewedById_fk")
+  id              String                    @id @default(cuid())
+  version         String                    @unique
+  methods         String[]
+  reviewReference String
+  reviewedById    String
+  active          Boolean                   @default(true)
+  createdAt       DateTime                  @default(now())
+  authorizations  OnboardingAuthorization[]
+}
+
+model OnboardingAuthorization {
+  recordedBy           User                  @relation("AuthorizationRecorder", fields: [recordedById], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "OnboardingAuthorization_recordedById_fk")
+  capacityDeclarations CapacityDeclaration[]
+  id                   String                @id @default(cuid())
+  artisanProfileId     String
+  artisan              ArtisanProfile        @relation(fields: [artisanProfileId], references: [id], onDelete: Restrict)
+  policyId             String
+  policy               AuthorizationPolicy   @relation(fields: [policyId], references: [id], onDelete: Restrict)
+  purpose              String
+  method               String
+  occurredAt           DateTime
+  language             String
+  recordedById         String
+  witnessReference     String?
+  evidenceReference    String
+  withdrawnAt          DateTime?
+  withdrawalReason     String?
+  createdAt            DateTime              @default(now())
+
+  @@index([artisanProfileId, purpose, withdrawnAt])
+}
+
+model OperatorAssignment {
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "OperatorAssignment_organizationId_fk")
+  operator       User         @relation("Operator", fields: [operatorId], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "OperatorAssignment_operatorId_fk")
+  assignedBy     User         @relation("OperatorAssigner", fields: [assignedById], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "OperatorAssignment_assignedById_fk")
+  id             String       @id @default(cuid())
+  operatorId     String
+  organizationId String
+  assignedById   String
+  createdAt      DateTime     @default(now())
+  revokedAt      DateTime?
+
+  @@unique([operatorId, organizationId])
+}
+
+// Accessible independent intake; no login or fake User is created for a participant.
+model ParticipantConcern {
+  reviewedBy       User?     @relation("ConcernReviewer", fields: [reviewedById], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "ParticipantConcern_reviewedById_fkey")
+  id               String    @id @default(cuid())
+  subjectReference String
+  concernType      String
+  description      String
+  contactMethod    String?
+  status           String    @default("OPEN")
+  reviewedById     String?
+  resolution       String?
+  createdAt        DateTime  @default(now())
+  reviewedAt       DateTime?
+
+  @@index([status, createdAt])
+}
+
+model ProcurementRevision {
+  id            String               @id @default(cuid())
+  rfqId         String
+  rfq           CommercialRfq        @relation(fields: [rfqId], references: [id], onDelete: Restrict)
+  version       Int
+  authorId      String
+  author        User                 @relation("RevisionAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  reason        String
+  predecessorId String?              @unique
+  predecessor   ProcurementRevision? @relation("RevisionChain", fields: [predecessorId], references: [id], onDelete: Restrict)
+  successor     ProcurementRevision? @relation("RevisionChain")
+  snapshot      Json
+  createdAt     DateTime             @default(now())
+  quotes        ProcurementQuote[]
+  samples       ProcurementSample[]
+  materialLines SpecificationMaterialLine[]
+  inspectionCriteria InspectionCriterion[]
+  lockedBatches CommercialBatch[] @relation("LockedBatchRevision")
+  releases      BatchRelease[]     @relation("ReleaseRevision")
+
+  catalogueOrder CommercialOrder? @relation("CatalogueOrderRevision")
+
+  @@unique([rfqId, version])
+}
+
+model ProcurementActivity {
+  id         String        @id @default(cuid())
+  rfqId      String
+  rfq        CommercialRfq @relation(fields: [rfqId], references: [id], onDelete: Restrict)
+  actorId    String
+  actor      User          @relation("ActivityActor", fields: [actorId], references: [id], onDelete: Restrict)
+  actorLabel String
+  code       String
+  version    Int
+  createdAt  DateTime      @default(now())
+
+  @@index([rfqId, createdAt, id])
+}
+
+model ProcurementAttachment {
+  id        String        @id @default(cuid())
+  rfqId     String
+  rfq       CommercialRfq @relation(fields: [rfqId], references: [id], onDelete: Restrict)
+  authorId  String
+  author    User          @relation("AttachmentAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  filename  String
+  mime      String
+  bytes     Bytes
+  sha256    String
+  removedAt DateTime?
+  createdAt DateTime      @default(now())
+
+  @@index([rfqId, removedAt])
+}
+
+model ProcurementQuestion {
+  id           String        @id @default(cuid())
+  rfqId        String
+  rfq          CommercialRfq @relation(fields: [rfqId], references: [id], onDelete: Restrict)
+  authorId     String
+  author       User          @relation("QuestionAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  question     String
+  answer       String?
+  answeredById String?
+  answeredBy   User?         @relation("QuestionAnswerer", fields: [answeredById], references: [id], onDelete: Restrict)
+  createdAt    DateTime      @default(now())
+  answeredAt   DateTime?
+
+  @@index([rfqId, createdAt])
+}
+
+model ProcurementMessage {
+  id          String        @id @default(cuid())
+  rfqId       String
+  rfq         CommercialRfq @relation(fields: [rfqId], references: [id], onDelete: Restrict)
+  authorId    String
+  author      User          @relation("MessageAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  authorLabel String
+  body        String
+  internal    Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+
+  @@index([rfqId, internal, createdAt, id])
+}
+
+model ProcurementSample {
+  id                String                     @id @default(cuid())
+  rfqId             String
+  rfq               CommercialRfq              @relation(fields: [rfqId], references: [id], onDelete: Restrict)
+  version           Int
+  revisionId        String
+  revision          ProcurementRevision        @relation(fields: [revisionId], references: [id], onDelete: Restrict)
+  authorId          String
+  author            User                       @relation("SampleAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  evidenceReference String
+  criteria          String
+  snapshot          Json
+  createdAt         DateTime                   @default(now())
+  decision          ProcurementSampleDecision?
+  products          ApprovedProductVersion[]
+  releases          BatchRelease[]
+
+  catalogueApprovalId String?
+  catalogueApproval BuyerSampleApproval? @relation(fields: [catalogueApprovalId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  @@index([catalogueApprovalId])
+
+  @@unique([rfqId, version])
+}
+
+model ProcurementSampleDecision {
+  id        String            @id @default(cuid())
+  sampleId  String            @unique
+  sample    ProcurementSample @relation(fields: [sampleId], references: [id], onDelete: Restrict)
+  actorId   String
+  actor     User              @relation("SampleSignatory", fields: [actorId], references: [id], onDelete: Restrict)
+  decision  String
+  comments  String
+  createdAt DateTime          @default(now())
+}
+
+model ProcurementQuote {
+  id            String                 @id @default(cuid())
+  rfqId         String
+  rfq           CommercialRfq          @relation(fields: [rfqId], references: [id], onDelete: Restrict)
+  version       Int
+  revisionId    String
+  revision      ProcurementRevision    @relation(fields: [revisionId], references: [id], onDelete: Restrict)
+  authorId      String
+  author        User                   @relation("QuoteAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  totalMillimes BigInt
+  expiresAt     DateTime
+  snapshot      Json
+  feasibilityAssessmentId String?
+  feasibilityAssessment   FeasibilityAssessment? @relation(fields: [feasibilityAssessmentId], references: [id], onDelete: Restrict)
+  costEstimateId          String?
+  costEstimate            CostEstimate?          @relation(fields: [costEstimateId], references: [id], onDelete: Restrict)
+  status                  String                 @default("ISSUED")
+  termsSha256             String?
+  createdAt     DateTime               @default(now())
+  acceptance    ProcurementAcceptance?
+  rejection     ProcurementQuoteRejection?
+  offers        CommercialOffer[]
+
+  @@unique([rfqId, version])
+}
+
+model EligibilityAssessment {
+  id                String           @id @default(cuid())
+  orderId           String
+  order             CommercialOrder  @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  version           Int
+  artisanProfileId  String
+  artisanProfile    ArtisanProfile   @relation(fields: [artisanProfileId], references: [id], onDelete: Restrict)
+  decision          String
+  reasons           Json
+  unknowns          Json
+  knownRemaining    Decimal?         @db.Decimal(12, 2)
+  unitType          String?
+  periodFrom        DateTime?
+  periodTo          DateTime?
+  authorId          String
+  author            User             @relation("EligibilityAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  createdAt         DateTime         @default(now())
+  offers            CommercialOffer[]
+
+  @@unique([orderId, version, artisanProfileId])
+  @@index([orderId, createdAt])
+}
+
+model AssistedOfferDecision {
+  id                   String          @id @default(cuid())
+  offerId              String          @unique
+  offer                CommercialOffer @relation(fields: [offerId], references: [id], onDelete: Restrict)
+  artisanProfileId     String
+  reportedDecision     String
+  method               String
+  evidenceReference    String
+  verificationStatus   String
+  recordedById         String
+  recordedBy           User            @relation("AssistedDecisionRecorder", fields: [recordedById], references: [id], onDelete: Restrict)
+  createdAt            DateTime        @default(now())
+
+  @@index([artisanProfileId])
+}
+
+model ProcurementQuoteRejection {
+  id        String           @id @default(cuid())
+  quoteId   String           @unique
+  quote     ProcurementQuote @relation(fields: [quoteId], references: [id], onDelete: Restrict)
+  actorId   String
+  actor     User             @relation("QuoteRejector", fields: [actorId], references: [id], onDelete: Restrict)
+  reason    String
+  createdAt DateTime         @default(now())
+}
+
+model EffortAssumption {
+  id           String                  @id @default(cuid())
+  craftSkillId String
+  craftSkill   CraftSkill              @relation(fields: [craftSkillId], references: [id], onDelete: Restrict)
+  unitType     String
+  minPerUnit   Decimal                 @db.Decimal(12, 2)
+  maxPerUnit   Decimal                 @db.Decimal(12, 2)
+  effortUnit   String                  @default("HOURS")
+  source       String
+  version      Int
+  status       String                  @default("APPROVED")
+  authorId     String
+  author       User                    @relation("EffortAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  createdAt    DateTime                @default(now())
+  assessments  FeasibilityAssessment[]
+
+  @@unique([craftSkillId, unitType, version])
+}
+
+model FeasibilityAssessment {
+  id                   String            @id @default(cuid())
+  rfqId                String
+  rfq                  CommercialRfq     @relation(fields: [rfqId], references: [id], onDelete: Restrict)
+  version              Int
+  rfqVersion           Int
+  result               String
+  unitType             String
+  requestedQuantity    Decimal           @db.Decimal(12, 2)
+  knownRemaining       Decimal?          @db.Decimal(12, 2)
+  shortage             Decimal?          @db.Decimal(12, 2)
+  effortMin            Decimal?          @db.Decimal(12, 2)
+  effortMax            Decimal?          @db.Decimal(12, 2)
+  effortAssumptionId   String?
+  effortAssumption     EffortAssumption? @relation(fields: [effortAssumptionId], references: [id], onDelete: Restrict)
+  constraints          Json
+  explanation          String
+  assumptions          Json
+  authorId             String
+  author               User              @relation("FeasibilityAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  createdAt            DateTime          @default(now())
+  costs                CostEstimate[]
+  quotes               ProcurementQuote[]
+
+  @@unique([rfqId, version])
+  @@index([rfqId, createdAt])
+}
+
+model CostEstimate {
+  id                        String                @id @default(cuid())
+  rfqId                     String
+  rfq                       CommercialRfq         @relation(fields: [rfqId], references: [id], onDelete: Restrict)
+  version                   Int
+  feasibilityAssessmentId   String
+  feasibilityAssessment     FeasibilityAssessment @relation(fields: [feasibilityAssessmentId], references: [id], onDelete: Restrict)
+  quantity                  Int
+  currency                  String                @default("TND")
+  components                Json
+  subtotalMillimes          BigInt
+  marginMethod              String
+  marginBasisPoints         Int
+  sellingMillimes           BigInt?
+  taxStatus                 String                @default("PENDING_LEGAL_REVIEW")
+  incomplete                Boolean
+  status                    String                @default("DRAFT")
+  authorId                  String
+  author                    User                  @relation("CostAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  snapshot                  Json
+  createdAt                 DateTime              @default(now())
+  quotes                    ProcurementQuote[]
+
+  @@unique([rfqId, version])
+  @@index([rfqId, createdAt])
+}
+
+model ProcurementAcceptance {
+  id        String           @id @default(cuid())
+  quoteId   String           @unique
+  quote     ProcurementQuote @relation(fields: [quoteId], references: [id], onDelete: Restrict)
+  orderId   String           @unique
+  order     CommercialOrder  @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  actorId   String
+  actor     User             @relation("QuoteSignatory", fields: [actorId], references: [id], onDelete: Restrict)
+  snapshot  Json
+  createdAt DateTime         @default(now())
+}
+
+model ApprovedProductVersion {
+  id                  String            @id @default(cuid())
+  sourceRfqId         String
+  sourceRfq           CommercialRfq     @relation("ProductSource", fields: [sourceRfqId], references: [id], onDelete: Restrict)
+  sourceOrderId       String
+  sourceOrder         CommercialOrder   @relation(fields: [sourceOrderId], references: [id], onDelete: Restrict)
+  sampleId            String
+  sample              ProcurementSample @relation(fields: [sampleId], references: [id], onDelete: Restrict)
+  authorId            String
+  author              User              @relation("ProductAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  productCode         String
+  version             Int
+  status              String            @default("ACTIVE")
+  snapshot            Json
+  materials           String
+  leadTimeDays        Int
+  leadTimeSampleCount Int
+  leadTimeContext     String
+  createdAt           DateTime          @default(now())
+  requests            CommercialRfq[]   @relation("ReorderSource")
+
+  @@unique([sourceRfqId, productCode, version])
+  @@index([sourceRfqId, status])
+}
+
+model ProcurementDocument {
+  id        String           @id @default(cuid())
+  number    Int              @unique @default(autoincrement())
+  rfqId     String
+  rfq       CommercialRfq    @relation(fields: [rfqId], references: [id], onDelete: Restrict)
+  orderId   String?
+  order     CommercialOrder? @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  authorId  String
+  author    User             @relation("DocumentAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  kind      String
+  version   Int
+  status    String           @default("FINAL")
+  content   Json
+  createdAt DateTime         @default(now())
+
+  @@unique([rfqId, kind, version])
+}
+
+model Shipment {
+  id              String                     @id @default(cuid())
+  orderId         String
+  order           CommercialOrder            @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  status          String                     @default("PICKUP_SCHEDULED")
+  version         Int                        @default(1)
+  hub             String
+  destination     String
+  provenance      String                     @default("SYNTHETIC")
+  actorId         String
+  actor           User                       @relation("ShipmentCreator", fields: [actorId], references: [id], onDelete: Restrict)
+  createdAt       DateTime                   @default(now())
+  items           ShipmentItem[]
+  pickups         PickupSchedule[]
+  handovers       CustodyHandover[]
+  deliveryReport  DeliveryReport?
+  buyerConfirmation BuyerDeliveryConfirmation?
+
+  @@index([orderId, createdAt])
+}
+
+model ShipmentItem {
+  id                 String                  @id @default(cuid())
+  shipmentId         String
+  shipment           Shipment                @relation(fields: [shipmentId], references: [id], onDelete: Restrict)
+  preparationItemId  String
+  preparationItem    ShipmentPreparationItem @relation(fields: [preparationItemId], references: [id], onDelete: Restrict)
+  quantity           Int
+
+  @@unique([shipmentId, preparationItemId])
+  @@index([preparationItemId])
+}
+
+model PickupSchedule {
+  id                         String       @id @default(cuid())
+  shipmentId                 String
+  shipment                   Shipment     @relation(fields: [shipmentId], references: [id], onDelete: Restrict)
+  associationOrganizationId  String
+  association                Organization @relation(fields: [associationOrganizationId], references: [id], onDelete: Restrict)
+  hub                        String
+  windowStart                DateTime
+  windowEnd                  DateTime
+  coordinatorId              String
+  coordinator                User         @relation("PickupCoordinator", fields: [coordinatorId], references: [id], onDelete: Restrict)
+  operatorId                 String
+  operator                   User         @relation("PickupOperator", fields: [operatorId], references: [id], onDelete: Restrict)
+  quantity                   Int
+  unit                       String       @default("PIECES")
+  note                       String       @default("")
+  actorId                    String
+  actor                      User         @relation("PickupRecorder", fields: [actorId], references: [id], onDelete: Restrict)
+  createdAt                  DateTime     @default(now())
+
+  @@index([shipmentId, createdAt])
+  @@index([associationOrganizationId, createdAt])
+}
+
+model CustodyHandover {
+  id                   String           @id @default(cuid())
+  shipmentId           String
+  shipment             Shipment         @relation(fields: [shipmentId], references: [id], onDelete: Restrict)
+  eventType            String
+  sourceHolder         String
+  destinationHolder    String
+  actorId              String
+  actor                User             @relation("CustodyActor", fields: [actorId], references: [id], onDelete: Restrict)
+  quantity             Int
+  unit                 String           @default("PIECES")
+  occurredAt           DateTime
+  recordedAt           DateTime         @default(now())
+  provenance           String           @default("SYNTHETIC")
+  confirmationStatus   String
+  priorHandoverId      String?          @unique
+  priorHandover        CustodyHandover? @relation("HandoverConfirmation", fields: [priorHandoverId], references: [id], onDelete: Restrict)
+  confirmation         CustodyHandover? @relation("HandoverConfirmation")
+  correlationId        String
+  note                 String           @default("")
+
+  @@index([shipmentId, recordedAt])
+}
+
+model DeliveryReport {
+  id         String   @id @default(cuid())
+  shipmentId String   @unique
+  shipment   Shipment @relation(fields: [shipmentId], references: [id], onDelete: Restrict)
+  quantity   Int
+  actorId    String
+  actor      User     @relation("DeliveryReporter", fields: [actorId], references: [id], onDelete: Restrict)
+  occurredAt DateTime
+  note       String   @default("")
+  provenance String   @default("SYNTHETIC")
+  createdAt  DateTime @default(now())
+}
+
+model BuyerDeliveryConfirmation {
+  id          String               @id @default(cuid())
+  shipmentId  String               @unique
+  shipment    Shipment             @relation(fields: [shipmentId], references: [id], onDelete: Restrict)
+  received    Int
+  accepted    Int
+  missing     Int
+  damaged     Int                      @default(0)
+  actorId     String
+  actor       User                 @relation("BuyerReceiptActor", fields: [actorId], references: [id], onDelete: Restrict)
+  occurredAt  DateTime
+  note        String               @default("")
+  provenance  String               @default("SYNTHETIC")
+  createdAt   DateTime             @default(now())
+  discrepancy DeliveryDiscrepancy?
+  feedback    BuyerOrderFeedback[] @relation("BuyerFeedbackReceipt")
+}
+
+model DeliveryDiscrepancy {
+  id             String                     @id @default(cuid())
+  confirmationId String                     @unique
+  confirmation   BuyerDeliveryConfirmation  @relation(fields: [confirmationId], references: [id], onDelete: Restrict)
+  quantity       Int
+  status         String                     @default("OPEN")
+  note           String                     @default("")
+  createdAt      DateTime                   @default(now())
+}
+
+model TraceabilityPublication {
+  id            String                  @id @default(cuid())
+  orderId       String
+  order         CommercialOrder         @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  publicToken   String                  @unique
+  status        String                  @default("DRAFT")
+  version       Int                     @default(1)
+  productTitle  String
+  craftName     String
+  story         String
+  coarseRegion  String
+  actorId       String
+  actor         User                    @relation("TraceabilityAuthor", fields: [actorId], references: [id], onDelete: Restrict)
+  createdAt     DateTime                @default(now())
+  updatedAt     DateTime                @updatedAt
+  revisions     TraceabilityRevision[]
+
+  @@index([orderId])
+}
+
+model TraceabilityRevision {
+  id             String                   @id @default(cuid())
+  publicationId  String
+  publication    TraceabilityPublication  @relation(fields: [publicationId], references: [id], onDelete: Restrict)
+  version        Int
+  status         String
+  snapshot       Json
+  actorId        String
+  actor          User                     @relation("TraceabilityReviewer", fields: [actorId], references: [id], onDelete: Restrict)
+  reason         String                   @default("")
+  createdAt      DateTime                 @default(now())
+  share          ProducerShareSnapshot?
+
+  @@unique([publicationId, version])
+}
+
+model ProducerSharePolicy {
+  version                 Int      @id
+  name                    String
+  numeratorDefinition     String
+  denominatorDefinition   String
+  taxTreatment            String
+  refundTreatment         String
+  partialTreatment        String
+  createdAt               DateTime @default(now())
+}
+
+model ProducerShareSnapshot {
+  id                   String                @id @default(cuid())
+  revisionId           String                @unique
+  revision             TraceabilityRevision  @relation(fields: [revisionId], references: [id], onDelete: Restrict)
+  policyVersion        Int
+  basis                String
+  numeratorMillimes    BigInt
+  denominatorMillimes  BigInt
+  basisPoints          Int?
+  availability         String
+  artisanCount         Int
+  provenance           String                @default("SYNTHETIC")
+}
+
+model ArtisanPayable {
+ contractualDates ContractualDueDate[]
+  id                String           @id @default(cuid())
+  offerId           String?
+  offer             CommercialOffer? @relation(fields: [offerId], references: [id], onDelete: Restrict)
+  orderId           String?
+  order             CommercialOrder? @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  batchId           String?
+  batch             CommercialBatch? @relation(fields: [batchId], references: [id], onDelete: Restrict)
+  artisanProfileId  String
+  artisanProfile    ArtisanProfile   @relation(fields: [artisanProfileId], references: [id], onDelete: Restrict)
+  milestone         String
+  policyVersion     Int
+  quantity          Int
+  unitPayMillimes   BigInt
+  amountMillimes    BigInt
+  currency          String           @default("TND")
+  status            String           @default("RECOGNIZED")
+  sourceEventId     String
+  termsSnapshot     String
+  provenance        String           @default("SYNTHETIC")
+  createdAt         DateTime         @default(now())
+  settlements       SimulatedSettlement[]
+  // Real payout evidence. `PayoutRequest_payableId_fkey` already exists in the database
+  // (20261027080000_financial_controls); these back-relations expose it to Prisma so verified
+  // payment evidence can be read from the payable without a schema migration.
+  payouts           PayoutRequest[]
+  sampleRequestId   String? @unique
+  sampleRequest     ProductSampleRequest? @relation("SampleLedger", fields: [sampleRequestId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+
+  @@unique([batchId, milestone, sourceEventId])
+  @@index([orderId])
+  @@index([artisanProfileId])
+}
+
+model SimulatedSettlement {
+  id             String                     @id @default(cuid())
+  orderId        String
+  order          CommercialOrder            @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  payableId      String?
+  payable        ArtisanPayable?            @relation(fields: [payableId], references: [id], onDelete: Restrict)
+  subjectKey     String
+  side           String
+  attempt        Int
+  status         String
+  amountMillimes BigInt
+  dueAt          DateTime
+  provenance     String                     @default("SYNTHETIC")
+  bankVerified   Boolean                    @default(false)
+  createdAt      DateTime                   @default(now())
+  events         SimulatedSettlementEvent[]
+
+  @@unique([subjectKey, side, attempt])
+  @@index([orderId, createdAt])
+}
+
+model SimulatedSettlementEvent {
+  id           String               @id @default(cuid())
+  settlementId String
+  settlement   SimulatedSettlement @relation(fields: [settlementId], references: [id], onDelete: Restrict)
+  status       String
+  actorId      String
+  actor        User                 @relation("SettlementActor", fields: [actorId], references: [id], onDelete: Restrict)
+  note         String               @default("")
+  createdAt    DateTime             @default(now())
+
+  @@index([settlementId, createdAt])
+}
+
+// Integer thousandths; receipt provenance cannot be escalated without an approved policy.
+model MaterialLot {
+  id String @id @default(cuid())
+  organizationId String
+  materialCode String
+  name String
+  unit String
+  lotReference String
+  supplierReference String
+  evidenceReference String
+  provenance String
+  actorId String
+  receivedAt DateTime @default(now())
+  warehouse String @default("Organization controlled stock")
+  receivedMilli BigInt
+  availableMilli BigInt
+  reservedMilli BigInt @default(0)
+  issuedMilli BigInt @default(0)
+  consumedMilli BigInt @default(0)
+  damagedMilli BigInt @default(0)
+  returnedMilli BigInt @default(0)
+  quarantineMilli BigInt @default(0)
+  createdAt DateTime @default(now())
+  @@unique([organizationId, lotReference])
+  @@index([organizationId, materialCode])
+}
+model InventoryMovement {
+  id String @id @default(cuid())
+  lotId String
+  actorId String
+  kind String
+  quantityMilli BigInt
+  referenceId String
+  reason String
+  createdAt DateTime @default(now())
+  @@index([lotId, createdAt])
+}
+model MaterialReservation {
+  id String @id @default(cuid())
+  lotId String
+  batchId String
+  requirementId String
+  quantityMilli BigInt
+  remainingMilli BigInt
+  status String @default("RESERVED")
+  actorId String
+  reason String
+  createdAt DateTime @default(now())
+  @@index([batchId])
+  @@index([lotId])
+}
+model MaterialHandover {
+  id String @id @default(cuid())
+  reservationId String
+  lotId String
+  batchId String
+  artisanProfileId String
+  receiverOrganizationId String
+  actorId String
+  quantityMilli BigInt
+  consumedMilli BigInt @default(0)
+  returnedMilli BigInt @default(0)
+  status String @default("PENDING_RECEIVER_CONFIRMATION")
+  evidenceReference String
+  occurredAt DateTime
+  createdAt DateTime @default(now())
+  @@index([receiverOrganizationId, createdAt])
+  @@index([batchId])
+}
+model MaterialReceipt {
+  id String @id @default(cuid())
+  handoverId String @unique
+  artisanProfileId String
+  actorId String
+  receivedMilli BigInt
+  damagedMilli BigInt
+  shortageMilli BigInt
+  method String
+  source String
+  verificationStatus String
+  evidenceReference String
+  note String
+  createdAt DateTime @default(now())
+}
+model MaterialReturn {
+  id String @id @default(cuid())
+  handoverId String
+  lotId String
+  quantityMilli BigInt
+  condition String
+  reason String
+  evidenceReference String
+  actorId String
+  disposition String @default("AWAITING_INSPECTION")
+  dispositionActorId String?
+  dispositionReason String?
+  createdAt DateTime @default(now())
+  @@index([lotId])
+}
+
+model BuyerDepositRecord {
+  id String @id @default(cuid())
+  orderId String
+  buyerOrganizationId String
+  expectedMillimes BigInt
+  amountMillimes BigInt
+  paymentReference String
+  paymentDate DateTime
+  evidence String
+  provenance String
+  status String @default("PENDING_VERIFICATION")
+  actorId String
+  reviewerId String?
+  reason String @default("")
+  @@unique([buyerOrganizationId, paymentReference])
+  @@index([orderId])
+  createdAt DateTime @default(now())
+}
+
+model PayoutRequest {
+  id String @id @default(cuid())
+  orderId String
+  payableId String
+  payable ArtisanPayable @relation(fields: [payableId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  executions PayoutExecutionRecord[]
+  amountMillimes BigInt
+  payableSnapshotMillimes BigInt
+  requesterId String
+  approverId String?
+  approvedAt DateTime?
+  reason String
+  policyVersion Int @default(1)
+  status String @default("REQUESTED")
+  @@index([orderId])
+  @@index([payableId])
+  createdAt DateTime @default(now())
+}
+
+model PayoutExecutionRecord {
+  id String @id @default(cuid())
+  payoutId String
+  payout PayoutRequest @relation(fields: [payoutId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  amountMillimes BigInt
+  reference String @unique
+  evidence String
+  occurredAt DateTime
+  actorId String
+  status String
+  bankVerified Boolean @default(false)
+  @@index([payoutId])
+  createdAt DateTime @default(now())
+}
+
+model PaymentDispute {
+  responseDueAt DateTime
+  escalation String @default("FINANCE_REVIEW_QUEUE")
+  id String @id @default(cuid())
+  orderId String
+  batchId String
+  payableId String?
+  artisanProfileId String
+  amountMillimes BigInt
+  reason String
+  description String
+  evidence String
+  actorId String
+  handlerId String?
+  status String @default("OPEN")
+  @@index([orderId])
+  @@index([artisanProfileId])
+  createdAt DateTime @default(now())
+}
+
+model FinancialAdjustment {
+  snapshot Json
+  evidence String
+  direction String @default("REVIEW_ONLY")
+  id String @id @default(cuid())
+  orderId String
+  amountMillimes BigInt
+  kind String
+  reason String
+  makerId String
+  checkerId String?
+  status String @default("PENDING_REVIEW")
+  @@index([orderId])
+  createdAt DateTime @default(now())
+}
+
+model FinanceRecordEvent {
+  orderId String?
+  order CommercialOrder? @relation(fields:[orderId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+  sourceKey String? @unique
+  data Json?
+  id String @id @default(cuid())
+  targetId String
+  targetType String
+  actorId String
+  status String
+  reason String
+  @@index([targetId, createdAt])
+  createdAt DateTime @default(now())
+}
+
+model OrderClosureAssessment {
+  snapshot Json
+  id String @id @default(cuid())
+  orderId String
+  actorId String
+  status String
+  blockers Json
+  @@index([orderId])
+  createdAt DateTime @default(now())
+}
+
+
+model MaterialReconciliation {
+ id String @id @default(cuid())
+ handoverId String @unique
+ actorId String
+ reason String
+ shortageDisposition String @default("LOSS_SEGREGATED")
+ createdAt DateTime @default(now())
+}
+
+// Operational projection, separate from immutable original release requirements.
+model MaterialReadiness {
+ id String @id @default(cuid())
+ requirementId String @unique
+ batchId String
+ materialCode String
+ readiness String
+ updatedAt DateTime @updatedAt
+ @@unique([batchId, materialCode])
+}
+
+model DemoVisitor {
+ scenarios DemoScenario[] @relation("OwnedDemoScenarios")
+ feedback DemoFeedback[] @relation("DemoFeedbackVisitor")
+ activeScenario DemoScenario? @relation("ActiveDemoScenario", fields: [activeScenarioId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+ commands DemoCommand[]
+ id String @id @default(cuid())
+ tokenHash String @unique
+ activeScenarioId String? @unique
+ sessionEpoch Int @default(0)
+ createdAt DateTime @default(now())
+ expiresAt DateTime
+}
+model DemoScenario {
+ visitor DemoVisitor @relation("OwnedDemoScenarios", fields: [visitorId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+ activeVisitor DemoVisitor? @relation("ActiveDemoScenario")
+ rfq CommercialRfq @relation(fields: [rfqId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+ identities DemoIdentity[]
+ commands DemoCommand[]
+ feedback BuyerOrderFeedback[] @relation("BuyerFeedbackScenario")
+ demoFeedback DemoFeedback[] @relation("DemoFeedbackScenario")
+ id String @id @default(cuid())
+ visitorId String
+ generation Int
+ version Int
+ status String @default("ACTIVE")
+ seedSpec Json
+ organizationIds Json
+ rfqId String @unique
+ createdAt DateTime @default(now())
+ archivedAt DateTime?
+ @@unique([visitorId,generation])
+ @@index([visitorId,status])
+}
+model DemoIdentity {
+ scenario DemoScenario @relation(fields: [scenarioId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+ user User @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+ id String @id @default(cuid())
+ scenarioId String
+ userId String @unique
+ persona String
+ @@unique([scenarioId,persona])
+}
+model DemoCommand {
+ visitor DemoVisitor @relation(fields: [visitorId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+ scenario DemoScenario @relation(fields: [scenarioId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+ id String @id @default(cuid())
+ visitorId String
+ keyHash String
+ operation String
+ payloadHash String
+ scenarioId String
+ // Set only for an idempotent showroom feedback submission.
+ feedbackId String?
+ createdAt DateTime @default(now())
+ @@unique([visitorId,keyHash])
+}
+
+/* ---------------------------------------------------------------- Batch 8: production planning
+ * Explainable recommendations, reviewed multi-group allocations, human overrides and schedule
+ * scenarios. Recommendations and simulations are advisory; artisan acceptance remains the only
+ * way capacity becomes committed.
+ */
+
+model RecommendationPolicy {
+  id        String   @id @default(cuid())
+  version   Int      @unique
+  name      String
+  inputs    Json
+  excluded  Json
+  active    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  snapshots RecommendationSnapshot[]
+}
+
+model RecommendationSnapshot {
+  id               String               @id @default(cuid())
+  policyId         String
+  policy           RecommendationPolicy @relation(fields: [policyId], references: [id], onDelete: Restrict)
+  orderId          String
+  order            CommercialOrder      @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  requiredQuantity Int
+  craftSkillId     String
+  candidates       Json
+  suggestion       Json
+  limitations      Json
+  authorId         String
+  author           User                 @relation("RecommendationAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  createdAt        DateTime             @default(now())
+  plans            AllocationPlan[]
+
+  @@index([orderId, createdAt])
+}
+
+model AllocationPlan {
+  id                  String                 @id @default(cuid())
+  orderId             String
+  order               CommercialOrder        @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  version             Int                    @default(1)
+  state               String                 @default("DRAFT")
+  requiredQuantity    Int
+  materialAssumptions Json @default("{}")
+  policyVersion       Int
+  recommendationId    String?
+  recommendation      RecommendationSnapshot? @relation(fields: [recommendationId], references: [id], onDelete: Restrict)
+  authorId            String
+  author              User                   @relation("AllocationPlanAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  reviewedById        String?
+  reviewedBy          User?                  @relation("AllocationPlanReviewer", fields: [reviewedById], references: [id], onDelete: Restrict)
+  reviewedAt          DateTime?
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @updatedAt
+  items               AllocationPlanItem[]
+  overrides           AllocationOverride[]
+
+  @@unique([orderId, version])
+  @@index([orderId, state])
+}
+
+model AllocationPlanItem {
+  id               String         @id @default(cuid())
+  planId           String
+  plan             AllocationPlan @relation(fields: [planId], references: [id], onDelete: Restrict)
+  artisanProfileId String
+  artisanProfile   ArtisanProfile @relation(fields: [artisanProfileId], references: [id], onDelete: Restrict)
+  quantity         Int
+  state            String         @default("DRAFT")
+  offerId          String?        @unique
+  offer            CommercialOffer? @relation(fields: [offerId], references: [id], onDelete: Restrict)
+  releasedQuantity Int            @default(0)
+  replacementForId String?        @unique
+  replacementFor   AllocationPlanItem? @relation("AllocationReplacement", fields: [replacementForId], references: [id], onDelete: Restrict)
+  replacedBy       AllocationPlanItem? @relation("AllocationReplacement")
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  @@unique([planId, artisanProfileId])
+  @@index([planId, state])
+  @@index([artisanProfileId, state])
+}
+
+model AllocationOverride {
+  id                     String         @id @default(cuid())
+  planId                 String
+  plan                   AllocationPlan @relation(fields: [planId], references: [id], onDelete: Restrict)
+  originalRecommendation Json
+  selectedAlternative    Json
+  actingUserId           String
+  actingUser             User           @relation("OverrideActor", fields: [actingUserId], references: [id], onDelete: Restrict)
+  businessScope          String
+  explanation            String
+  decisionVersion        Int
+  createdAt              DateTime       @default(now())
+
+  @@index([planId, createdAt])
+}
+
+model ScheduleScenario {
+  id               String          @id @default(cuid())
+  orderId          String
+  order            CommercialOrder @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  planId           String?
+  name             String
+  requiredQuantity Int
+  startDate        DateTime
+  deadline         DateTime
+  result           Json
+  assumptions      Json
+  policyVersion    Int
+  authorId         String
+  author           User            @relation("ScheduleScenarioAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  createdAt        DateTime        @default(now())
+
+  @@index([orderId, createdAt])
+}
+
+/* ---------------------------------------------------------------- Batch 9: product catalog
+ * Versioned product specifications with append-only revision history, paid sample terms and a
+ * single coherent buyer sample approval. Existing ProcurementRevision/ProcurementSample stay the
+ * authority for an accepted order's design evidence; these models add the design lifecycle those
+ * records reference, without creating a second product truth.
+ */
+
+model ProductSpecification {
+  id           String   @id @default(cuid())
+  craftSkillId String
+  craftSkill   CraftSkill @relation(fields: [craftSkillId], references: [id], onDelete: Restrict)
+  productCode  String
+  name         String
+  ownerOrganizationId String
+  ownerOrganization Organization @relation("ProductOwner", fields: [ownerOrganizationId], references: [id], onDelete: Restrict)
+  authorId     String
+  author       User     @relation("SpecAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  revisions    ProductSpecificationRevision[]
+
+  @@unique([ownerOrganizationId, productCode])
+  @@index([craftSkillId])
+}
+
+model ProductSpecificationRevision {
+ pilotProposalRevisions PilotProposalRevision[]
+  id             String               @id @default(cuid())
+  specificationId String
+  specification  ProductSpecification @relation(fields: [specificationId], references: [id], onDelete: Restrict)
+  revisionNumber Int
+  status         String               @default("DRAFT")
+  description    String
+  dimensions     String               @default("")
+  unit           String               @default("cm")
+  materials      Json
+  instructions   String
+  instructionLanguage String @default("en")
+  instructionTranslations Json @default("[]")
+  tolerances     String               @default("")
+  qualityCriteria String
+  referenceImages Json
+  sampleReference String?
+  authorId       String
+  author         User                 @relation("SpecRevisionAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  submittedById  String?
+  submittedBy    User?                @relation("SpecRevisionSubmitter", fields: [submittedById], references: [id], onDelete: Restrict)
+  submittedAt    DateTime?
+  approvedById   String?
+  approvedBy     User?                @relation("SpecRevisionApprover", fields: [approvedById], references: [id], onDelete: Restrict)
+  approvedAt     DateTime?
+  rejectionReason String               @default("")
+  supersededById String?               @unique
+  supersededBy   ProductSpecificationRevision? @relation("SpecSupersession", fields: [supersededById], references: [id], onDelete: Restrict)
+  supersedes     ProductSpecificationRevision? @relation("SpecSupersession")
+  createdAt      DateTime             @default(now())
+  samples        ProductSampleRequest[]
+  approvals      BuyerSampleApproval[]
+
+  @@unique([specificationId, revisionNumber])
+  @@index([specificationId, status])
+  orders                CommercialOrder[]
+}
+
+model ProductSampleRequest {
+  id                String   @id @default(cuid())
+  specificationRevisionId String
+  specificationRevision ProductSpecificationRevision @relation(fields: [specificationRevisionId], references: [id], onDelete: Restrict)
+  buyerOrganizationId String
+  buyerOrganization Organization @relation("SampleBuyer", fields: [buyerOrganizationId], references: [id], onDelete: Restrict)
+  operatorOrganizationId String
+  operatorOrganization Organization @relation("SampleOperator", fields: [operatorOrganizationId], references: [id], onDelete: Restrict)
+  sampleQuantity    Int
+  responsibleArtisanProfileId String?
+  responsibleArtisan ArtisanProfile? @relation(fields: [responsibleArtisanProfileId], references: [id], onDelete: Restrict)
+  status            String   @default("REQUESTED")
+  workTerms         String
+  compensationMillimes BigInt?
+  compensationBasis String   @default("UNPAID_BY_DEFAULT_BLOCKED")
+  materialResponsibility String
+  plannedCompletion DateTime?
+  actualRecordedMinutes Int?
+  actualMaterialCostMillimes BigInt?
+  actualMaterialUsage String @default("")
+  timeEvidence      String   @default("SYNTHETIC")
+  evidenceReference String   @default("")
+  authorId          String
+  author            User     @relation("SampleRequestAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  evaluations       SampleEvaluation[]
+  approvals         BuyerSampleApproval[]
+
+  @@index([buyerOrganizationId, status])
+  @@index([specificationRevisionId])
+  payables            SamplePayable[]
+  materialCostMillimes BigInt?
+  termsSha256 String?
+  acceptedTermsSha256 String?
+  acceptedById String?
+  acceptedBy User? @relation("SampleTermsAcceptor", fields: [acceptedById], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "sample_acceptor_user_fk")
+  acceptedAt DateTime?
+  reimburseMaterials Boolean @default(false)
+  ledgerPayable ArtisanPayable? @relation("SampleLedger")
+}
+
+model SampleEvaluation {
+  id           String   @id @default(cuid())
+  sampleRequestId String
+  sampleRequest ProductSampleRequest @relation(fields: [sampleRequestId], references: [id], onDelete: Restrict)
+  decision     String
+  criteria     String
+  comments     String   @default("")
+  evidenceReference String
+  inspectorId  String
+  inspector    User     @relation("SampleInspector", fields: [inspectorId], references: [id], onDelete: Restrict)
+  createdAt    DateTime @default(now())
+
+  @@index([sampleRequestId, createdAt])
+}
+
+model BuyerSampleApproval {
+  id               String   @id @default(cuid())
+  sampleRequestId  String
+  sampleRequest    ProductSampleRequest @relation(fields: [sampleRequestId], references: [id], onDelete: Restrict)
+  specificationRevisionId String
+  specificationRevision ProductSpecificationRevision @relation(fields: [specificationRevisionId], references: [id], onDelete: Restrict)
+  buyerOrganizationId String
+  buyerOrganization Organization @relation("SampleApprovalBuyer", fields: [buyerOrganizationId], references: [id], onDelete: Restrict)
+  actorId          String
+  actor            User     @relation("SampleApprovalActor", fields: [actorId], references: [id], onDelete: Restrict)
+  decision         String
+  comments         String   @default("")
+  evidenceReference String
+  amendmentOfId    String?  @unique
+  amendmentOf      BuyerSampleApproval? @relation("SampleApprovalAmendment", fields: [amendmentOfId], references: [id], onDelete: Restrict)
+  amendedBy        BuyerSampleApproval? @relation("SampleApprovalAmendment")
+  createdAt        DateTime @default(now())
+
+  procurementProjections ProcurementSample[]
+
+  @@index([buyerOrganizationId, createdAt])
+}
+
+/* ---------------------------------------------------------------- Batch 11: collaboration
+ * Order-linked discussion, production exceptions, schedule revisions, counteroffers, availability
+ * pauses and support cases. Every record keeps the reporter's original statement; a coordinator can
+ * add to a report but never overwrite the artisan's own account of it.
+ */
+
+model OrderDiscussion {
+  id        String          @id @default(cuid())
+  orderId   String
+  order     CommercialOrder @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  scope     String          @default("BUYER")
+  authorId  String
+  author    User            @relation("DiscussionAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  authorOrganizationId String?
+  authorOrganization Organization? @relation(fields: [authorOrganizationId], references: [id], onDelete: Restrict)
+  body      String
+  createdAt DateTime        @default(now())
+  messages  DiscussionMessage[]
+
+  @@index([orderId, createdAt])
+}
+
+model DiscussionMessage {
+  id            String          @id @default(cuid())
+  discussionId  String
+  discussion    OrderDiscussion @relation(fields: [discussionId], references: [id], onDelete: Restrict)
+  authorId      String
+  author        User            @relation("DiscussionMessageAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  body          String
+  internalOnly  Boolean         @default(false)
+  createdAt     DateTime        @default(now())
+
+  @@index([discussionId, createdAt])
+}
+
+model ProductionException {
+  id               String   @id @default(cuid())
+  batchId          String
+  batch            CommercialBatch @relation(fields: [batchId], references: [id], onDelete: Restrict)
+  orderId          String
+  order            CommercialOrder @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  reporterId       String
+  reporter         User     @relation("ExceptionReporter", fields: [reporterId], references: [id], onDelete: Restrict)
+  reporterRole     String
+  category         String
+  severity         String
+  description      String
+  evidenceReference String  @default("")
+  status           String   @default("OPEN")
+  assignedCoordinatorId String?
+  assignedCoordinator User? @relation("ExceptionCoordinator", fields: [assignedCoordinatorId], references: [id], onDelete: Restrict)
+  resolution       String   @default("")
+  resolvedAt       DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([batchId, status])
+  @@index([orderId, status])
+  affectedQuantity  Int?
+  affectedDate      DateTime?
+}
+
+model ScheduleRevision {
+  id            String   @id @default(cuid())
+  batchId       String
+  batch         CommercialBatch @relation(fields: [batchId], references: [id], onDelete: Restrict)
+  orderId       String
+  order         CommercialOrder @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  proposedDeadline DateTime
+  previousDeadline DateTime
+  reason        String
+  impact        Json
+  status        String   @default("PENDING_APPROVAL")
+  authorId      String
+  author        User     @relation("ScheduleRevisionAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  approvedById  String?
+  approvedBy    User?    @relation("ScheduleRevisionApprover", fields: [approvedById], references: [id], onDelete: Restrict)
+  approvedAt    DateTime?
+  buyerApprovedById String?
+  buyerApprovedBy User?  @relation("ScheduleRevisionBuyer", fields: [buyerApprovedById], references: [id], onDelete: Restrict)
+  buyerApprovedAt DateTime?
+  artisanApprovedById String?
+  artisanApprovedBy User? @relation("ScheduleRevisionArtisan", fields: [artisanApprovedById], references: [id], onDelete: Restrict)
+  artisanApprovedAt DateTime?
+  createdAt     DateTime @default(now())
+
+  @@index([orderId, status])
+  @@index([batchId, createdAt])
+}
+
+model Counteroffer {
+  id            String   @id @default(cuid())
+  offerId       String
+  offer         CommercialOffer @relation(fields: [offerId], references: [id], onDelete: Restrict)
+  revisedOfferId String? @unique
+  revisedOffer CommercialOffer? @relation("RevisedCounterOffer", fields: [revisedOfferId], references: [id], onDelete: Restrict)
+  originalTerms Json?
+  proposedQuantity Int
+  proposedDeadline DateTime
+  clarification String   @default("")
+  status        String   @default("PROPOSED")
+  authorUserId  String
+  authorUser    User     @relation("CounterofferAuthor", fields: [authorUserId], references: [id], onDelete: Restrict)
+  reviewedById  String?
+  reviewedBy    User?    @relation("CounterofferReviewer", fields: [reviewedById], references: [id], onDelete: Restrict)
+  reviewNote    String   @default("")
+  acceptedById  String?
+  acceptedBy    User?    @relation("CounterofferAcceptor", fields: [acceptedById], references: [id], onDelete: Restrict)
+  acceptedAt    DateTime?
+  createdAt     DateTime @default(now())
+
+  @@index([offerId, status])
+}
+
+model AvailabilityPause {
+  id               String   @id @default(cuid())
+  artisanProfileId String
+  artisanProfile   ArtisanProfile @relation(fields: [artisanProfileId], references: [id], onDelete: Restrict)
+  reason           String
+  effectiveFrom    DateTime @default(now())
+  pausedAt         DateTime @default(now())
+  resumedAt        DateTime?
+  resumedById      String?
+  resumedBy        User?    @relation("PauseResumer", fields: [resumedById], references: [id], onDelete: Restrict)
+  actorId          String
+  actor            User     @relation("PauseAuthor", fields: [actorId], references: [id], onDelete: Restrict)
+
+  @@index([artisanProfileId, resumedAt])
+}
+
+model SupportTicket {
+  id             String   @id @default(cuid())
+  category       String
+  relatedType    String?
+  relatedId      String?
+  reporterId     String
+  reporter       User     @relation("TicketReporter", fields: [reporterId], references: [id], onDelete: Restrict)
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  description    String
+  evidenceReference String @default("")
+  privacyScope String @default("SUPPORT_ONLY")
+  attachments SupportTicketAttachment[]
+  priority       String   @default("NORMAL")
+  status         String   @default("OPEN")
+  ownerId        String?
+  owner          User?    @relation("TicketOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  dueAt          DateTime?
+  resolution     String   @default("")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  events         SupportTicketEvent[]
+  feedbackLinks  BuyerOrderFeedbackRevision[] @relation("BuyerFeedbackCaseLink")
+
+  @@index([organizationId, status])
+  @@index([reporterId, createdAt])
+}
+
+model SupportTicketEvent {
+  id        String   @id @default(cuid())
+  ticketId  String
+  ticket    SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Restrict)
+  actorId   String
+  actor     User     @relation("TicketEventActor", fields: [actorId], references: [id], onDelete: Restrict)
+  kind      String
+  detail    String
+  createdAt DateTime @default(now())
+
+  @@index([ticketId, createdAt])
+}
+
+model NotificationDelivery {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation("NotificationRecipient", fields: [userId], references: [id], onDelete: Restrict)
+  category     String
+  channel      String
+  subject      String
+  body         String
+  status       String   @default("PENDING")
+  provider     String   @default("IN_APP")
+  locale       String   @default("en")
+  attempts     Int      @default(1)
+  failureReason String  @default("")
+  createdAt    DateTime @default(now())
+  deliveredAt  DateTime?
+
+  @@index([userId, createdAt])
+  @@index([status, channel])
+}
+
+model SamplePayable {
+  id               String   @id @default(cuid())
+  sampleRequestId  String
+  sampleRequest    ProductSampleRequest @relation(fields: [sampleRequestId], references: [id], onDelete: Restrict)
+  offerId          String?
+  offer            CommercialOffer? @relation("SamplePayableOffer", fields: [offerId], references: [id], onDelete: Restrict)
+  artisanProfileId String
+  artisanProfile   ArtisanProfile @relation(fields: [artisanProfileId], references: [id], onDelete: Restrict)
+  milestone        String   @default("SAMPLE_ACCEPTED_TERMS")
+  amountMillimes   BigInt
+  currency         String   @default("TND")
+  status           String   @default("RECOGNIZED")
+  policyVersion    Int      @default(1)
+  sourceEventId    String
+  termsSnapshot    String
+  provenance       String   @default("SYNTHETIC")
+  createdAt        DateTime @default(now())
+
+  @@unique([sampleRequestId, milestone])
+  @@index([artisanProfileId])
+}
+
+/* Batch 10 completion: preserved forecasts, observed production time, deduplicated alerts. */
+
+model ForecastSnapshot {
+  id                String   @id @default(cuid())
+  batchId           String
+  batch             CommercialBatch @relation(fields: [batchId], references: [id], onDelete: Restrict)
+  ruleVersion       Int
+  forecastedFor     DateTime
+  assumptions       Json
+  evidence          String   @default("SYNTHETIC")
+  createdById       String?
+  createdBy         User?    @relation("ForecastAuthor", fields: [createdById], references: [id], onDelete: Restrict)
+  createdAt         DateTime @default(now())
+  comparisons       ForecastComparison[]
+
+  @@index([batchId, createdAt])
+}
+
+model ForecastComparison {
+  id              String   @id @default(cuid())
+  forecastId      String
+  forecast        ForecastSnapshot @relation(fields: [forecastId], references: [id], onDelete: Restrict)
+  actualCompletedAt DateTime
+  observedDifferenceDays Int
+  absoluteErrorDays Int
+  note            String   @default("")
+  createdAt       DateTime @default(now())
+
+  @@unique([forecastId])
+}
+
+model ProductionTimeRecord {
+  id               String   @id @default(cuid())
+  batchId          String
+  batch            CommercialBatch @relation(fields: [batchId], references: [id], onDelete: Restrict)
+  artisanProfileId String
+  artisanProfile   ArtisanProfile @relation(fields: [artisanProfileId], references: [id], onDelete: Restrict)
+  reportedById     String
+  reportedBy       User     @relation("TimeReporter", fields: [reportedById], references: [id], onDelete: Restrict)
+  consented        Boolean  @default(false)
+  periodFrom       DateTime
+  periodTo         DateTime
+  unitContext      String
+  observedUnits    Int @default(0)
+  observedMinutes  Int?
+  provenance       String @default("")
+  evidence         String   @default("SYNTHETIC")
+  correctionOfId   String?  @unique
+  correctionOf     ProductionTimeRecord? @relation("TimeCorrection", fields: [correctionOfId], references: [id], onDelete: Restrict)
+  correctedBy      ProductionTimeRecord? @relation("TimeCorrection")
+  createdAt        DateTime @default(now())
+
+  @@index([batchId, createdAt])
+}
+
+model BatchAlert {
+  id          String   @id @default(cuid())
+  batchId     String
+  batch       CommercialBatch @relation(fields: [batchId], references: [id], onDelete: Restrict)
+  ruleVersion Int
+  reasonHash  String
+  kind        String
+  facts       Json
+  ownerRole   String   @default("PRODUCTION_MANAGER")
+  status      String   @default("OPEN")
+  acknowledgedById String?
+  acknowledgedBy User? @relation("AlertAcknowledger", fields: [acknowledgedById], references: [id], onDelete: Restrict)
+  acknowledgedAt DateTime?
+  resolvedAt  DateTime?
+  createdAt   DateTime @default(now())
+
+  @@unique([batchId, ruleVersion, reasonHash])
+  @@index([status, createdAt])
+}
+
+model ReportingPolicy {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  version   Int
+  value     Json
+  reviewedById String?
+  reviewedBy User?  @relation("PolicyReviewer", fields: [reviewedById], references: [id], onDelete: Restrict)
+  createdAt DateTime @default(now())
+}
+
+model SupportTicketAttachment {
+  id String @id @default(cuid())
+  ticketId String
+  ticket SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  author User @relation("TicketAttachmentAuthor", fields: [authorId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  authorId String
+  filename String
+  mime String
+  bytes Bytes
+  sha256 String
+  createdAt DateTime @default(now())
+  @@index([ticketId, createdAt])
+}
+
+// Commercial relationship metadata; Organization remains the buyer identity authority.
+model CommercialProspect {
+ operatorOrganization Organization @relation("SalesOperator",fields:[operatorOrganizationId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ buyerOrganization Organization @relation("SalesBuyer",fields:[buyerOrganizationId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ id String @id @default(cuid())
+ operatorOrganizationId String
+ buyerOrganizationId String
+ version Int @default(1)
+ snapshot Json
+ createdAt DateTime @default(now())
+ revisions ProspectRevision[]
+ proposals PilotProposalRevision[]
+ @@unique([operatorOrganizationId,buyerOrganizationId])
+ @@index([operatorOrganizationId,createdAt])
+}
+model ProspectRevision {
+ actor User @relation(fields:[actorId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ id String @id @default(cuid())
+ prospectId String
+ prospect CommercialProspect @relation(fields:[prospectId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ version Int
+ snapshot Json
+ actorId String
+ createdAt DateTime @default(now())
+ @@unique([prospectId,version])
+}
+model PilotProposalRevision {
+ actor User @relation(fields:[actorId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ specificationRevision ProductSpecificationRevision @relation(fields:[specificationRevisionId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ rfq CommercialRfq? @relation(fields:[rfqId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ id String @id @default(cuid())
+ prospectId String
+ prospect CommercialProspect @relation(fields:[prospectId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ groupId String
+ version Int
+ specificationRevisionId String
+ rfqId String?
+ snapshot Json
+ actorId String
+ createdAt DateTime @default(now())
+ @@unique([groupId,version])
+ @@index([prospectId,createdAt])
+}
+
+// Evidence transcription/correction history; never changes an accepted agreement or verifies payment.
+model ContractualDueDate {
+ id String @id @default(cuid())
+ payableId String
+ payable ArtisanPayable @relation(fields:[payableId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ version Int
+ basis String
+ dueAt DateTime?
+ contractReference String
+ contractVersion String
+ payableTermsSha256 String
+ offerVersionAtRecording Int?
+ sourceEvidence String
+ evidenceStatus String @default("RECORDED_UNVERIFIED")
+ reason String
+ actorId String
+ actor User @relation(fields:[actorId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ correctionOfId String? @unique
+ correctionOf ContractualDueDate? @relation("ContractDateCorrection",fields:[correctionOfId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ correctedBy ContractualDueDate? @relation("ContractDateCorrection")
+ createdAt DateTime @default(now())
+ @@unique([payableId,version])
+}
+
+// E18-06 — private buyer order feedback. A satisfaction assessment is not a claim, settlement or
+// publication. The header pins order, reporter, receipt and provenance; every later change appends
+// a complete revision snapshot instead of rewriting an earlier statement.
+model BuyerOrderFeedback {
+  id                    String   @id @default(cuid())
+  orderId               String
+  order                 CommercialOrder @relation("BuyerFeedbackOrder", fields: [orderId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  reporterId            String
+  reporter              User     @relation("BuyerFeedbackReporter", fields: [reporterId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  receiptConfirmationId String
+  receiptConfirmation   BuyerDeliveryConfirmation @relation("BuyerFeedbackReceipt", fields: [receiptConfirmationId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  sourceClass           String
+  scenarioId            String?
+  scenario              DemoScenario? @relation("BuyerFeedbackScenario", fields: [scenarioId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  createdAt             DateTime @default(now())
+  currentVersion        Int      @default(1)
+  revisions             BuyerOrderFeedbackRevision[]
+
+  @@unique([orderId, reporterId])
+  @@index([orderId, createdAt, id])
+  @@index([reporterId, createdAt])
+}
+
+model BuyerOrderFeedbackRevision {
+  id                String   @id @default(cuid())
+  feedbackId        String
+  feedback          BuyerOrderFeedback @relation(fields: [feedbackId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  version           Int
+  kind              String
+  actorId           String
+  actor             User     @relation("BuyerFeedbackRevisionActor", fields: [actorId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  createdAt         DateTime @default(now())
+  category          String
+  rating            Int?
+  comment           String   @default("")
+  followUpStatus    String   @default("OPEN")
+  followUpOwnerId   String?
+  followUpOwner     User?    @relation("BuyerFeedbackFollowUpOwner", fields: [followUpOwnerId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  followUpNote      String   @default("")
+  linkedTicketId    String?
+  linkedTicket      SupportTicket? @relation("BuyerFeedbackCaseLink", fields: [linkedTicketId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  reason            String   @default("")
+
+  @@unique([feedbackId, version])
+  @@index([feedbackId, version])
+  @@index([followUpOwnerId])
+  @@index([linkedTicketId])
+}
+
+// E15-06 -- structured feedback about a synthetic demonstration. Deliberately separate from
+// BuyerOrderFeedback (a receipt-bound commercial buyer assessment) and from SupportTicket (a claim).
+// Deliberately never deleted on showroom reset: a reset archives the scenario, it does not remove it.
+model DemoFeedback {
+  id          String   @id @default(cuid())
+  scenarioId  String
+  scenario    DemoScenario @relation("DemoFeedbackScenario", fields: [scenarioId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  visitorId   String
+  visitor     DemoVisitor  @relation("DemoFeedbackVisitor", fields: [visitorId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  generation  Int
+  sourceClass String   @default("VISITOR_SUBMITTED")
+  screenKey   String
+  category    String
+  comment     String   @default("")
+  status      String   @default("NEW")
+  dedupeKey   String?
+  createdAt   DateTime @default(now())
+  events      DemoFeedbackEvent[]
+
+  @@index([scenarioId, createdAt, id])
+  @@index([status, createdAt])
+  @@index([visitorId, createdAt])
+}
+
+model DemoFeedbackEvent {
+  id         String   @id @default(cuid())
+  feedbackId String
+  feedback   DemoFeedback @relation(fields: [feedbackId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  actorId    String?
+  actor      User?    @relation("DemoFeedbackEventActor", fields: [actorId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  kind       String
+  fromStatus String?
+  toStatus   String?
+  note       String   @default("")
+  createdAt  DateTime @default(now())
+
+  @@index([feedbackId, createdAt, id])
+  @@index([actorId, createdAt])
+}
+
+model MarketFile {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  purpose        String
+  filename       String
+  mime           String
+  bytes          Bytes
+  sha256         String
+  uploadedById   String
+  createdAt      DateTime     @default(now())
+
+  @@index([organizationId, purpose, createdAt])
+}
+
+model MarketProduct {
+  id                 String            @id @default(cuid())
+  associationId      String
+  association        Organization      @relation(fields: [associationId], references: [id])
+  name               String
+  description        String
+  craft              String
+  priceMillimes      BigInt
+  artisanPayMillimes BigInt
+  leadTimeDays       Int
+  minQuantity        Int
+  imagePath          String?
+  imageFileId        String?
+  imageUrl           String?
+  status             String            @default("PENDING_REVIEW")
+  reviewNote         String?
+  reviewedById       String?
+  reviewedAt         DateTime?
+  createdById        String
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  cartItems          MarketCartItem[]
+  orderItems         MarketOrderItem[]
+
+  @@index([status, craft])
+  @@index([associationId, status])
+}
+
+model MarketCartItem {
+  id         String        @id @default(cuid())
+  buyerOrgId String
+  buyerOrg   Organization  @relation(fields: [buyerOrgId], references: [id])
+  productId  String
+  product    MarketProduct @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity   Int
+  updatedAt  DateTime      @updatedAt
+
+  @@unique([buyerOrgId, productId])
+}
+
+model MarketOrder {
+  id                 String               @id @default(cuid())
+  number             Int                  @unique @default(autoincrement())
+  buyerOrgId         String
+  buyerOrg           Organization         @relation("MarketBuyer", fields: [buyerOrgId], references: [id])
+  associationId      String?
+  association        Organization?        @relation("MarketAssociation", fields: [associationId], references: [id])
+  kind               String
+  status             String               @default("SENT")
+  title              String
+  description        String?
+  note               String?
+  neededBy           DateTime?
+  photoFileId        String?
+  quantity           Int
+  totalMillimes      BigInt?
+  artisanPayMillimes BigInt?
+  priceStatus        String               @default("NOT_NEEDED")
+  qualityStatus      String               @default("NOT_CHECKED")
+  invoiceCheckedAt   DateTime?
+  invoiceCheckedById String?
+  billingSnapshot    Json?
+  acceptedAt         DateTime?
+  assignedAt         DateTime?
+  estimatedFinishAt  DateTime?
+  almostReadyAt      DateTime?
+  associationDelivery Json?
+  nasjDelivery       Json?
+  qrToken            String?              @unique
+  createdById        String
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  items              MarketOrderItem[]
+  events             MarketOrderEvent[]
+  women              MarketOrderArtisan[]
+  ratings            MarketOrderRating[]
+
+  @@index([buyerOrgId, createdAt])
+  @@index([associationId, status])
+  @@index([status, createdAt])
+}
+
+model MarketOrderItem {
+  id                String        @id @default(cuid())
+  orderId           String
+  order             MarketOrder   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId         String
+  product           MarketProduct @relation(fields: [productId], references: [id])
+  name              String
+  quantity          Int
+  unitPriceMillimes BigInt
+  unitPayMillimes   BigInt
+
+  @@index([orderId])
+}
+
+model MarketOrderEvent {
+  id        String      @id @default(cuid())
+  orderId   String
+  order     MarketOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status    String
+  title     String
+  note      String?
+  actorId   String
+  actorName String
+  createdAt DateTime    @default(now())
+
+  @@index([orderId, createdAt])
+}
+
+model MarketOrderArtisan {
+  id               String         @id @default(cuid())
+  orderId          String
+  order            MarketOrder    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  artisanProfileId String
+  artisanProfile   ArtisanProfile @relation(fields: [artisanProfileId], references: [id])
+  recordedById     String
+  payMillimes      BigInt         @default(0)
+  paidRecordedAt   DateTime?
+  paymentProofFileId String?
+  paymentCheckedAt DateTime?
+  paymentCheckedById String?
+  createdAt        DateTime       @default(now())
+
+  @@unique([orderId, artisanProfileId])
+}
+
+model MarketBillingProfile {
+  id              String       @id @default(cuid())
+  buyerOrgId      String       @unique
+  buyerOrg        Organization @relation(fields: [buyerOrgId], references: [id])
+  legalName       String
+  taxId           String
+  billingAddress  String
+  shippingAddress String
+  contactName     String
+  contactPhone    String
+  paymentMethod   String
+  updatedAt       DateTime     @updatedAt
+}
+
+model MarketArtisanDetail {
+  id               String         @id @default(cuid())
+  artisanProfileId String         @unique
+  artisanProfile   ArtisanProfile @relation(fields: [artisanProfileId], references: [id])
+  idNumber         String
+  phone            String?
+}
+
+model MarketOrderRating {
+  id           String      @id @default(cuid())
+  orderId      String
+  order        MarketOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  role         String
+  stars        Int
+  qualityStars Int?
+  comment      String
+  createdById  String
+  createdAt    DateTime    @default(now())
+
+  @@unique([orderId, role])
+}
+
+model MarketNotification {
+  id        String    @id @default(cuid())
+  userId    String
+  title     String
+  link      String
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId, createdAt])
+}

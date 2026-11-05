@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 280" width="480" height="280">
+  <title>Synthetic striped table runner illustration</title>
+  <rect width="480" height="280" fill="#eee8dc"/>
+  <path d="M78 58h324v164H78z" fill="#e5cfaa" stroke="#675944" stroke-width="3"/>
+  <path d="M110 60v160m26-160v160m208-160v160m26-160v160" stroke="#355a50" stroke-width="14"/>
+  <path d="M80 100h320M80 124h320M80 148h320M80 172h320" stroke="#957950" stroke-width="2"/>
+  <path d="M64 68h14m-14 20h14m-14 20h14m-14 20h14m-14 20h14m-14 20h14m-14 20h14m-14 20h14m324-140h14m-14 20h14m-14 20h14m-14 20h14m-14 20h14m-14 20h14m-14 20h14m-14 20h14" stroke="#675944" stroke-width="3"/>
+</svg>

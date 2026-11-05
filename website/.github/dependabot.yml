@@ -1,0 +1,35 @@
+# Dependabot opens weekly PRs to update dependencies; each PR runs the normal pipeline.
+# Takes effect once this file is on main.
+version: 2
+updates:
+  # GitHub Actions used in .github/workflows (updates the pinned SHA and its version comment).
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 3
+    groups:
+      actions:
+        patterns: ['*']
+    commit-message:
+      prefix: ci
+
+  # npm packages of the pnpm workspace (pnpm-lock.yaml).
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 3
+    open-pull-requests-limit: 5
+    # Major versions can break the code: they are planned team tasks, not weekly bot PRs.
+    # Vulnerable versions are still caught by `pnpm audit` in CI.
+    ignore:
+      - dependency-name: '*'
+        update-types: [version-update:semver-major]
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+    commit-message:
+      prefix: deps
