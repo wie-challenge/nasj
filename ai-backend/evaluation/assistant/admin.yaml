@@ -1,0 +1,11 @@
+# Owner: Person A. Roles: PLATFORM_ADMIN, NASJ_OPERATOR. Format: README.md in this folder.
+- id: admin-real-payouts-en
+  role: PLATFORM_ADMIN
+  locale: en
+  kind: planned
+  question: "How do I send the real payments to the artisans for last month's order?"
+  must_include:
+    - says real payouts are not available on the platform yet
+  must_avoid:
+    - invents steps for sending real payments
+  notes: Real payouts are disabled; payment transitions are simulated (docs/role-model-decision.md).

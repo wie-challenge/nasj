@@ -1,18 +1,95 @@
 name: nasj-ai
+
+# Shared by the API and the worker. Inside Compose, services reach each other by name.
+x-ai-service: &ai-service
+  build: .
+  environment:
+    NASJ_AI_ENVIRONMENT: production
+    NASJ_AI_SERVICE_API_KEY: ${NASJ_AI_SERVICE_API_KEY:?Run python scripts/setup_local.py}
+    NASJ_AI_MAX_REQUEST_BYTES: ${NASJ_AI_MAX_REQUEST_BYTES:-65536}
+    NASJ_AI_RABBITMQ_URL: amqp://${NASJ_AI_RABBITMQ_USER:-nasj_ai}:${NASJ_AI_RABBITMQ_PASSWORD}@rabbitmq:5672/nasj
+    NASJ_AI_REDIS_URL: redis://:${NASJ_AI_REDIS_PASSWORD}@redis:6379/0
+    NASJ_AI_LLM_PROVIDER: ${NASJ_AI_LLM_PROVIDER:-fake}
+    NASJ_AI_LLM_API_KEY: ${NASJ_AI_LLM_API_KEY:-}
+    NASJ_AI_CHAT_MODEL: ${NASJ_AI_CHAT_MODEL:-}
+    NASJ_AI_LLM_REQUESTS_PER_MINUTE: ${NASJ_AI_LLM_REQUESTS_PER_MINUTE:-35}
+  depends_on:
+    rabbitmq:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+  read_only: true
+  tmpfs:
+    - /tmp
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges:true
+  restart: unless-stopped
+
 services:
   api:
-    build: .
-    environment:
-      NASJ_AI_ENVIRONMENT: production
-      NASJ_AI_SERVICE_API_KEY: ${NASJ_AI_SERVICE_API_KEY:?Run python scripts/setup_local.py}
-      NASJ_AI_MAX_REQUEST_BYTES: ${NASJ_AI_MAX_REQUEST_BYTES:-65536}
+    <<: *ai-service
     ports:
       - "127.0.0.1:8001:8001"
-    read_only: true
-    tmpfs:
-      - /tmp
-    cap_drop:
-      - ALL
+
+  # Nasouj worker: consumes chat requests from RabbitMQ.
+  worker:
+    <<: *ai-service
+    command: ["python", "-m", "nasj_ai.assistant.worker"]
+    healthcheck:
+      disable: true
+
+  # Queue between the NestJS backend and this service. Management UI: http://127.0.0.1:15672
+  rabbitmq:
+    image: rabbitmq:4.3.7-management-alpine
+    hostname: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${NASJ_AI_RABBITMQ_USER:-nasj_ai}
+      RABBITMQ_DEFAULT_PASS: ${NASJ_AI_RABBITMQ_PASSWORD:?Run python scripts/setup_local.py}
+      RABBITMQ_DEFAULT_VHOST: nasj
+    ports:
+      - "127.0.0.1:5672:5672"
+      - "127.0.0.1:15672:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
+
+  # Cache only: nothing here is the single copy of any data, so persistence is disabled.
+  redis:
+    image: redis:8.8.4-alpine
+    command:
+      - redis-server
+      - --requirepass
+      - ${NASJ_AI_REDIS_PASSWORD:?Run python scripts/setup_local.py}
+      - --save
+      - ""
+      - --appendonly
+      - "no"
+      - --maxmemory
+      - 256mb
+      - --maxmemory-policy
+      - allkeys-lru
+    environment:
+      REDISCLI_AUTH: ${NASJ_AI_REDIS_PASSWORD}
+    ports:
+      - "127.0.0.1:6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+volumes:
+  rabbitmq-data:

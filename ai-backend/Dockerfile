@@ -11,6 +11,7 @@ FROM python:3.12-slim
 ENV PATH="/app/.venv/bin:$PATH" PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 WORKDIR /app
 COPY --from=builder /app/.venv /app/.venv
+COPY knowledge ./knowledge
 USER 10001:10001
 EXPOSE 8001
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \

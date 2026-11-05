@@ -1,0 +1,6 @@
+# Owner: Person B. What this role gets help with is defined in the plan, section 5.2.
+roles: [BUYER_REPRESENTATIVE]
+version: 1
+pipeline: chat
+knowledge: [shared, buyer, general]
+tools: []

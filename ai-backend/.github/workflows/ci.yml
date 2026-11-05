@@ -25,6 +25,7 @@ jobs:
       - run: uv run --frozen ruff format --check .
       - run: uv run --frozen mypy src tests scripts
       - run: uv run --frozen pytest
+      - run: uv run --frozen python scripts/check_content.py
       - run: uv build
       - name: Verify installed wheel imports independently of the source tree
         run: |

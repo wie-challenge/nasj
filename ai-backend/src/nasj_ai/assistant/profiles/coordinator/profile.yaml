@@ -1,0 +1,6 @@
+# Owner: Person C. What this role gets help with is defined in the plan, section 5.2.
+roles: [ASSOCIATION_COORDINATOR]
+version: 1
+pipeline: chat
+knowledge: [shared, association, general]
+tools: []

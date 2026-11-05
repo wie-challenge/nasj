@@ -5,12 +5,16 @@ build-backend = "hatchling.build"
 [project]
 name = "nasj-ai"
 version = "0.1.0"
-description = "Private, explainable decision-support previews for nasj"
+description = "Private backend for the Nasouj assistant of NASJ"
 readme = "README.md"
 requires-python = ">=3.12,<3.15"
 dependencies = [
+  "aio-pika>=10.2,<11",
   "fastapi>=0.115,<1",
+  "openai>=3.41,<4",
   "pydantic-settings>=2.8,<3",
+  "pyyaml>=6.0.3,<7",
+  "redis>=8.1,<9",
   "uvicorn>=0.34,<1",
 ]
 
@@ -21,6 +25,7 @@ dev = [
     "mypy>=1.15,<2",
     "pytest>=8,<10",
     "ruff>=0.11,<1",
+    "types-pyyaml>=6.0.12",
 ]
 
 [tool.hatch.build.targets.wheel]

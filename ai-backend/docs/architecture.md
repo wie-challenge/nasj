@@ -1,36 +1,44 @@
 # Architecture and operations
 
 ```text
-Next.js browser → NestJS website API → PostgreSQL / Prisma
-                         │ authorize and minimize
-                         │ bounded server-to-server bearer-authenticated call
+Browser → Next.js → NestJS website API ──── PostgreSQL (users, permissions, conversations)
+                         │
+                         │ publish / consume (planned)
                          ▼
-                    FastAPI /api/v1
-                    ├─ strict schemas + payload limit
-                    ├─ pure matching / pricing / forecast rules
-                    └─ advisory result + snapshot + digest + rule version
+                    RabbitMQ (queue) ───────▶ NASJ AI service (this repository)
+                                               ├─ FastAPI: health + service-key /api/v1
+                                               ├─ Nasouj worker (planned)
+                                               └─ Redis (cache)
+                                                     │
+                                                     ▼
+                                               NVIDIA Build API (planned)
 
-ESP32 / local wearable: no raw safety-data path to this service
+IoT wearable: no data path to this service
 ```
 
-NestJS owns business writes, scoped permissions, records, audit and human decisions. This service has no Prisma access, user sessions, financial ledger, queue, external provider or database. HTTP routers call pure module services; input/output schemas define a versioned boundary for the future TypeScript adapter.
+The full Nasouj design (role profiles, message formats, caching rules, prompt isolation) is in [nasouj-assistant-plan.md](nasouj-assistant-plan.md).
 
-## Service boundary
+## Responsibilities
 
-- All preview routes require a configured random 32–256-character ASCII service key, including development. A static key authenticates a service, not an end user or organization. NestJS must authorize the data before sending it. Rotate through deployment secrets; use private TLS service traffic.
-- Minimal health responses are public. Production mode hides development documentation. No CORS middleware is enabled and no browser integration is intended.
-- No payload persistence. Request logs contain generated request ID, fixed route, method, status and duration, never body, query or authentication data. Use `--no-access-log` to prevent a separate server access log of raw query strings.
-- Validation errors omit rejected input; failures return generic codes and correlation IDs. The ASGI request boundary reads at most the configured body limit before rejecting with 413. Lists, identifiers, unit counts, date ranges and decimal precision are bounded.
-- The digest covers canonical validated JSON. It is a replay check, not a cryptographic attestation that the caller's facts are true or authorized. Source IDs/timestamps/evidence kinds are supplied by the trusted caller.
-- Decimals travel as strings. Matching normalizes to six decimals, rounds weighted components half-up and sums displayed components. Pricing rounds TND half-up to three decimals per line. Forecast uses integer calendar arithmetic with inclusive first day and an explicit post-production buffer.
-- Readiness means configured in-process rules are available. It does not claim a model, provider, database or production deployment.
+- **NestJS** owns authentication, authorization, business records, audit and conversation storage. It decides what data a request may contain.
+- **This service** has no database, no user sessions and no browser access. It trusts only callers holding the service key (HTTP) or the RabbitMQ credentials (queue).
+- **RabbitMQ** carries chat requests and answer fragments between NestJS and this service, plus background jobs.
+- **Redis** holds short-lived cached data only (user context, recent history, rate-limit counters, optional repeated answers). Nothing in Redis is the only copy of anything.
 
-## Records and versions
+## Service boundary rules (implemented)
 
-Update the `*-rules-v1` constant for changes to eligibility, scoring, rounding, costing or calendars. The future NestJS RecommendationRun must persist exact input, result, rule version and digest together. Render explanations from that saved result rather than running a second scorer.
+- Every `/api/v1` route requires a random 32–256-character ASCII service key, including in development. The key authenticates a service, not a user.
+- Health responses are minimal and public. Production mode hides the API explorer and OpenAPI document. No CORS is enabled.
+- Request logs contain the request ID, route, method, status and duration only, never bodies, query strings or credentials. Run uvicorn with `--no-access-log`.
+- Validation errors never echo rejected input. Unexpected failures return a generic code with the request ID.
+- The request body limit (default 64 KiB) is enforced while reading, before the app runs.
 
-Declared weekly capacity here is an already projected snapshot. The website must align product units, commitment periods and source permissions; the service cannot check stale or mis-scoped data independently. No recommendation reserves capacity or bypasses voluntary acceptance.
+## Local infrastructure
 
-## Deployment
+`compose.yaml` runs the API, RabbitMQ (`rabbitmq:4.3.7-management-alpine`, virtual host `nasj`) and Redis (`redis:8.8.4-alpine`, password required, no persistence, 256 MB limit). Ports are bound to `127.0.0.1`. Secrets come from `.env`, created by `scripts/setup_local.py`.
 
-A locked dependency set, non-root Docker image and loopback Compose setup are included. Real operation needs private ingress/TLS, rate limits, key rotation and caller timeout/fallback policies. Multi-key rotation or workload identity is later infrastructure work. No public deployment is created by this repository scaffold.
+Known local-only shortcuts to fix before any deployment:
+
+- RabbitMQ uses one user. Production needs separate NestJS and AI users with permissions limited to their queues.
+- The Redis password is passed as a command argument, so it is visible to anyone who can inspect the container.
+- There is no TLS between services.

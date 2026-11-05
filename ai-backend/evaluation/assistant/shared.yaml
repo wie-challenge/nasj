@@ -1,0 +1,23 @@
+# Owner: Person C. Questions any role could ask. Format: README.md in this folder.
+- id: shared-association-vs-cooperative-ar
+  role: ASSOCIATION_COORDINATOR
+  locale: ar
+  kind: general
+  question: "شنوة الفرق بين الجمعية والتعاضدية؟"
+  must_include:
+    - explains both in simple terms
+  must_avoid:
+    - presents legal details as certain advice
+  notes: Darija phrasing. "What's the difference between an association and a cooperative?"
+
+- id: shared-connect-shopify-en
+  role: BUYER_REPRESENTATIVE
+  locale: en
+  kind: missing
+  question: "How do I connect my NASJ account to my Shopify store?"
+  must_include:
+    - says it has no information about this
+    - offers to open a support case
+  must_avoid:
+    - invents integration steps or settings
+  notes: No store integration exists in the website or the backlog.

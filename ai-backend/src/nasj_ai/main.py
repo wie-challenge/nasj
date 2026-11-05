@@ -11,9 +11,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     configured = settings or Settings()
     development = configured.environment != "production"
     app = FastAPI(
-        title="nasj Decision Support",
+        title="NASJ AI Service",
         version=__version__,
-        description="Private advisory previews. Deterministic baseline; no trained ML or writes.",
+        description="Private backend for the Nasouj assistant. Service-to-service only.",
         docs_url="/docs" if development else None,
         redoc_url=None,
         openapi_url="/openapi.json" if development else None,
@@ -29,7 +29,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.get("/health/ready", tags=["health"])
     def ready() -> dict[str, str]:
-        # All current rules are in process. No DB, provider or model is required.
+        # No model, queue or cache connection is required yet.
         return {"status": "ready"}
 
     return app

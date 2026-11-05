@@ -1,7 +1,5 @@
-# Model lifecycle
+# Model choice
 
-No trained model, LLM provider or GPU dependency is configured. Current engines are deterministic versioned Python rules.
+No model is connected yet. Nasouj will use hosted models from NVIDIA Build through its OpenAI-compatible API. Model names will be settings, not code, so models can change without code changes.
 
-Before E11-07/08, require permissioned representative data, an approved feature allowlist, leakage-controlled evaluation, a baseline comparison, context-specific coverage, reviewed limitations, drift checks and deterministic fallback.
-
-Future registry entries need model, dataset and feature versions, evaluation report, approved scope and retirement policy. Store artifacts outside Git (`models/artifacts/` is ignored). Do not load arbitrary user-provided pickle files. Suggestions cannot approve offers, change pay or override inspectors.
+Each model choice is recorded with its name, the date tested, the evaluation results it was chosen on (see `evaluation/`) and its known limits. No model is trained or stored here; `models/artifacts/` is ignored by Git. Never load arbitrary user-provided pickle files.
